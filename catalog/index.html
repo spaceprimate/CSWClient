@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Naval Research Laboratory Geospatial Computing Section">
+    <meta name="author" content="Naval Research Laboratory Geospatial Computing Section">
+    <link rel="icon" href="favicon.ico">
+
+    <title>NRL- Geospatial Computing Section</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../libs/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- NRL Branding -->
+    <link href="../css/nrl.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/custom.css" rel="stylesheet">
+
+    <link href="../libs/featherlight/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- font -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body style="background: #ffffff;" ng-app="nrlCatalog">
+
+
+<header class="navbar navbar-static-top navbar-inverse navbar-compact" >
+   <div class="container-fluid">
+      <div class="navbar-header">     
+        <div class="navbar-brand">
+          <a href="#" class="logo-container"><img src="../img/logo-xs.png"></a>
+          <div class="title">
+            <a class="title-link" href="#"><div class="title-top">7442 - Geospatial Computing Section</div></a>
+          </div>
+        </div>
+        <button aria-controls="bs-navbar" aria-expanded="false" class="collapsed navbar-toggle" data-target="#bs-navbar" data-toggle="collapse" type="button" ng-click="showNavbar = !showNavbar"> <span class="sr-only">Toggle navigation</span> <span class="glyphicon glyphicon-menu-hamburger" ng-hide="showNavbar"></span><span class="glyphicon glyphicon-chevron-up" ng-show="showNavbar"></span> </button>
+      </div>
+      <nav class="collapse navbar-collapse" id="bs-navbar">
+         <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">HOME</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">ABOUT US  <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="./facilities.php">Facilities</a></li>
+                <li><a href="./jobs.php">Job Opportunities</a></li>
+                <li><a href="contact.php">Contact Us</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">WEB SERVICES  <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="./nrlTileServer.php">NRL Tile Server</a></li>
+                <li><a href="./drgExplorer.php">DRG Explorer</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">SOFTWARE PROJECTS  <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="./nrlTileServerSf.php">NRL Tile Server</a></li>
+                <li><a href="./ghub.php">GHub</a></li>
+                <li><a href="./gidbThickClient.php">GIDB</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#">GEOSPATIAL DATA</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">ACCOMPLISHMENTS <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="./publications.php">Publications</a></li>
+                <li><a href="./patents.php">Patents</a></li>
+              </ul>
+            </li>
+
+
+
+
+         </ul>
+      </nav>
+   </div>
+
+</header>
+
+  <div id="nrl-catalog" ng-controller="mainController">
+
+  <div class="container-fluid content-header">
+    <div class="row">
+      <div class="col-sm-4"><h2 class="page-title">Catalog</h2></div>
+      <div class="col-sm-8" style="padding-top:16px;">
+        <form class="form-inline"> <div class="form-group"> 
+        <select class="form-control" ng-model="mainFilter.type" ng-options="f.label for f in filterTypes track by f.id">
+          
+        </select>  
+        <input class="form-control" id="exampleInputName2" placeholder="Search" ng-model="mainFilter.term">  <button type="submit" class="btn btn-default" ng-click="getFirstPage()">Search</button> 
+        </div>
+        <a href="#" class="sm" style="padding: 4px 0 0 12px;">Advanced Search</a>
+        </form>
+        
+      </div>
+    </div>
+    
+  </div>
+
+  <div class="col-sm-2 sidebar-fixed">
+    <h3>Filter Results</h3>
+    <p><span class="glyphicon glyphicon-chevron-right"></span> Bounding Box</p>
+    <p><span class="glyphicon glyphicon-chevron-right"></span> Category</p>
+    <p><span class="glyphicon glyphicon-chevron-right"></span> Status</p>
+    <p><span class="glyphicon glyphicon-chevron-right"></span> Date Range</p>
+  </div>
+
+   
+  <div class="container-fluid content" id="main-container">
+
+    <div class="row">
+      
+      <div class="col-sm-10 col-sm-offset-2" style="padding-top: 18px;">
+        <div class="row">
+          <div class="col-xs-6">
+            <p>
+              <select id="sortingControl"><option value="Relevancy">Sort By Date</option><option value="NewlyAdded">Sort By Size</option><option value="PubDate">Sort By Protocol</option><option value="Rating">Sort By Title</option></select>
+            </p>
+          </div>
+          <div class="col-xs-6">
+            
+          </div>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th colspan="2">Title</th>
+                <th>Type</th>
+                <th>Bounding Box</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="record in curRecords">
+                <td><input type="checkbox" name="test"></td>
+                <td>{{record.title}}</td>
+                <td>{{record.type}}</td>
+                <td>{{record.upperCorner}}, {{record.lowerCorner}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+         
+          <ul class="pagination pull-left" ng-show="totalPages > 1">
+            <li><a href="#" ng-click="getPrevPage()" ng-if="curPage > 1">Previous</a></li>
+
+            <li ng-if="pageLimits[1] > 10"><a href="#" ng-click="goToPage(1)">1</a></li>
+            <li ng-if="pageLimits[1] > 10"><a href="" class="ellipsis">...</a></li>
+
+            <li ng-repeat="page in pages" ng-if="page > pageLimits[0] && page <= pageLimits[1]" ng-class="{'active' : page == curPage}">
+              <a href="#" ng-click="goToPage(page)">{{page}}</a>
+            </li>
+            
+            <li ng-if="pageLimits[1] < totalPages"><a href="" class="ellipsis">...</a></li>
+            <li ng-if="pageLimits[1] < totalPages"><a href="#" ng-click="goToPage(totalPages)">{{totalPages}}</a></li>
+
+
+            <li><a href="#" ng-click="getNextPage()" ng-if="curPage < totalPages">Next</a></li>
+          </ul>
+
+          <div class="pull-right form-inline" style="margin-top:20px;" ng-show="totalPages > 1">
+            <div class="form-group">
+              
+              <select ng-model="recordsPerPage" class="form-control" ng-change="updatePages()" >
+                <option value="10">10 per page</option>
+                <option value="25">25 per page</option>
+                <option value="50">50 per page</option>
+                <option value="100">100 per page</option>
+              </select> 
+
+            </div>
+            
+          </div>
+
+          <div class="clearfix"></div>
+          <hr>
+        
+      </div>
+
+
+
+
+
+
+
+
+    </div>
+
+
+</div>
+
+</div><!-- /#nrl-catalog -->
+
+    
+
+
+
+
+    <script src="../libs/jquery/jquery.min.js"></script>
+    <script src="../libs/featherlight/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../libs/angular/angular.min.js"></script>
+    <!-- <script src="libs/bootstrap/js/bootstrap.min.js"></script> -->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../libs/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="js/catalog-app.js"></script>
+  </body>
+</html>

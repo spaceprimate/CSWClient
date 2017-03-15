@@ -1,0 +1,9 @@
+#main-container{
+	position: fixed;
+    top: 93px;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    overflow: auto;
+    padding-top: 16px;
+}

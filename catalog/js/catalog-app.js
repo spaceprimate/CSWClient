@@ -1,0 +1,230 @@
+
+
+
+// Site Module- instatiated above
+var nrlCatalog = angular.module('nrlCatalog', [ ]);
+//var app = angular.module('store', [ ]);
+
+/*
+ * main controller
+ * $routeProvider allows us to add page specific controllers if needed in the future
+ */
+nrlCatalog.controller('mainController', ['$scope', function($scope) {
+
+    //$scope.test = "wotcha, harry";
+    $scope.curPage = 1;
+    var newRequest = true;
+    $scope.curRecords= [];
+    $scope.pages = [];
+    $scope.totalRecords = 0;
+    $scope.recordsPerPage = 10;
+    $scope.totalPages;
+    $scope.pageLimits = [];
+
+    
+    $scope.filterTypes = [
+        {id: "title", label: "Title"},
+        {id: "boundingbox", label: "Bounding Box"}
+    ];
+    $scope.mainFilter = {
+        type : $scope.filterTypes[0],
+        term: ""
+    }
+    $scope.filters = [];
+
+    /*
+    $scope.addFilter = function(id, type, term){
+        var filter = {};
+        filter.id = id;
+        filter.type = type;
+        filter.term = term;
+        $scope.filters.push(filter);
+    }
+    */
+
+    $scope.testApp = function(){
+        console.log("main filter type and term: ");
+        console.log($scope.mainFilter.type);
+        console.log($scope.mainFilter.term);
+    }
+
+    $scope.setPages = function(){
+        $scope.totalPages = Math.ceil($scope.totalRecords / $scope.recordsPerPage);
+        $scope.pages = [];
+        for (var i = 0; i < $scope.totalPages; i++) {
+            $scope.pages.push(i+1);
+        }
+    }
+
+    $scope.updatePages = function(){
+        //$scope.curPage = 1;
+        $scope.setPages();
+        $scope.goToPage(1);
+        //setCurPage(1);
+    }
+
+    function setCurPage(curPage){
+        $scope.curPage = curPage;
+        $scope.pageLimits[1] = Math.ceil(curPage / 10) * 10;
+        $scope.pageLimits[0] = $scope.pageLimits[1] - 10;
+    }
+    /*
+    function hasFilter(){
+        for (var f in $scope.filters){
+            if (f.active == true){
+                return true;
+            }
+        }
+        return false;
+    }
+    */
+    $scope.goToPage = function(page){
+        setCurPage(page);
+        var recordRequest = createRequest($scope.curPage);   
+        $scope.requestRecords(recordRequest);
+    }
+    function createRequest(page){
+        var recordNumber = (page - 1) * $scope.recordsPerPage + 1;
+        var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + $scope.recordsPerPage + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">' +
+                          '<csw:Query typeNames="csw:Record">' +
+                            '<csw:ElementSetName>brief</csw:ElementSetName>';
+
+
+        //add filter here
+        //testing: 
+        //$scope.filters.push("hello");
+        
+        if ($scope.mainFilter.term != ""){
+        
+            request +=  '<csw:Constraint version="1.1.0">';
+                request += '<ogc:Filter>' +
+
+                            '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
+                              '<ogc:PropertyName>dc:' + $scope.mainFilter.type.id + '</ogc:PropertyName>' +
+                              '<ogc:Literal>%' + $scope.mainFilter.term + '%</ogc:Literal>' +
+                            '</ogc:PropertyIsLike>' +
+
+
+                            
+                          '</ogc:Filter>';
+                        
+            request += '</csw:Constraint>';
+        }
+        
+
+/*
+                            '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
+                              '<ogc:PropertyName>dc:' + $scope.mainFilter.type.id + '</ogc:PropertyName>' +
+                              '<ogc:Literal>' + $scope.mainFilter.term + '%</ogc:Literal>' +
+                            '</ogc:PropertyIsLike>' +
+*/
+        //console.log("does has filterses? " + hasFilter());
+        
+        
+        
+
+        request +=      '</csw:Query>' +
+                    '</csw:GetRecords>';
+        return request;
+    }
+
+    $scope.getFirstPage = function(){
+        curPage = 1;
+        $scope.pageLimits = [0, 10];
+        newRequest = true;
+        var recordRequest = createRequest(curPage);   
+        $scope.requestRecords(recordRequest);
+    };
+
+    $scope.getNextPage = function(){
+        setCurPage($scope.curPage + 1);
+        //curPage ++;
+        var recordRequest = createRequest($scope.curPage);
+        $scope.requestRecords(recordRequest);
+    };
+
+    $scope.getPrevPage = function(){
+        setCurPage($scope.curPage - 1);
+        //curPage --;
+        var recordRequest = createRequest($scope.curPage);
+        $scope.requestRecords(recordRequest);
+    };
+
+    $scope.requestRecords = function(recordRequest){
+        $.ajax({ type: "POST",
+                        url: "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2",
+                        data: recordRequest,
+                        contentType: "text/xml",
+                        dataType: "xml",
+                        cache: false,
+                        error: function() { alert("No data found."); },
+                        success: function(xml) {
+                            $scope.curRecords = [];
+                            //alert("it works");
+                            console.log(xml);
+                            var i = 1;
+
+                            if (newRequest == true){
+                                $scope.totalRecords = $(xml).find("SearchResults").attr('numberOfRecordsMatched');
+                                $scope.setPages();
+                                newRequest = false;
+                            }
+                            
+                            
+
+
+                            $(xml).find("BriefRecord").each(function(i,record){
+
+                                
+                                //console.log($(record).find("title").html());
+                                var item = {};
+                                item.title = $(record).find("title").html();
+                                item.type = $(record).find("type").html();
+                                item.lowerCorner = $(record).find("LowerCorner").html();
+                                item.upperCorner = $(record).find("UpperCorner").html();
+                                $scope.curRecords.push(item);
+                                //$("#records").append("<tr><td>" + i + "</td><td>" + $(record).find("title").html() + "</td>");
+                                i++;
+                              
+                            });
+                            $scope.$apply(function() {
+                              //$scope.msgs = newMsgs;
+                              console.log("updated scope");
+                            });
+                            console.log("curRecords: ");
+                            console.log($scope.curRecords);
+
+                            //alert($(xml).find("project")[0].attr("id"));
+                        }
+        });
+    }
+
+    $scope.getFirstPage();
+    
+
+
+}]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
