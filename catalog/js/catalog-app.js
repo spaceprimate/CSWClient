@@ -110,7 +110,16 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
                         
             request += '</csw:Constraint>';
         }
-        
+
+        /* screen out service type- there's only once called "NRL" */
+        request +=  '<csw:Constraint version="1.1.0">';
+            request += '<ogc:Filter>' +
+                        '<ogc:PropertyIsNotEqualTo>' +
+                          '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
+                          '<ogc:Literal>service</ogc:Literal>' +
+                        '</ogc:PropertyIsNotEqualTo>' +
+                      '</ogc:Filter>';
+        request += '</csw:Constraint>';
 
 /*
                             '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
