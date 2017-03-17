@@ -26,11 +26,29 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
         {id: "title", label: "Title"},
         {id: "boundingbox", label: "Bounding Box"}
     ];
-    $scope.mainFilter = {
-        type : $scope.filterTypes[0],
-        term: ""
-    }
     $scope.filters = [];
+
+    //filter from main search box
+    $scope.filters.push({
+        id : "main",
+        type : $scope.filterTypes[0],
+        term: "",
+        active: false
+    });
+
+    $scope.filtersActive = false;
+
+    function clearFilters(){
+        for (var i = $scope.filters.length - 1; i >= 0; i--) {
+            $scope.filters.pop();
+            $scope.filtersActive = false;
+        }
+    }
+
+    $scope.submitSearch = function(){
+        $scope.filtersActive = true;
+        $scope.getFirstPage();
+    }
 
     /*
     $scope.addFilter = function(id, type, term){
@@ -90,47 +108,38 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
                             '<csw:ElementSetName>brief</csw:ElementSetName>';
 
 
-        //add filter here
-        //testing: 
-        //$scope.filters.push("hello");
-        
-        if ($scope.mainFilter.term != ""){
-        
-            request +=  '<csw:Constraint version="1.1.0">';
-                request += '<ogc:Filter>' +
+            if ($scope.filtersActive){
+                request +=  '<csw:Constraint version="1.1.0">' +
+                                '<ogc:Filter>' + 
+                                    '<ogc:And>' +
+                                        '<ogc:PropertyIsNotEqualTo>' +
+                                            '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
+                                            '<ogc:Literal>service</ogc:Literal>' +
+                                        '</ogc:PropertyIsNotEqualTo>' + 
 
-                            '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
-                              '<ogc:PropertyName>dc:' + $scope.mainFilter.type.id + '</ogc:PropertyName>' +
-                              '<ogc:Literal>%' + $scope.mainFilter.term + '%</ogc:Literal>' +
-                            '</ogc:PropertyIsLike>' +
+                                        '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
+                                            '<ogc:PropertyName>dc:' + $scope.filters[0].type.id + '</ogc:PropertyName>' +
+                                            '<ogc:Literal>%' + $scope.filters[0].term + '%</ogc:Literal>' +
+                                        '</ogc:PropertyIsLike>' +
+                                        '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
+                                            '<ogc:PropertyName>dc:' + $scope.filters[0].type.id + '</ogc:PropertyName>' +
+                                            '<ogc:Literal>%marble%</ogc:Literal>' +
+                                        '</ogc:PropertyIsLike>' +
+                                    '</ogc:And>' + 
+                                '</ogc:Filter>' +
+                            '</csw:Constraint>';
 
-
-                            
-                          '</ogc:Filter>';
-                        
-            request += '</csw:Constraint>';
-        }
-
-        /* screen out service type- there's only once called "NRL" */
-        request +=  '<csw:Constraint version="1.1.0">';
-            request += '<ogc:Filter>' +
-                        '<ogc:PropertyIsNotEqualTo>' +
-                          '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
-                          '<ogc:Literal>service</ogc:Literal>' +
-                        '</ogc:PropertyIsNotEqualTo>' +
-                      '</ogc:Filter>';
-        request += '</csw:Constraint>';
-
-/*
-                            '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
-                              '<ogc:PropertyName>dc:' + $scope.mainFilter.type.id + '</ogc:PropertyName>' +
-                              '<ogc:Literal>' + $scope.mainFilter.term + '%</ogc:Literal>' +
-                            '</ogc:PropertyIsLike>' +
-*/
-        //console.log("does has filterses? " + hasFilter());
-        
-        
-        
+            }
+            else{
+                request +=  '<csw:Constraint version="1.1.0">' +
+                                '<ogc:Filter>' + 
+                                    '<ogc:PropertyIsNotEqualTo>' +
+                                        '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
+                                        '<ogc:Literal>service</ogc:Literal>' +
+                                    '</ogc:PropertyIsNotEqualTo>' + 
+                                '</ogc:Filter>' +
+                            '</csw:Constraint>';
+            }
 
         request +=      '</csw:Query>' +
                     '</csw:GetRecords>';
@@ -146,6 +155,7 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
     };
 
     $scope.getNextPage = function(){
+
         setCurPage($scope.curPage + 1);
         //curPage ++;
         var recordRequest = createRequest($scope.curPage);

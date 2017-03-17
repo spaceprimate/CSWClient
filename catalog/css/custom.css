@@ -7,3 +7,17 @@
     overflow: auto;
     padding-top: 16px;
 }
+
+.button-slide-up{
+
+    display: block;
+    width: 53px;
+    margin: auto;
+    border: #eae9e9 1px solid;
+    text-align: center;
+    background: #ffffff;
+    font-size: 12px;
+    border-bottom: 0px;
+    cursor: pointer;
+}
+
