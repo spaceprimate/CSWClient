@@ -37,60 +37,7 @@
   <body style="background: #ffffff;" ng-app="nrlCatalog">
 
 
-<header class="navbar navbar-static-top navbar-inverse navbar-compact" >
-   <div class="container-fluid">
-      <div class="navbar-header">     
-        <div class="navbar-brand">
-          <a href="#" class="logo-container"><img src="../img/logo-xs.png"></a>
-          <div class="title">
-            <a class="title-link" href="#"><div class="title-top">7442 - Geospatial Computing Section</div></a>
-          </div>
-        </div>
-        <button aria-controls="bs-navbar" aria-expanded="false" class="collapsed navbar-toggle" data-target="#bs-navbar" data-toggle="collapse" type="button" ng-click="showNavbar = !showNavbar"> <span class="sr-only">Toggle navigation</span> <span class="glyphicon glyphicon-menu-hamburger" ng-hide="showNavbar"></span><span class="glyphicon glyphicon-chevron-up" ng-show="showNavbar"></span> </button>
-      </div>
-      <nav class="collapse navbar-collapse" id="bs-navbar">
-         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">HOME</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">ABOUT US  <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="./facilities.php">Facilities</a></li>
-                <li><a href="./jobs.php">Job Opportunities</a></li>
-                <li><a href="contact.php">Contact Us</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">WEB SERVICES  <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="./nrlTileServer.php">NRL Tile Server</a></li>
-                <li><a href="./drgExplorer.php">DRG Explorer</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">SOFTWARE PROJECTS  <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="./nrlTileServerSf.php">NRL Tile Server</a></li>
-                <li><a href="./ghub.php">GHub</a></li>
-                <li><a href="./gidbThickClient.php">GIDB</a></li>
-              </ul>
-            </li>
-            <li><a href="#">GEOSPATIAL DATA</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">ACCOMPLISHMENTS <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                <li><a href="./publications.php">Publications</a></li>
-                <li><a href="./patents.php">Patents</a></li>
-              </ul>
-            </li>
-
-
-
-
-         </ul>
-      </nav>
-   </div>
-
-</header>
+<header-template></header-template>
 
   <div id="nrl-catalog" ng-controller="mainController">
 
@@ -99,10 +46,10 @@
       <div class="col-sm-3"><h2 class="page-title" style="margin-top: 10px;">Catalog</h2></div>
       <div class="col-sm-6" style="padding-top:10px;" >
         <form class="form-inline text-center"> <div class="form-group"> 
-        <select class="form-control" ng-model="filters[0].type" ng-options="f.label for f in filterTypes track by f.id">
+        <select class="form-control" ng-model="basicSearch[0].type" ng-options="f.label for f in filterTypes track by f.id">
           
         </select>  
-        <input class="form-control" id="exampleInputName2" placeholder="Search" ng-model="filters[0].term">  <button type="submit" class="btn btn-default" ng-click="submitSearch()">Search</button> 
+        <input class="form-control" placeholder="Search" ng-model="basicSearch[0].term">  <button type="submit" class="btn btn-default" ng-click="submitSearch()">Search</button> 
         </div>
         <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showAdvancedSearch = !showAdvancedSearch">Advanced Search</a>
         </form>
@@ -132,11 +79,28 @@
       
       <div class="col-sm-10 col-sm-offset-2" style="padding-top: 18px;">
 
+
         <!-- advanced search section -->
         <div ng-show="showAdvancedSearch">
-          Advanced Search Coming Soon!
+          <advanced-search></advanced-search>
         </div>
 
+        <section>
+          <h2 style="margin-top: 0px;">Advanced Search</h2>
+          <div ng-repeat="f in advancedSearch" class="form-inline">
+            <div ng-if="f.type.id == 'boundingbox'">{{f.typesddd.balogna}}</div>
+            <div ng-if="f.type.id == 'title'" class="form-group">
+              <select class="form-control" ng-model="f.type" ng-options="o.label for o in filterTypes track by o.id">
+                
+              </select>
+              <select class="form-control" ng-model="f.constraint" ng-options="o as o for o in filterConstraints">
+                
+              </select>
+              <input class="form-control" id="exampleInputName2" placeholder="Search term" ng-model="f.term"> 
+            </div>
+            <button class="btn btn-default no-outline" ng-click="addAdvancedFilter()"><span class="glyphicon glyphicon-plus"></span></button>
+          </div>
+        </section>
 
 
         <div class="row">

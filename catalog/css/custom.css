@@ -20,4 +20,4 @@
     border-bottom: 0px;
     cursor: pointer;
 }
-
+body .no-outline{border: 0px; outline: 0px;}

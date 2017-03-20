@@ -9,7 +9,7 @@ var nrlCatalog = angular.module('nrlCatalog', [ ]);
  * main controller
  * $routeProvider allows us to add page specific controllers if needed in the future
  */
-nrlCatalog.controller('mainController', ['$scope', function($scope) {
+nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //$scope.test = "wotcha, harry";
     $scope.curPage = 1;
@@ -21,44 +21,66 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
     $scope.totalPages;
     $scope.pageLimits = [];
 
+    $scope.useAdvancedSearch = false;
+
+    var curFilter = "none";
+
     
     $scope.filterTypes = [
         {id: "title", label: "Title"},
         {id: "boundingbox", label: "Bounding Box"}
     ];
-    $scope.filters = [];
+    $scope.filterConstraints = [
+        "contains", "begins with", "exactly matches", "does not contain"
+    ];
+    $scope.basicSearch = [{
+        id : "main",
+        type : {id: "title", label: "Title"},
+        term: "",
+    }];
+
+    $scope.advancedSearch = [];
 
     //filter from main search box
-    $scope.filters.push({
+    $scope.advancedSearch.push({
         id : "main",
         type : $scope.filterTypes[0],
+        constraint : $scope.filterConstraints[0],
         term: "",
         active: false
     });
-
-    $scope.filtersActive = false;
+    //none, basic, advanced
+    //$scope.filtersStatus = "none";
 
     function clearFilters(){
         for (var i = $scope.filters.length - 1; i >= 0; i--) {
             $scope.filters.pop();
-            $scope.filtersActive = false;
+            //$scope.filtersStatus = "none";
         }
     }
 
     $scope.submitSearch = function(){
-        $scope.filtersActive = true;
+        curFilter = "basic";
+        //$scope.filtersStatus = true;
         $scope.getFirstPage();
     }
 
-    /*
-    $scope.addFilter = function(id, type, term){
-        var filter = {};
-        filter.id = id;
-        filter.type = type;
-        filter.term = term;
-        $scope.filters.push(filter);
+    $scope.submitAdvancedSearch = function(){
+        curFilter = "advanced";
+        //$scope.filtersStatus = true;
+        $scope.getFirstPage();
     }
-    */
+
+    
+    $scope.addAdvancedFilter = function(){
+        var filter = {};
+        //filter.id = id;
+        filter.type = $scope.filterTypes[0];
+        filter.constraint = $scope.filterConstraints[0];
+        filter.term = "";
+        $scope.advancedSearch.push(filter);
+    }
+    
 
     $scope.testApp = function(){
         console.log("main filter type and term: ");
@@ -103,34 +125,11 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
     }
     function createRequest(page){
         var recordNumber = (page - 1) * $scope.recordsPerPage + 1;
-        var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + $scope.recordsPerPage + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">' +
+        var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + $scope.recordsPerPage + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
                           '<csw:Query typeNames="csw:Record">' +
                             '<csw:ElementSetName>brief</csw:ElementSetName>';
 
-
-            if ($scope.filtersActive){
-                request +=  '<csw:Constraint version="1.1.0">' +
-                                '<ogc:Filter>' + 
-                                    '<ogc:And>' +
-                                        '<ogc:PropertyIsNotEqualTo>' +
-                                            '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
-                                            '<ogc:Literal>service</ogc:Literal>' +
-                                        '</ogc:PropertyIsNotEqualTo>' + 
-
-                                        '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
-                                            '<ogc:PropertyName>dc:' + $scope.filters[0].type.id + '</ogc:PropertyName>' +
-                                            '<ogc:Literal>%' + $scope.filters[0].term + '%</ogc:Literal>' +
-                                        '</ogc:PropertyIsLike>' +
-                                        '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
-                                            '<ogc:PropertyName>dc:' + $scope.filters[0].type.id + '</ogc:PropertyName>' +
-                                            '<ogc:Literal>%marble%</ogc:Literal>' +
-                                        '</ogc:PropertyIsLike>' +
-                                    '</ogc:And>' + 
-                                '</ogc:Filter>' +
-                            '</csw:Constraint>';
-
-            }
-            else{
+            if (curFilter == "none"){
                 request +=  '<csw:Constraint version="1.1.0">' +
                                 '<ogc:Filter>' + 
                                     '<ogc:PropertyIsNotEqualTo>' +
@@ -140,11 +139,63 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
                                 '</ogc:Filter>' +
                             '</csw:Constraint>';
             }
+            else if (curFilter == "basic") {
+                request +=  '<csw:Constraint version="1.1.0">' +
+                                '<ogc:Filter>' + 
+                                    '<ogc:And>' +
+                                        '<ogc:PropertyIsNotEqualTo>' +
+                                            '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
+                                            '<ogc:Literal>service</ogc:Literal>' +
+                                        '</ogc:PropertyIsNotEqualTo>' + 
+
+                                        '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
+                                            '<ogc:PropertyName>dc:' + $scope.basicSearch[0].type.id + '</ogc:PropertyName>' +
+                                            '<ogc:Literal>%' + $scope.basicSearch[0].term + '%</ogc:Literal>' +
+                                        '</ogc:PropertyIsLike>' +
+                                        '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
+                                            '<ogc:PropertyName>dc:' + $scope.basicSearch[0].type.id + '</ogc:PropertyName>' +
+                                            '<ogc:Literal>%marble%</ogc:Literal>' +
+                                        '</ogc:PropertyIsLike>' +
+                                    '</ogc:And>' + 
+                                '</ogc:Filter>' +
+                            '</csw:Constraint>';
+
+            }
+
+            else if (curFilter == "basicdf") {
+                request +=  '<csw:Constraint version="1.1.0">' +
+                                '<ogc:Filter>' + 
+                                
+                                    '<ogc:BBOX>' + 
+                                      '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
+                                      '<gml:Envelope>' + 
+                                        '<gml:lowerCorner>47 -5</gml:lowerCorner>' + 
+                                        '<gml:upperCorner>55 20</gml:upperCorner>' + 
+                                      '</gml:Envelope>' + 
+                                    '</ogc:BBOX>' + 
+                                    
+                                '</ogc:Filter>' +
+                            '</csw:Constraint>';
+
+            }
+            
 
         request +=      '</csw:Query>' +
                     '</csw:GetRecords>';
         return request;
     }
+
+
+/*
+                                        '<ogc:BBOX>' + 
+                                            '<ogc:PropertyName>BoundingBox</ogc:PropertyName>' + 
+                                            '<gml:Envelope>' + 
+                                                '<gml:lowerCorner>47 -5</gml:lowerCorner>' + 
+                                                '<gml:upperCorner>55 20</gml:upperCorner>' + 
+                                            '</gml:Envelope>' + 
+                                        '</ogc:BBOX>' + 
+                                        */
+        
 
     $scope.getFirstPage = function(){
         curPage = 1;
@@ -170,6 +221,58 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
     };
 
     $scope.requestRecords = function(recordRequest){
+
+        $http({
+            url: "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2",
+            method: "POST",
+            data: recordRequest,
+            headers: {
+                'Accept': 'application/xml'
+            }
+        })
+        .then(function(response){
+            //success
+            $scope.curRecords = [];
+                            //alert("it works");
+                            
+                            var xml = $.parseXML(response.data);
+                            var i = 1;
+
+                            if (newRequest == true){
+                                $scope.totalRecords = $(xml).find("SearchResults").attr('numberOfRecordsMatched');
+                                $scope.setPages();
+                                newRequest = false;
+                            }
+                            
+                            
+
+
+                            $(xml).find("BriefRecord").each(function(i,record){
+
+                                
+                                console.log($(record).find("title").html());
+                                var item = {};
+                                item.title = $(record).find("title").html();
+                                item.type = $(record).find("type").html();
+                                item.lowerCorner = $(record).find("LowerCorner").html();
+                                item.upperCorner = $(record).find("UpperCorner").html();
+                                $scope.curRecords.push(item);
+                                //$("#records").append("<tr><td>" + i + "</td><td>" + $(record).find("title").html() + "</td>");
+                                i++;
+                              
+                            });
+
+                            console.log($scope.curRecords);
+
+
+        },
+            function(response){console.log(response)});
+        
+    };
+
+
+    //old request using jquery and manual scope update
+    $scope.requestRecordsOld = function(recordRequest){
         $.ajax({ type: "POST",
                         url: "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2",
                         data: recordRequest,
@@ -216,10 +319,13 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
                             //alert($(xml).find("project")[0].attr("id"));
                         }
         });
-    }
+    };
 
+    //init
     $scope.getFirstPage();
     
+
+
 
 
 }]);
@@ -229,9 +335,33 @@ nrlCatalog.controller('mainController', ['$scope', function($scope) {
 
 
 
+nrlCatalog.directive('advancedSearch', function() {
+    return{
+        restrict: 'E',
+        template:   'wotcha, harry!',
+    }
+    
+});
 
+nrlCatalog.directive('headerTemplate', function() {
+    return{
+        restrict: 'E',
+        templateUrl:   'templates/header.html',
+    }
+    
+});
 
-
+/*
+<form class="form-inline">
+            <div class="form-group"> 
+              <select class="form-control" ng-model="filters[0].type" ng-options="f.label for f in filterTypes track by f.id">
+                
+              </select>  
+              <input class="form-control" id="exampleInputName2" placeholder="Search" ng-model="filters[0].term">  
+            </div>
+            <p><button type="submit" class="btn btn-default" ng-click="submitSearch()">Search</button> </p>
+          </form>
+          */
 
 
 
