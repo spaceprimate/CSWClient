@@ -124,11 +124,12 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         var recordRequest = createRequest($scope.curPage);   
         $scope.requestRecords(recordRequest);
     }
+
     function createRequest(page){
         var recordNumber = (page - 1) * $scope.recordsPerPage + 1;
         var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + $scope.recordsPerPage + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
                           '<csw:Query typeNames="csw:Record">' +
-                            '<csw:ElementSetName>brief</csw:ElementSetName>';
+                            '<csw:ElementSetName>full</csw:ElementSetName>';
 
             if (curFilter == "none"){
                 request +=  '<csw:Constraint version="1.1.0">' +
@@ -197,6 +198,22 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         return request;
     }
 
+    function createRequestTest(page){
+        var recordNumber = (page - 1) * $scope.recordsPerPage + 1;
+        var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + $scope.recordsPerPage + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
+                          '<csw:Query typeNames="csw:Record">' +
+                            '<csw:ElementSetName>full</csw:ElementSetName>';
+
+           
+
+            
+            
+
+        request +=      '</csw:Query>' +
+                    '</csw:GetRecords>';
+        return request;
+    }
+
 
 /*
 
@@ -257,6 +274,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                             //alert("it works");
                             
                             var xml = $.parseXML(response.data);
+                            console.log(xml);
                             var i = 1;
 
                             if (newRequest == true){
@@ -268,7 +286,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                             
 
 
-                            $(xml).find("BriefRecord").each(function(i,record){
+                            $(xml).find("Record").each(function(i,record){
 
                                 
                                 console.log($(record).find("title").html());
