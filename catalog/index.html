@@ -43,13 +43,22 @@
 
   <div class="container-fluid content-header">
     <div class="row">
-      <div class="col-sm-3"><h2 class="page-title" style="margin-top: 10px;">Catalog</h2></div>
-      <div class="col-sm-6" style="padding-top:10px;" >
+      <div class="col-sm-2"><h2 class="page-title" style="margin-top: 10px;">Catalog</h2></div>
+      <div class="col-sm-10" style="padding-top:10px;" >
         <form class="form-inline text-center"> <div class="form-group"> 
         <select class="form-control" ng-model="basicSearch[0].type" ng-options="f.label for f in filterTypes track by f.id">
           
         </select>  
-        <input class="form-control" placeholder="Search" ng-model="basicSearch[0].term">  <button type="submit" class="btn btn-default" ng-click="submitSearch()">Search</button> 
+        <input class="form-control" placeholder="Search" ng-model="basicSearch[0].term" ng-if="basicSearch[0].type.id != 'boundingbox'" ng-if="basicSearch[0].type != 'boundingbox'">
+
+        <input type="number" ng-if="basicSearch[0].type.id == 'boundingbox'" ng-model="basicSearch[0].bbox[0]" placeholder="min Lat" class="form-control" style="width: 74px;">
+        <input type="number" ng-if="basicSearch[0].type.id == 'boundingbox'" ng-model="basicSearch[0].bbox[1]" placeholder="min Lon" class="form-control" style="width: 74px;">
+        <input type="text" ng-if="basicSearch[0].type.id == 'boundingbox'" ng-model="basicSearch[0].bbox[2]" placeholder="max Lat" class="form-control" style="width: 74px;">
+        <input type="text" ng-if="basicSearch[0].type.id == 'boundingbox'" ng-model="basicSearch[0].bbox[3]" placeholder="min Lon" class="form-control" style="width: 74px;">
+
+       
+
+        <button type="submit" class="btn btn-warning" ng-click="submitSearch()">Search</button> 
         </div>
         <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showAdvancedSearch = !showAdvancedSearch">Advanced Search</a>
         </form>
@@ -63,11 +72,23 @@
   </div>
 
   <div class="col-sm-2 sidebar-fixed">
-    <h3>Filter Results</h3>
-    <p><span class="glyphicon glyphicon-chevron-right"></span> Bounding Box</p>
-    <p><span class="glyphicon glyphicon-chevron-right"></span> Category</p>
-    <p><span class="glyphicon glyphicon-chevron-right"></span> Status</p>
-    <p><span class="glyphicon glyphicon-chevron-right"></span> Date Range</p>
+
+
+
+    <h4><span class="glyphicon glyphicon-chevron-down small"></span> Category</h4>
+    <ul class="list-unstyled lined">
+      <li><a class="#">NASA</a><span class="badge">14</span></li>
+      <li><a class="#">Military<span class="badge">15</span></a></li>
+      <li><a class="#">Border Imagery<span class="badge">8</span></a></li>
+      <li><a class="#">USGS<span class="badge">37</span></a></li>
+      <li><a class="#">Digital Nautical Charts<span class="badge">655</span></a></li>
+      <li><a class="#">Historical<span class="badge">49</span></a></li>
+    </ul>
+
+    <h4><span class="glyphicon glyphicon-chevron-right small"></span> Protocol</h4>
+    <h4><span class="glyphicon glyphicon-chevron-right small"></span> Schema</h4>
+
+
   </div>
 
    
@@ -82,12 +103,12 @@
 
         <!-- advanced search section -->
         <div ng-show="showAdvancedSearch">
-          <advanced-search></advanced-search>
+          <!--<advanced-search></advanced-search>-->
         </div>
 
-        <section>
+        <section ng-show="showAdvancedSearch">
           <h2 style="margin-top: 0px;">Advanced Search</h2>
-          <div ng-repeat="f in advancedSearch" class="form-inline">
+          <div ng-repeat="f in advancedSearch" class="form-inline" style="margin-bottom: 3px;">
             <div ng-if="f.type.id == 'boundingbox'">{{f.typesddd.balogna}}</div>
             <div ng-if="f.type.id == 'title'" class="form-group">
               <select class="form-control" ng-model="f.type" ng-options="o.label for o in filterTypes track by o.id">
@@ -100,6 +121,8 @@
             </div>
             <button class="btn btn-default no-outline" ng-click="addAdvancedFilter()"><span class="glyphicon glyphicon-plus"></span></button>
           </div>
+
+          <button class="btn btn-warning">Search</button>
         </section>
 
 

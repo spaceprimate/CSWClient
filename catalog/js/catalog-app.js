@@ -37,6 +37,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         id : "main",
         type : {id: "title", label: "Title"},
         term: "",
+        bbox: []
     }];
 
     $scope.advancedSearch = [];
@@ -146,17 +147,18 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                                         '<ogc:PropertyIsNotEqualTo>' +
                                             '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
                                             '<ogc:Literal>service</ogc:Literal>' +
-                                        '</ogc:PropertyIsNotEqualTo>' + 
+                                        '</ogc:PropertyIsNotEqualTo>';
 
-                                        '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
-                                            '<ogc:PropertyName>dc:' + $scope.basicSearch[0].type.id + '</ogc:PropertyName>' +
-                                            '<ogc:Literal>%' + $scope.basicSearch[0].term + '%</ogc:Literal>' +
-                                        '</ogc:PropertyIsLike>' +
-                                        '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
-                                            '<ogc:PropertyName>dc:' + $scope.basicSearch[0].type.id + '</ogc:PropertyName>' +
-                                            '<ogc:Literal>%marble%</ogc:Literal>' +
-                                        '</ogc:PropertyIsLike>' +
-                                    '</ogc:And>' + 
+                if ($scope.basicSearch[0].type.id == 'title'){
+                    request += '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
+                                    '<ogc:PropertyName>dc:' + $scope.basicSearch[0].type.id + '</ogc:PropertyName>' +
+                                    '<ogc:Literal>%' + $scope.basicSearch[0].term + '%</ogc:Literal>' +
+                                '</ogc:PropertyIsLike>';
+                }
+
+                                        
+                                        
+                request +=          '</ogc:And>' + 
                                 '</ogc:Filter>' +
                             '</csw:Constraint>';
 
@@ -187,6 +189,15 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
 
 /*
+
+
+'<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
+                                            '<ogc:PropertyName>dc:' + $scope.basicSearch[0].type.id + '</ogc:PropertyName>' +
+                                            '<ogc:Literal>%marble%</ogc:Literal>' +
+                                        '</ogc:PropertyIsLike>' +
+
+
+
                                         '<ogc:BBOX>' + 
                                             '<ogc:PropertyName>BoundingBox</ogc:PropertyName>' + 
                                             '<gml:Envelope>' + 
