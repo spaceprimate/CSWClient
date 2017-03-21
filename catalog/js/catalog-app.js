@@ -156,6 +156,16 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                                 '</ogc:PropertyIsLike>';
                 }
 
+                else if ($scope.basicSearch[0].type.id == 'boundingbox'){
+                    request += '<ogc:BBOX>' + 
+                                      '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
+                                      '<gml:Envelope>' + 
+                                        '<gml:lowerCorner>' + $scope.basicSearch[0].bbox[0] + ' ' + $scope.basicSearch[0].bbox[1] + '</gml:lowerCorner>' + 
+                                        '<gml:upperCorner>' + $scope.basicSearch[0].bbox[0] + ' ' + $scope.basicSearch[0].bbox[1] + '</gml:upperCorner>' + 
+                                      '</gml:Envelope>' + 
+                                    '</ogc:BBOX>';
+                }
+
                                         
                                         
                 request +=          '</ogc:And>' + 
