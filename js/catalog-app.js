@@ -1,4 +1,10 @@
-
+/*
+ * App for interfacing with CSW services to browse and seach records
+ * 
+ *
+ *
+ *
+ */
 
 
 // Site Module- instatiated above
@@ -40,10 +46,19 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         bbox: []
     }];
 
-    $scope.advancedSearch = [];
+
+
+    $scope.advancedSearch = {
+        filters: [],
+        extent: {
+            type: "contains",
+            extent: [-90, -180, 90, 180]
+        }
+    };
+
 
     //filter from main search box
-    $scope.advancedSearch.push({
+    $scope.advancedSearch.filters.push({
         id : "main",
         type : $scope.filterTypes[0],
         constraint : $scope.filterConstraints[0],
@@ -79,7 +94,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         filter.type = $scope.filterTypes[0];
         filter.constraint = $scope.filterConstraints[0];
         filter.term = "";
-        $scope.advancedSearch.push(filter);
+        $scope.advancedSearch.filters.push(filter);
     }
     
 
@@ -360,6 +375,53 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         });
     };
 
+    var vectorSource = new ol.source.Vector({
+        url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
+        format: new ol.format.GeoJSON()
+      });
+
+      var map = new ol.Map({
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          new ol.layer.Vector({
+            source: vectorSource
+          })
+        ],
+        target: 'map',
+        view: new ol.View({
+          center: [0, 0],
+          projection: 'EPSG:4326',
+          zoom: 1,
+          minZoom: 1,
+        })
+      });
+
+      var extent = new ol.interaction.Extent({
+        condition: ol.events.condition.platformModifierKeyOnly
+      });
+      map.addInteraction(extent);
+      extent.setActive(false);
+
+      //Enable interaction by holding shift
+      document.addEventListener('keydown', function(event) {
+        if (event.keyCode == 16) {
+          extent.setActive(true);
+        }
+      });
+      document.addEventListener('keyup', function(event) {
+        if (event.keyCode == 16) {
+          extent.setActive(false);
+        }
+        //$scope.advancedSearch.extent.extent = [0,0,0,0];
+        $scope.advancedSearch.extent.extent = extent.extent_;
+        console.log(extent.extent_);
+        $scope.$apply();
+      });
+
+
+
     //init
     $scope.getFirstPage();
     
@@ -386,6 +448,14 @@ nrlCatalog.directive('headerTemplate', function() {
     return{
         restrict: 'E',
         templateUrl:   'templates/header.html',
+    }
+    
+});
+
+nrlCatalog.directive('sidebarTemplate', function() {
+    return{
+        restrict: 'E',
+        templateUrl:   'templates/sidebar.html',
     }
     
 });
