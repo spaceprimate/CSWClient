@@ -1,153 +1,21 @@
 /*
- * App for interfacing with CSW services to browse and seach records
- * 
- *
- *
- *
+ * Generates xml for a CSW request
  */
 
 
-// Site Module- instatiated above
-var nrlCatalog = angular.module('nrlCatalog', [ ]);
-//var app = angular.module('store', [ ]);
 
-/*
- * main controller
- * $routeProvider allows us to add page specific controllers if needed in the future
- */
-nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
+var csw = {};
 
-    $scope.curPage = 1;
-    var newRequest = true;
-    $scope.curRecords= [];
-    $scope.pages = [];
-    $scope.totalRecords = 0;
-    $scope.recordsPerPage = 10;
-    $scope.totalPages;
-    $scope.pageLimits = [];
-    $scope.defaultExtent = [-180, -90, 180, 90];
+csw.request = function(filters){};
+//basic strings go here
+csw.components = {};
 
-    $scope.useAdvancedSearch = false;
-
-
-
-/* FILTERS =========================================================
- */
-
-    var curFilter = "none";
-
+//filter constructor
+csw.filter = function(){
     
-    $scope.filterTypes = [
-        {id: "title", label: "Title"},
-        {id: "boundingbox", label: "Bounding Box"}
-    ];
-    $scope.filterConstraints = [
-        "contains", "begins with", "exactly matches", "does not contain"
-    ];
+};
 
-    
-    $scope.basicSearch = [{
-        id : "main",
-        type : {id: "title", label: "Title"},
-        term: "",
-        bbox: []
-    }];
-
-
-
-    $scope.advancedSearch = {
-        filters: [],
-        extent: {
-            type: "contains",
-            extent: $scope.defaultExtent
-        }
-    };
-
-
-    //filter from main search box
-    $scope.advancedSearch.filters.push({
-        id : "main",
-        type : $scope.filterTypes[0],
-        constraint : $scope.filterConstraints[0],
-        term: ""
-    });
-    //none, basic, advanced
-    //$scope.filtersStatus = "none";
-
-    function clearFilters(){
-        for (var i = $scope.filters.length - 1; i >= 0; i--) {
-            $scope.filters.pop();
-            //$scope.filtersStatus = "none";
-        }
-    }
-
-    $scope.addAdvancedFilter = function(){
-        var filter = {};
-        //filter.id = id;
-        filter.type = $scope.filterTypes[0];
-        filter.constraint = $scope.filterConstraints[0];
-        filter.term = "";
-        $scope.advancedSearch.filters.push(filter);
-    };
-    
-
-
-    $scope.submitSearch = function(){
-        curFilter = "basic";
-        //$scope.filtersStatus = true;
-        $scope.getFirstPage();
-    };
-
-    $scope.submitAdvancedSearch = function(){
-        curFilter = "advanced";
-        //$scope.filtersStatus = true;
-        $scope.getFirstPage();
-    };
-
-    
-    
-
-    $scope.testApp = function(){
-        console.log("main filter type and term: ");
-        console.log($scope.mainFilter.type);
-        console.log($scope.mainFilter.term);
-    };
-
-    $scope.setPages = function(){
-        $scope.totalPages = Math.ceil($scope.totalRecords / $scope.recordsPerPage);
-        $scope.pages = [];
-        for (var i = 0; i < $scope.totalPages; i++) {
-            $scope.pages.push(i+1);
-        }
-    };
-
-    $scope.updatePages = function(){
-        //$scope.curPage = 1;
-        $scope.setPages();
-        $scope.goToPage(1);
-        //setCurPage(1);
-    };
-
-    function setCurPage(curPage){
-        $scope.curPage = curPage;
-        $scope.pageLimits[1] = Math.ceil(curPage / 10) * 10;
-        $scope.pageLimits[0] = $scope.pageLimits[1] - 10;
-    }
-    /*
-    function hasFilter(){
-        for (var f in $scope.filters){
-            if (f.active == true){
-                return true;
-            }
-        }
-        return false;
-    }
-    */
-    $scope.goToPage = function(page){
-        setCurPage(page);
-        var recordRequest = createRequest($scope.curPage);   
-        $scope.requestRecords(recordRequest);
-    };
+//filter toString prototype override
 
     
 

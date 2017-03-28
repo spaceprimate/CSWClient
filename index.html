@@ -117,13 +117,14 @@
 
           </div><!-- /.col-xs-6 -->
           <div class="col-xs-6">
+            <a href="#" class="pull-right" ng-click="clearExtent()" ng-hide="advancedSearch.extent.extent == defaultExtent">clear</a>
             <label class="small">Hold "Shift" to select extent on map, or eventer values below</label>
             <div id="map" class="map"></div>
 
-            <div class="coord-input"><label class="small">min Lat</label><input type="number" ng-model="advancedSearch.extent.extent[0]"></div>
-            <div class="coord-input"><label class="small">min Long</label><input type="number" ng-model="advancedSearch.extent.extent[1]"></div>
-            <div class="coord-input"><label class="small">max Lat</label><input type="number" ng-model="advancedSearch.extent.extent[2]"></div>
-            <div class="coord-input"><label class="small">max Long</label><input type="number" ng-model="advancedSearch.extent.extent[3]"></div>
+            <div class="coord-input"><label class="small">min Lat</label><input type="number" ng-model="advancedSearch.extent.extent[1]" ng-change="updateExtent()"></div>
+            <div class="coord-input"><label class="small">min Long</label><input type="number" ng-model="advancedSearch.extent.extent[0]" ng-change="updateExtent()"></div>
+            <div class="coord-input"><label class="small">max Lat</label><input type="number" ng-model="advancedSearch.extent.extent[3]" ng-change="updateExtent()"></div>
+            <div class="coord-input"><label class="small">max Long</label><input type="number" ng-model="advancedSearch.extent.extent[2]" ng-change="updateExtent()"></div>
 
 
 
@@ -175,8 +176,9 @@
             <thead>
               <tr>
                 <th colspan="2">Title</th>
-                <th>Type</th>
-                <th>Bounding Box</th>
+                
+                <th>Extent</th>
+                <th></th>
 
               </tr>
             </thead>
@@ -184,8 +186,8 @@
               <tr ng-repeat="record in curRecords">
                 <td><input type="checkbox" name="test"></td>
                 <td>{{record.title}}</td>
-                <td>{{record.type}}</td>
-                <td>{{record.upperCorner}}, {{record.lowerCorner}}</td>
+                <td><span ng-repeat="e in record.extent">{{e}}, </span></td>
+                <td><div id="{{record.mapID}}"  class="map-thumbnail"></div></td>
               </tr>
             </tbody>
           </table>
@@ -225,6 +227,9 @@
           <div class="clearfix"></div>
           <hr>
 
+          
+          <div id="map0"></div>
+          
           
 
         

@@ -89,3 +89,6 @@ a.bottom-toggle{
     line-height: 9px;
 }
 a.left-toggle:hover, a.bottom-toggle:hover{color: #777; background: #e0e0e0;}
+
+.map-thumbnail{width: 250px; height: 125px;}
+
