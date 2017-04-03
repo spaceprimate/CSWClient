@@ -14,14 +14,28 @@
     position: fixed;
     top: 30px;
     bottom: 0px;
-    background: #f8f8f8;
+    background: #eaeaea;
     border-right: 1px solid #e9e9e9;
         box-shadow: inset -6px 0px 10px -6px rgba(0, 0, 0, 0.13);
     border-right: 1px solid #dedede;
     z-index: 3100;
 }
+.add-remove-buttons{display: inline-block; position: absolute; right: 3px; top: 50%; margin-top:-10px;}
+.add-remove-buttons a{color: #333;}
 
-.coord-input{float:left; width: 25%; padding-right: 5px;}
+label.highlight{    color: #337ab7; font-weight: 400; font-style: italic;
+    padding: 1px 0px;
+
+}
+
+.form-inline.advanced-filter {
+    position: relative;
+    border-bottom: 1px solid #c5c5c5;
+    padding: 12px 3px;
+}
+.advanced-filter.first {border-top: 1px solid #c5c5c5;}
+
+.coord-input{float:left; width: 115px; padding-right: 3px;}
 .coord-input label{margin-bottom: 0px;}
 .coord-input input{max-width: 100%;}
 
