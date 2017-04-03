@@ -48,7 +48,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 /* FILTERS =========================================================
  */
 
-    var curFilter = "none";
+    var curSearch = "basic";
 
     /*
     $scope.filterTypes = [
@@ -120,15 +120,32 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     
 
 
-    $scope.submitSearch = function(){
-        curFilter = "basic";
+    $scope.submitSearch = function(search){
+        if (search ==  null){
+            curSearch == "basic";
+        }
+        else{
+            curSearch = search;
+        }
+
+        //curFilter = "basic";
         //$scope.filtersStatus = true;
         $scope.getFirstPage();
     };
+    /*
+    $scope.testSearch = function(search){
+        if (search ==  null){
+            curSearch == "basic";
+        }
+        else{
+            curSearch = search;
+        }
 
-    $scope.testAdvSearch = function(){
-        curFilter = "advanced";
+        //curFilter = "basic";
+        //$scope.filtersStatus = true;
+        $scope.getFirstPage();
     }
+    */
 
     $scope.submitAdvancedSearch = function(){
         curFilter = "advanced";
@@ -292,12 +309,20 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                                         '</ogc:BBOX>' + 
                                         */
         
-
+    function getRecordRequest(){
+        if (curSearch == "basic"){
+            return $scope.basicSearch.createRequest($scope.pages);
+        }
+        else{
+            return $scope.advancedSearch.createRequest($scope.pages);
+        }
+    }
     $scope.getFirstPage = function(){
         curPage = 1;
         $scope.pages.pageLimits = [0, 10];
         newRequest = true;
-        var recordRequest = createRequest(curPage);
+        var recordRequest = $scope.basicSearch.createRequest($scope.pages);
+        console.log("actually called?");
         //var recordRequest = createRequest(curPage, curSearch, ...)
         $scope.requestRecords(recordRequest);
     };
@@ -340,7 +365,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                             //alert("it works");
                             
                             var xml = $.parseXML(response.data);
-                            //console.log(xml);
+                            console.log(xml);
                             var i = 1;
 
                             if (newRequest == true){
