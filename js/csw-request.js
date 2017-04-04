@@ -14,7 +14,7 @@ csw.components = {};
 csw.filter = function(){
     this.types = [
         {id: "title", label: "Title"},
-        {id: "boundingbox", label: "Bounding Box"},
+        {id: "extent", label: "Bounding Box"},
         {id: "test", label: "test"}
     ];
     this.constraints = [
@@ -40,7 +40,7 @@ csw.search = function(){
     this.setHasExtent = function(){
         var extentTest = false;
         for (var i = 0; i < this.filters.length; i++) {
-            if (this.filters[i].type.id == "boundingbox"){
+            if (this.filters[i].type.id == "extent"){
                 extentTest = true;
             }
         }
@@ -53,7 +53,7 @@ csw.search = function(){
     
     this.findExtentIndex = function(){
         for (var i = 0; i < this.filters.length; i++) {
-            if (this.filters[i].type.id == "boundingbox"){
+            if (this.filters[i].type.id == "extent"){
                 return i;
             }
         }
@@ -91,8 +91,8 @@ csw.search = function(){
 csw.search.prototype.createRequest = function(pages){
     console.log("prototype request made");
 //function createRequest(page){
-        console.log(": pages");
-        console.log(pages);
+        console.log("filters: ");
+        console.log(this.filters);
 
         //console.log(pages.curPage);
         //console.log(pages.recordsPerPage);
@@ -143,9 +143,52 @@ csw.search.prototype.createRequest = function(pages){
     }
 
 csw.getFilterXml = function(filter){
-    xml =   '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
+
+    if (filter.type.id == "title"){ return csw.getTitleXml(filter);}
+    else if (filter.type.id == "extent"){ return csw.getBboxXml(filter);}
+
+    
+};
+
+csw.getBboxXml = function(filter){
+    
+    var xml =          '<ogc:BBOX>' + 
+                      '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
+                      '<gml:Envelope>' + 
+                        '<gml:lowerCorner>' + filter.extent[0] + ' ' + filter.extent[1] + '</gml:lowerCorner>' + 
+                        '<gml:upperCorner>' + filter.extent[2] + ' ' + filter.extent[3] + '</gml:upperCorner>' + 
+                      '</gml:Envelope>' + 
+                    '</ogc:BBOX>';
+    
+    /*
+    var xml = '<ogc:BBOX>' + 
+                                      '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
+                                      '<gml:Envelope>' + 
+                                        '<gml:lowerCorner>47 -5</gml:lowerCorner>' + 
+                                        '<gml:upperCorner>55 20</gml:upperCorner>' + 
+                                      '</gml:Envelope>' + 
+                                    '</ogc:BBOX>';
+    */
+    return xml;
+    
+}
+
+csw.getTitleXml = function(filter){
+    var termPrefix, termSuffix, matchCase;
+    if (filter.constraint.id == "PropertyIsLike"){
+        termPrefix = "%";
+        termSuffix = "%";
+        matchCase = "false";
+    }
+
+
+    var xml =   '<ogc:'+ filter.constraint.id +' matchCase="'+ matchCase +'" wildCard="%" singleChar="_" escapeChar="\">' +
                 '<ogc:PropertyName>dc:' + filter.type.id + '</ogc:PropertyName>' +
-                '<ogc:Literal>%' + filter.term + '%</ogc:Literal>' +
+                '<ogc:Literal>' + termPrefix + filter.term + termSuffix + '</ogc:Literal>' +
             '</ogc:PropertyIsLike>';
     return xml;
-}
+};
+
+
+
+

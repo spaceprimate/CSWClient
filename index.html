@@ -65,7 +65,7 @@
         <form class="form-inline text-center"> 
           <div class="form-group"> 
              
-            <input class="form-control" placeholder="Search" ng-model="basicSearch.filters[0].term" ng-if="basicSearch[0].type.id != 'boundingbox'" ng-if="basicSearch[0].type != 'boundingbox'">
+            <input class="form-control" placeholder="Search" ng-model="basicSearch.filters[0].term">
 
             
 
@@ -110,12 +110,12 @@
                 <input  id="exampleInputName2" placeholder="Search term" ng-model="f.term"> 
               </div>
 
-              <select ng-if="f.type.id == 'boundingbox'" ng-model="f.extentConstraint" ng-options="o.label for o in f.extentConstraints"></select>
+              <select ng-if="f.type.id == 'extent'" ng-model="f.extentConstraint" ng-options="o.label for o in f.extentConstraints"></select>
 
               
 
-              <div ng-if="f.type.id == 'boundingbox'">
-                <label class="small highlight" ng-if="f.type.id == 'boundingbox'">Hold "Shift" to select extent on map, or eventer values below</label>
+              <div ng-if="f.type.id == 'extent'">
+                <label class="small highlight" ng-if="f.type.id == 'extent'">Hold "Shift" to select extent on map, or eventer values below</label>
                 <div class="clearfix"></div>
 
                 <div class="coord-input"><label class="small">min Long</label><input type="number" ng-model="advancedSearch.filters[$index].extent[0]" ng-change="updateExtent()" ></div>

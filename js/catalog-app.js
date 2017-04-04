@@ -53,7 +53,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     /*
     $scope.filterTypes = [
         {id: "title", label: "Title"},
-        {id: "boundingbox", label: "Bounding"}
+        {id: "extent", label: "Bounding"}
     ];
     $scope.filterConstraints = [
         "contains", "begins with", "exactly matches", "does not contain"
@@ -232,9 +232,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                                 '</ogc:PropertyIsLike>';
                 }
 
-                else if ($scope.basicSearch.filters[0].type.id == 'boundingbox'){
+                else if ($scope.basicSearch.filters[0].type.id == 'extent'){
                     request += '<ogc:BBOX>' + 
-                                      '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
+                                      '<ogc:PropertyName>ows:extent</ogc:PropertyName>' + 
                                       '<gml:Envelope>' + 
                                         '<gml:lowerCorner>' + $scope.basicSearch.filters[0].bbox[0] + ' ' + $scope.basicSearch.filters[0].bbox[1] + '</gml:lowerCorner>' + 
                                         '<gml:upperCorner>' + $scope.basicSearch.filters[0].bbox[0] + ' ' + $scope.basicSearch.filters[0].bbox[1] + '</gml:upperCorner>' + 
@@ -255,7 +255,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                                 '<ogc:Filter>' + 
                                 
                                     '<ogc:BBOX>' + 
-                                      '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
+                                      '<ogc:PropertyName>ows:extent</ogc:PropertyName>' + 
                                       '<gml:Envelope>' + 
                                         '<gml:lowerCorner>47 -5</gml:lowerCorner>' + 
                                         '<gml:upperCorner>55 20</gml:upperCorner>' + 
@@ -301,7 +301,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
 
                                         '<ogc:BBOX>' + 
-                                            '<ogc:PropertyName>BoundingBox</ogc:PropertyName>' + 
+                                            '<ogc:PropertyName>extent</ogc:PropertyName>' + 
                                             '<gml:Envelope>' + 
                                                 '<gml:lowerCorner>47 -5</gml:lowerCorner>' + 
                                                 '<gml:upperCorner>55 20</gml:upperCorner>' + 
@@ -321,7 +321,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         curPage = 1;
         $scope.pages.pageLimits = [0, 10];
         newRequest = true;
-        var recordRequest = $scope.basicSearch.createRequest($scope.pages);
+        var recordRequest = getRecordRequest();
         console.log("actually called?");
         //var recordRequest = createRequest(curPage, curSearch, ...)
         $scope.requestRecords(recordRequest);
@@ -668,13 +668,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
 
 
-nrlCatalog.directive('advancedSearch', function() {
-    return{
-        restrict: 'E',
-        template:   'wotcha, harry!',
-    }
-    
-});
+
 
 nrlCatalog.directive('headerTemplate', function() {
     return{
