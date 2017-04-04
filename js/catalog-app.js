@@ -192,14 +192,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         return false;
     }
     */
-    $scope.goToPage = function(page){
-        setCurPage(page);
-        var recordRequest = createRequest($scope.pages.curPage);   
-        $scope.requestRecords(recordRequest);
-    };
+
 
     
-
+/*
     function createRequest(page){
         var recordNumber = (page - 1) * $scope.pages.recordsPerPage + 1;
         var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + $scope.pages.recordsPerPage + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
@@ -272,6 +268,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                     '</csw:GetRecords>';
         return request;
     }
+    */
 
     function createRequestTest(page){
         var recordNumber = (page - 1) * $scope.pages.recordsPerPage + 1;
@@ -318,7 +315,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
     }
     $scope.getFirstPage = function(){
-        curPage = 1;
+        $scope.pages.curPage = 1;
         $scope.pages.pageLimits = [0, 10];
         newRequest = true;
         var recordRequest = getRecordRequest();
@@ -331,14 +328,23 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
         setCurPage($scope.pages.curPage + 1);
         //curPage ++;
-        var recordRequest = createRequest($scope.pages.curPage);
+        //var recordRequest = createRequest($scope.pages.curPage);
+        var recordRequest = getRecordRequest();
         $scope.requestRecords(recordRequest);
     };
 
     $scope.getPrevPage = function(){
         setCurPage($scope.pages.curPage - 1);
         //curPage --;
-        var recordRequest = createRequest($scope.pages.curPage);
+        //var recordRequest = createRequest($scope.pages.curPage);
+        var recordRequest = getRecordRequest();
+        $scope.requestRecords(recordRequest);
+    };
+
+    $scope.goToPage = function(page){
+        setCurPage(page);
+        //var recordRequest = createRequest($scope.pages.curPage);   
+        var recordRequest = getRecordRequest();
         $scope.requestRecords(recordRequest);
     };
 
