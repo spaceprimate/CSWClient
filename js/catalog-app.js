@@ -13,25 +13,16 @@ var nrlCatalog = angular.module('nrlCatalog', [ ]);
 
 /*
  * main controller
- * $routeProvider allows us to add page specific controllers if needed in the future
+ * injects $scope and $http ( for post requests )
  */
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
-
-    //$scope.curPage = 1;
-    //$scope.pages = [];
-    //$scope.pages.totalRecords = 0;
-    //$scope.pages.recordsPerPage = 10;
-    //$scope.pages.totalPages;
-    //$scope.pages.pageLimits = [];
-
+    //if true, app knows to rebuild $scope.pages object
     var newRequest = true;
-    $scope.curRecords= [];
-    
-    
-    
-    $scope.defaultExtent = [-180, -90, 180, 90];
 
-    $scope.useAdvancedSearch = false;
+    //after post request, records objects are created and pushed here
+    $scope.curRecords= [];
+
+    $scope.defaultExtent = [-180, -90, 180, 90];
 
     $scope.pages = {
         curPage: 1,
@@ -44,63 +35,13 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     }
 
 
-
-/* FILTERS =========================================================
- */
-
+    //set to either "basic" or "advanced"
     var curSearch = "basic";
 
-    /*
-    $scope.filterTypes = [
-        {id: "title", label: "Title"},
-        {id: "extent", label: "Bounding"}
-    ];
-    $scope.filterConstraints = [
-        "contains", "begins with", "exactly matches", "does not contain"
-    ];
-    */
-
+    //Create our search objects
     $scope.basicSearch = new csw.search();
-
-    console.log("basic search is: ");
-    console.log($scope.basicSearch);
-
-    /*
-    $scope.basicSearch = [{
-        id : "main",
-        type : {id: "title", label: "Title"},
-        term: "",
-        bbox: []
-    }];
-    */
-
     $scope.advancedSearch = new csw.search();
 
-    //$scope.setHasExtent
-
-
-    /*
-    $scope.advancedSearch = {
-        filters: [],
-        extent: {
-            type: "contains",
-            extent: $scope.defaultExtent
-        }
-    };
-    */
-
-
-    //filter from main search box
-    /*
-    $scope.advancedSearch.filters.push({
-        id : "main",
-        type : $scope.filterTypes[0],
-        constraint : $scope.filterConstraints[0],
-        term: ""
-    });
-    */
-    //none, basic, advanced
-    //$scope.filtersStatus = "none";
 
     function clearFilters(){
         for (var i = $scope.filters.length - 1; i >= 0; i--) {
@@ -109,15 +50,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
     }
 
-    $scope.addAdvancedFilter = function(){
-        var filter = {};
-        //filter.id = id;
-        filter.type = $scope.filterTypes[0];
-        filter.constraint = $scope.filterConstraints[0];
-        filter.term = "";
-        $scope.advancedSearch.filters.push(filter);
-    };
-    
+
 
 
     $scope.submitSearch = function(search){
@@ -389,6 +322,12 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                                 //console.log($(record).find("title").html());
                                 var item = {};
                                 item.title = $(record).find("title").html();
+                                item.keywords = [];
+                                $(record).find("subject").each(function(e, subject){
+                                    item.keywords.push($(subject).html());
+                                });
+                                item.abstract = $(record).find("abstract").html();
+                                console.log(item.abstract);
                                 item.type = $(record).find("type").html();
                                 item.lowerCorner = $(record).find("LowerCorner").html();
                                 item.upperCorner = $(record).find("UpperCorner").html();
