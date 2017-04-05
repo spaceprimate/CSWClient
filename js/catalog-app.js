@@ -43,16 +43,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.advancedSearch = new csw.search();
 
 
-    function clearFilters(){
-        for (var i = $scope.filters.length - 1; i >= 0; i--) {
-            $scope.filters.pop();
-            //$scope.filtersStatus = "none";
-        }
-    }
-
-
-
-
+    /**
+     * Sets curSearch value and calls method to retrieve the first set of pages
+     * 
+     * @param {string} either "basic" or "advanced". if param is ommited, "basic" is used
+     */
     $scope.submitSearch = function(search){
         if (search ==  null){
             curSearch == "basic";
@@ -60,41 +55,13 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         else{
             curSearch = search;
         }
-
-        //curFilter = "basic";
-        //$scope.filtersStatus = true;
-        $scope.getFirstPage();
-    };
-    /*
-    $scope.testSearch = function(search){
-        if (search ==  null){
-            curSearch == "basic";
-        }
-        else{
-            curSearch = search;
-        }
-
-        //curFilter = "basic";
-        //$scope.filtersStatus = true;
-        $scope.getFirstPage();
-    }
-    */
-
-    $scope.submitAdvancedSearch = function(){
-        curFilter = "advanced";
-        //$scope.filtersStatus = true;
         $scope.getFirstPage();
     };
 
-    
-    
-
-    $scope.testApp = function(){
-        console.log("main filter type and term: ");
-        console.log($scope.mainFilter.type);
-        console.log($scope.mainFilter.term);
-    };
-
+    /**
+     * based on settings in pages object, this calculates how many pages are required
+     * to accomodate the number of returned records, based on the number of records per page (set by user)
+     */
     $scope.setPages = function(){
         $scope.pages.totalPages = Math.ceil($scope.pages.totalRecords / $scope.pages.recordsPerPage);
         $scope.pages.pages = [];
@@ -103,142 +70,31 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
     };
 
+    /**
+     * Calls methods to recalculate # of pages and, load first page in series
+     * Triggered when user changes $scope.pages.recordsPerPage in view
+     */
     $scope.updatePages = function(){
-        //$scope.pages.curPage = 1;
         $scope.setPages();
         $scope.goToPage(1);
-        //setCurPage(1);
     };
 
+    /**
+     * Sets Current page, and updates what records should be visile on that page
+     * @param{int}
+     */
     function setCurPage(curPage){
         $scope.pages.curPage = curPage;
         $scope.pages.pageLimits[1] = Math.ceil(curPage / 10) * 10;
         $scope.pages.pageLimits[0] = $scope.pages.pageLimits[1] - 10;
     }
-    /*
-    function hasFilter(){
-        for (var f in $scope.filters){
-            if (f.active == true){
-                return true;
-            }
-        }
-        return false;
-    }
-    */
 
-
-    
-/*
-    function createRequest(page){
-        var recordNumber = (page - 1) * $scope.pages.recordsPerPage + 1;
-        var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + $scope.pages.recordsPerPage + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
-                          '<csw:Query typeNames="csw:Record">' +
-                            '<csw:ElementSetName>full</csw:ElementSetName>';
-
-            if (curFilter == "none"){
-                request +=  '<csw:Constraint version="1.1.0">' +
-                                '<ogc:Filter>' + 
-                                    '<ogc:PropertyIsNotEqualTo>' +
-                                        '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
-                                        '<ogc:Literal>service</ogc:Literal>' +
-                                    '</ogc:PropertyIsNotEqualTo>' + 
-                                '</ogc:Filter>' +
-                            '</csw:Constraint>';
-            }
-            else if (curFilter == "basic") {
-                request +=  '<csw:Constraint version="1.1.0">' +
-                                '<ogc:Filter>' + 
-                                    '<ogc:And>' +
-                                        '<ogc:PropertyIsNotEqualTo>' +
-                                            '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
-                                            '<ogc:Literal>service</ogc:Literal>' +
-                                        '</ogc:PropertyIsNotEqualTo>';
-
-                if ($scope.basicSearch.filters[0].type.id == 'title'){
-                    request += '<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
-                                    '<ogc:PropertyName>dc:' + $scope.basicSearch.filters[0].type.id + '</ogc:PropertyName>' +
-                                    '<ogc:Literal>%' + $scope.basicSearch.filters[0].term + '%</ogc:Literal>' +
-                                '</ogc:PropertyIsLike>';
-                }
-
-                else if ($scope.basicSearch.filters[0].type.id == 'extent'){
-                    request += '<ogc:BBOX>' + 
-                                      '<ogc:PropertyName>ows:extent</ogc:PropertyName>' + 
-                                      '<gml:Envelope>' + 
-                                        '<gml:lowerCorner>' + $scope.basicSearch.filters[0].bbox[0] + ' ' + $scope.basicSearch.filters[0].bbox[1] + '</gml:lowerCorner>' + 
-                                        '<gml:upperCorner>' + $scope.basicSearch.filters[0].bbox[0] + ' ' + $scope.basicSearch.filters[0].bbox[1] + '</gml:upperCorner>' + 
-                                      '</gml:Envelope>' + 
-                                    '</ogc:BBOX>';
-                }
-
-                                        
-                                        
-                request +=          '</ogc:And>' + 
-                                '</ogc:Filter>' +
-                            '</csw:Constraint>';
-
-            }
-
-            else if (curFilter == "basicdf") {
-                request +=  '<csw:Constraint version="1.1.0">' +
-                                '<ogc:Filter>' + 
-                                
-                                    '<ogc:BBOX>' + 
-                                      '<ogc:PropertyName>ows:extent</ogc:PropertyName>' + 
-                                      '<gml:Envelope>' + 
-                                        '<gml:lowerCorner>47 -5</gml:lowerCorner>' + 
-                                        '<gml:upperCorner>55 20</gml:upperCorner>' + 
-                                      '</gml:Envelope>' + 
-                                    '</ogc:BBOX>' + 
-                                    
-                                '</ogc:Filter>' +
-                            '</csw:Constraint>';
-
-            }
-            
-
-        request +=      '</csw:Query>' +
-                    '</csw:GetRecords>';
-        return request;
-    }
-    */
-
-    function createRequestTest(page){
-        var recordNumber = (page - 1) * $scope.pages.recordsPerPage + 1;
-        var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + $scope.pages.recordsPerPage + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
-                          '<csw:Query typeNames="csw:Record">' +
-                            '<csw:ElementSetName>full</csw:ElementSetName>';
-
-           
-
-            
-            
-
-        request +=      '</csw:Query>' +
-                    '</csw:GetRecords>';
-        return request;
-    }
-
-
-/*
-
-
-'<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="\">' +
-                                            '<ogc:PropertyName>dc:' + $scope.basicSearch.filters[0].type.id + '</ogc:PropertyName>' +
-                                            '<ogc:Literal>%marble%</ogc:Literal>' +
-                                        '</ogc:PropertyIsLike>' +
-
-
-
-                                        '<ogc:BBOX>' + 
-                                            '<ogc:PropertyName>extent</ogc:PropertyName>' + 
-                                            '<gml:Envelope>' + 
-                                                '<gml:lowerCorner>47 -5</gml:lowerCorner>' + 
-                                                '<gml:upperCorner>55 20</gml:upperCorner>' + 
-                                            '</gml:Envelope>' + 
-                                        '</ogc:BBOX>' + 
-                                        */
-        
+    /**
+     * Checks curSearch and calls createRequest on appropriate search object
+     * There are only 2 possible search objects, "basic" and "advanced"
+     *
+     * @return{String} getRecordRequest - xml string required for csw record request
+     */
     function getRecordRequest(){
         if (curSearch == "basic"){
             return $scope.basicSearch.createRequest($scope.pages);
@@ -247,49 +103,70 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             return $scope.advancedSearch.createRequest($scope.pages);
         }
     }
+
+    /**
+     * Checks curSearch and calls createRequest on appropriate search object
+     * There are only 2 possible search objects, "basic" and "advanced"
+     *
+     * @return{String} getRecordRequest - xml string required for csw record request
+     */
     $scope.getFirstPage = function(){
         $scope.pages.curPage = 1;
         $scope.pages.pageLimits = [0, 10];
         newRequest = true;
         var recordRequest = getRecordRequest();
-        console.log("actually called?");
-        //var recordRequest = createRequest(curPage, curSearch, ...)
         $scope.requestRecords(recordRequest);
     };
 
+    /**
+     * increments $scope.pages.curPage
+     * creates and submits and new records request
+     */
     $scope.getNextPage = function(){
-
         setCurPage($scope.pages.curPage + 1);
-        //curPage ++;
-        //var recordRequest = createRequest($scope.pages.curPage);
         var recordRequest = getRecordRequest();
         $scope.requestRecords(recordRequest);
     };
 
+    /**
+     * decrements $scope.pages.curPage
+     * creates and submits and new records request
+     */
     $scope.getPrevPage = function(){
         setCurPage($scope.pages.curPage - 1);
-        //curPage --;
-        //var recordRequest = createRequest($scope.pages.curPage);
         var recordRequest = getRecordRequest();
         $scope.requestRecords(recordRequest);
     };
 
+    /**
+     * Loads records for a arbitrary page #
+     * creates and submits and new records request
+     * @param{int} page - page #
+     */
     $scope.goToPage = function(page){
         setCurPage(page);
-        //var recordRequest = createRequest($scope.pages.curPage);   
         var recordRequest = getRecordRequest();
         $scope.requestRecords(recordRequest);
     };
 
+    /**
+     * Converts coordinates from corner formatted strings "20, 30" to extent array
+     * @param{String} lowerCorner, upperCorner
+     * @return{array} getExtentFromCorners
+     */
     function getExtentFromCorners(lowerCorner, upperCorner){
         lc = lowerCorner.split(" ");
         uc = upperCorner.split(" ");
-        
         return lc.concat(uc);
     }
 
+    /**
+     * Makes angular http POST request to CSW Server
+     * iterates through results, creating and pushing record objects to $scope.curRecords
+     *
+     * @param{String} recordRequest - string containing xml for request
+     */
     $scope.requestRecords = function(recordRequest){
-
         $http({
             url: "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2",
             method: "POST",
@@ -300,175 +177,74 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         })
         .then(function(response){
             //success
-            $scope.curRecords = [];
-                            //alert("it works");
-                            
-                            var xml = $.parseXML(response.data);
-                            console.log(xml);
-                            var i = 1;
+            $scope.curRecords = [];                            
+            var xml = $.parseXML(response.data);
+            console.log(xml);
+            var i = 1;
 
-                            if (newRequest == true){
-                                $scope.pages.totalRecords = $(xml).find("SearchResults").attr('numberOfRecordsMatched');
-                                $scope.setPages();
-                                newRequest = false;
-                            }
-                            
-                            
+            if (newRequest == true){
+                $scope.pages.totalRecords = $(xml).find("SearchResults").attr('numberOfRecordsMatched');
+                $scope.setPages();
+                newRequest = false;
+            }
+            $(xml).find("Record").each(function(i,record){
+                var item = {};
+                item.title = $(record).find("title").html();
+                item.keywords = [];
+                $(record).find("subject").each(function(e, subject){
+                    item.keywords.push($(subject).html());
+                });
+                item.abstract = $(record).find("abstract").html();
+                item.type = $(record).find("type").html();
+                item.lowerCorner = $(record).find("LowerCorner").html();
+                item.upperCorner = $(record).find("UpperCorner").html();
+                item.extent = getExtentFromCorners($(record).find("LowerCorner").html(), $(record).find("UpperCorner").html());
+                item.mapID = "map"+i;
+                $scope.curRecords.push(item);
+                i++;
 
-
-                            $(xml).find("Record").each(function(i,record){
-
-                                
-                                //console.log($(record).find("title").html());
-                                var item = {};
-                                item.title = $(record).find("title").html();
-                                item.keywords = [];
-                                $(record).find("subject").each(function(e, subject){
-                                    item.keywords.push($(subject).html());
-                                });
-                                item.abstract = $(record).find("abstract").html();
-                                console.log(item.abstract);
-                                item.type = $(record).find("type").html();
-                                item.lowerCorner = $(record).find("LowerCorner").html();
-                                item.upperCorner = $(record).find("UpperCorner").html();
-                                item.extent = getExtentFromCorners($(record).find("LowerCorner").html(), $(record).find("UpperCorner").html());
-                                item.mapID = "map"+i;
-                                $scope.curRecords.push(item);
-                                //$("#records").append("<tr><td>" + i + "</td><td>" + $(record).find("title").html() + "</td>");
-                                i++;
-
-                                //console.log(item.extent);
-                              
-                            });
-
-                            setTimeout(createPreviews, 100);
-                            //createPreviews();
-
-
-
-                            //console.log($scope.curRecords);
-
-
+            });
+            setTimeout(createPreviews, 100);
         },
-            function(response){console.log(response)});
-        
+        function(response){console.log(response)});
     };
 
-
-    //old request using jquery and manual scope update
-    /*
-    $scope.requestRecordsOld = function(recordRequest){
-        $.ajax({ type: "POST",
-                        url: "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2",
-                        data: recordRequest,
-                        contentType: "text/xml",
-                        dataType: "xml",
-                        cache: false,
-                        error: function() { alert("No data found."); },
-                        success: function(xml) {
-                            $scope.curRecords = [];
-                            //alert("it works");
-                            console.log(xml);
-                            var i = 1;
-
-                            if (newRequest == true){
-                                $scope.pages.totalRecords = $(xml).find("SearchResults").attr('numberOfRecordsMatched');
-                                $scope.setPages();
-                                newRequest = false;
-                            }
-                            
-                            
-
-
-                            $(xml).find("BriefRecord").each(function(i,record){
-
-                                
-                                //console.log($(record).find("title").html());
-                                var item = {};
-                                item.title = $(record).find("title").html();
-                                item.type = $(record).find("type").html();
-                                item.lowerCorner = $(record).find("LowerCorner").html();
-                                item.upperCorner = $(record).find("UpperCorner").html();
-                                $scope.curRecords.push(item);
-                                //$("#records").append("<tr><td>" + i + "</td><td>" + $(record).find("title").html() + "</td>");
-                                i++;
-                              
-                            });
-                            $scope.$apply(function() {
-                              //$scope.msgs = newMsgs;
-                              console.log("updated scope");
-                            });
-                            console.log("curRecords: ");
-                            console.log($scope.curRecords);
-
-                            //alert($(xml).find("project")[0].attr("id"));
-                        }
-        });
-    };
-    */
-
+    /**
+     * updates extent when user manually changes coordinate input in view
+     */
     $scope.updateExtent = function(){
-        extent.setExtent($scope.advancedSearch.getExtent());
+        advSearchExtent.setExtent($scope.advancedSearch.getExtent());
     };
 
 
-
+    /**
+     * resets extent to default (in OL map and search object)
+     */
     $scope.clearExtent = function(){
         extent.setExtent(null);
         $scope.advancedSearch.extent.extent = $scope.defaultExtent;
     };
 
-    $scope.mapTest = function(){
-        console.log(extent);
-        //extent.setActive(true);
-        extent.setExtent([0,0,90,90]);
-        //extent.setActive(false);
-
-        extent.changed();
-    };
 
     /* ===========================================================================================
      * open layers map
      */
 
+    var feature = new ol.Feature({
+        geometry: new ol.geom.Polygon.fromExtent([0,0,90,90])
+    })
 
-     var polyCoords = [];
-        var coords = "95.61,38.60 95.22,37.98 95.60,37.66 94.97,37.65".split(' ');
-
-        for (var i in coords) {
-          var c = coords[i].split(',');
-          polyCoords.push(ol.proj.transform([parseFloat(c[0]), parseFloat(c[1])], 'EPSG:4326', 'EPSG:3857'));
-        }
-
-        var testCoords = [
-            [0,0],
-            [0,90],
-            [90,90],
-            [90,0],
-            [0,0]
-        ]
-
-        var feature = new ol.Feature({
-            geometry: new ol.geom.Polygon.fromExtent([0,0,90,90])
+    var layer = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: [feature]
         })
+    });
 
-        var layer = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [feature]
-            })
-        });
-
-
-
-
-
-
+    //
     var vectorSource = new ol.source.Vector({
         url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
         format: new ol.format.GeoJSON()
       });
-
-    
 
     var layers = [
           new ol.layer.Tile({
@@ -488,131 +264,117 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
           minZoom: 1,
         });
 
+    // Open Street Maps layer
     var osmLayer = new ol.layer.Tile({
-            source: new ol.source.OSM()
-          });
+        source: new ol.source.OSM()
+    });
+    //Country Outlines layer
     var countriesLayer = new ol.layer.Vector({
-            //source: feature
-            source: vectorSource
-          });
+        source: vectorSource
+    });
 
-    var maps = [];
+    // Extent preview maps Array: 1 for every item in $scope.curRecords
+    // deleted and repopulated on each page load
+    var previewMaps = [];
 
+    /**
+     * Flips the long/lat values in an extent array 
+     * for use in building an OL polygon
+     * @param {float Array(4)} extent
+     * @return {float Array(4)} flipExtent
+     */
     function flipExtent(extent){
+        console.log(extent);
         return [extent[1], extent[0], extent[3], extent[2]];
     }
 
+
+    // Styles for extent preview maps
+    var mapStroke = new ol.style.Stroke({
+        color: '#f44336',
+        width: 2
+    });
+    var mapStyle = new ol.style.Style({ stroke: mapStroke });
+
+
+    /**
+     * iterates through $scope.curRecords, creating a new OL map for each
+     * with each record's extent displayed in red
+     */
     function createPreviews(){
         for (var i = 0; i < $scope.curRecords.length; i++) {
-            //console.log("this is a test: " + $scope.curRecords[i].extent);
-
+            
             var feature = new ol.Feature({
-            geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.curRecords[i].extent))
+                geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.curRecords[i].extent))
             });
 
-            var selected_polygon_style = {
-                strokeWidth: 5,
-                strokeColor: '#f44336'
-                // add more styling key/value pairs as your need
-            };
+            feature.setStyle(mapStyle);
 
-             var stroke = new ol.style.Stroke({
-               color: '#f44336',
-               width: 2
-             });
-
-             var style = new ol.style.Style({
-                stroke: stroke
-             });
-            //feature.style = selected_polygon_style;
-            feature.setStyle(style);
-            //console.log("feature: ");
-            //console.log(feature);
-
-            var layer = new ol.layer.Vector({
+            var extentLayer = new ol.layer.Vector({
                 source: new ol.source.Vector({
                     features: [feature]
                 })
             });
 
-
-            
-
-            maps[i] = new ol.Map({
+            previewMaps[i] = new ol.Map({
                 size: [250,125],
-                layers: [osmLayer, layer],
+                layers: [osmLayer, extentLayer],
                 target: $scope.curRecords[i].mapID,
                 view: new ol.View({
                   center: [0, 0],
                   projection: 'EPSG:4326',
                   zoom: 0,
-
-
                 }),
                 controls: []
               });
 
-            maps[i].getView().fit([-90, -180, 90, 180]);
-
-            //console.log(maps[i].getSize());
-
-
-        
+            previewMaps[i].getView().fit([-90, -180, 90, 180]);
         }
     }
 
 
-
-      var map = new ol.Map({
+    /**
+     * Map used for drawing extent in Advanced Search
+     */
+    var advSearchMap = new ol.Map({
         layers: [osmLayer, countriesLayer],
         target: 'adv-search-map',
         view: new ol.View({
-          center: [0, 0],
-          projection: 'EPSG:4326',
-          zoom: 1,
-          minZoom: 1,
+            center: [0, 0],
+            projection: 'EPSG:4326',
+            zoom: 1,
+            minZoom: 1,
         })
-      });
+    });
 
-      var extent = new ol.interaction.Extent({
+    //OL extent for advanced search
+    var advSearchExtent = new ol.interaction.Extent({
         condition: ol.events.condition.platformModifierKeyOnly
-      });
-      map.addInteraction(extent);
-      extent.setActive(false);
+    });
+    advSearchMap.addInteraction(advSearchExtent);
+    advSearchExtent.setActive(false);
 
-      //Enable interaction by holding shift
-      document.addEventListener('keydown', function(event) {
+    //Enable interaction by holding shift
+    document.addEventListener('keydown', function(event) {
         if (event.keyCode == 16) {
-          extent.setActive(true);
+            advSearchExtent.setActive(true);
         }
-      });
-      document.addEventListener('keyup', function(event) {
+    });
+
+    //stop extent interaction when the shift key releases
+    /** this is being called constantly and causes warnings, should only be called when interaction with the map **/
+    document.addEventListener('keyup', function(event) {
         if (event.keyCode == 16) {
-          extent.setActive(false);
+            advSearchExtent.setActive(false);
         }
-        //$scope.advancedSearch.extent.extent = [0,0,0,0];
-        $scope.advancedSearch.setExtent( extent.getExtent() );
-        //console.log(extent.extent_);
+        $scope.advancedSearch.setExtent( advSearchExtent.getExtent() );
         $scope.$apply();
-      });
-
-      //setTimeout( function() { map.setTarget('adv-search-map'); console.log("target called"); map.updateSize}, 9000);
-
+    });
 
     //init
     //$scope.getFirstPage();
-    
-
-
-
 
 }]);
-
-
-
-
-
-
 
 
 nrlCatalog.directive('headerTemplate', function() {
@@ -620,7 +382,6 @@ nrlCatalog.directive('headerTemplate', function() {
         restrict: 'E',
         templateUrl:   'templates/header.html',
     }
-    
 });
 
 nrlCatalog.directive('sidebarTemplate', function() {
@@ -628,32 +389,20 @@ nrlCatalog.directive('sidebarTemplate', function() {
         restrict: 'E',
         templateUrl:   'templates/sidebar.html',
     }
-    
 });
 
-/*
-<form class="form-inline">
-            <div class="form-group"> 
-              <select class="form-control" ng-model="filters[0].type" ng-options="f.label for f in filterTypes track by f.id">
-                
-              </select>  
-              <input class="form-control" id="exampleInputName2" placeholder="Search" ng-model="filters[0].term">  
-            </div>
-            <p><button type="submit" class="btn btn-default" ng-click="submitSearch()">Search</button> </p>
-          </form>
-          */
+nrlCatalog.directive('basicSearch', function() {
+    return{
+        restrict: 'E',
+        templateUrl:   'templates/searchBasic.html',
+    }
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
+nrlCatalog.directive('advancedSearch', function() {
+    return{
+        restrict: 'E',
+        templateUrl:   'templates/searchAdvanced.html',
+    }
+});
 
 
