@@ -36,7 +36,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
 
     //set to either "basic" or "advanced"
-    var curSearch = "basic";
+    var curSearch = "basicSearch";
 
     //Create our search objects
     $scope.basicSearch = new csw.search();
@@ -49,8 +49,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @param {string} either "basic" or "advanced". if param is ommited, "basic" is used
      */
     $scope.submitSearch = function(search){
-        if (search ==  null){
-            curSearch == "basic";
+        
+        
+        if (search ==  undefined){
+            curSearch = "basicSearch";
         }
         else{
             curSearch = search;
@@ -89,20 +91,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.pages.pageLimits[0] = $scope.pages.pageLimits[1] - 10;
     }
 
-    /**
-     * Checks curSearch and calls createRequest on appropriate search object
-     * There are only 2 possible search objects, "basic" and "advanced"
-     *
-     * @return{String} getRecordRequest - xml string required for csw record request
-     */
-    function getRecordRequest(){
-        if (curSearch == "basic"){
-            return $scope.basicSearch.createRequest($scope.pages);
-        }
-        else{
-            return $scope.advancedSearch.createRequest($scope.pages);
-        }
-    }
+
 
     /**
      * Checks curSearch and calls createRequest on appropriate search object
@@ -114,7 +103,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.pages.curPage = 1;
         $scope.pages.pageLimits = [0, 10];
         newRequest = true;
-        var recordRequest = getRecordRequest();
+        var recordRequest = $scope[curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
     };
 
@@ -357,8 +346,6 @@ nrlCatalog.directive('advancedSearch', function() {
 
             $scope.advancedSearch = new csw.search();
 
-
-           
             var vectorSource = new ol.source.Vector({
                 url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
                 format: new ol.format.GeoJSON()
@@ -428,9 +415,6 @@ nrlCatalog.directive('advancedSearch', function() {
                 extent.setExtent(null);
                 $scope.advancedSearch.extent.extent = $scope.defaultExtent;
             };
-
-
-
 
 		},
         controllerAs: 'advSearch'
