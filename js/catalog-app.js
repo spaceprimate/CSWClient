@@ -40,7 +40,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     //Create our search objects
     $scope.basicSearch = new csw.search();
-    $scope.advancedSearch = new csw.search();
+    
 
 
     /**
@@ -151,8 +151,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     /**
      * Converts coordinates from corner formatted strings "20, 30" to extent array
-     * @param{String} lowerCorner, upperCorner
-     * @return{array} getExtentFromCorners
+     * @param{String} lowerCorner
+     * @param{String} upperCorner
+     * @return{[]} getExtentFromCorners
      */
     function getExtentFromCorners(lowerCorner, upperCorner){
         lc = lowerCorner.split(" ");
@@ -164,7 +165,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * Makes angular http POST request to CSW Server
      * iterates through results, creating and pushing record objects to $scope.curRecords
      *
-     * @param{String} recordRequest - string containing xml for request
+     * @param {String} recordRequest - string containing xml for request
      */
     $scope.requestRecords = function(recordRequest){
         $http({
@@ -209,21 +210,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         function(response){console.log(response)});
     };
 
-    /**
-     * updates extent when user manually changes coordinate input in view
-     */
-    $scope.updateExtent = function(){
-        advSearchExtent.setExtent($scope.advancedSearch.getExtent());
-    };
-
-
-    /**
-     * resets extent to default (in OL map and search object)
-     */
-    $scope.clearExtent = function(){
-        extent.setExtent(null);
-        $scope.advancedSearch.extent.extent = $scope.defaultExtent;
-    };
+    
 
 
     /* ===========================================================================================
@@ -333,43 +320,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     }
 
 
-    /**
-     * Map used for drawing extent in Advanced Search
-     */
-    var advSearchMap = new ol.Map({
-        layers: [osmLayer, countriesLayer],
-        target: 'adv-search-map',
-        view: new ol.View({
-            center: [0, 0],
-            projection: 'EPSG:4326',
-            zoom: 1,
-            minZoom: 1,
-        })
-    });
-
-    //OL extent for advanced search
-    var advSearchExtent = new ol.interaction.Extent({
-        condition: ol.events.condition.platformModifierKeyOnly
-    });
-    advSearchMap.addInteraction(advSearchExtent);
-    advSearchExtent.setActive(false);
-
-    //Enable interaction by holding shift
-    document.addEventListener('keydown', function(event) {
-        if (event.keyCode == 16) {
-            advSearchExtent.setActive(true);
-        }
-    });
-
-    //stop extent interaction when the shift key releases
-    /** this is being called constantly and causes warnings, should only be called when interaction with the map **/
-    document.addEventListener('keyup', function(event) {
-        if (event.keyCode == 16) {
-            advSearchExtent.setActive(false);
-        }
-        $scope.advancedSearch.setExtent( advSearchExtent.getExtent() );
-        $scope.$apply();
-    });
+    
 
     //init
     //$scope.getFirstPage();
@@ -402,6 +353,87 @@ nrlCatalog.directive('advancedSearch', function() {
     return{
         restrict: 'E',
         templateUrl:   'templates/searchAdvanced.html',
+        controller: function($scope){
+
+            $scope.advancedSearch = new csw.search();
+
+
+           
+            var vectorSource = new ol.source.Vector({
+                url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
+                format: new ol.format.GeoJSON()
+            });
+
+            // Open Street Maps layer
+            var osmLayer = new ol.layer.Tile({
+                source: new ol.source.OSM()
+            });
+            //Country Outlines layer
+            var countriesLayer = new ol.layer.Vector({
+                source: vectorSource
+            });
+
+
+            /**
+             * Map used for drawing extent in Advanced Search
+             */
+            var advSearchMap = new ol.Map({
+                layers: [osmLayer, countriesLayer],
+                target: 'adv-search-map',
+                view: new ol.View({
+                    center: [0, 0],
+                    projection: 'EPSG:4326',
+                    zoom: 1,
+                    minZoom: 1,
+                })
+            });
+
+            //OL extent for advanced search
+            var advSearchExtent = new ol.interaction.Extent({
+                condition: ol.events.condition.platformModifierKeyOnly
+            });
+            advSearchMap.addInteraction(advSearchExtent);
+            advSearchExtent.setActive(false);
+
+            //Enable interaction by holding shift
+            document.addEventListener('keydown', function(event) {
+                if (event.keyCode == 16) {
+                    advSearchExtent.setActive(true);
+                }
+            });
+
+            //stop extent interaction when the shift key releases
+            /** this is being called constantly and causes warnings, should only be called when interaction with the map **/
+            document.addEventListener('keyup', function(event) {
+                if (event.keyCode == 16) {
+                    advSearchExtent.setActive(false);
+                }
+                $scope.advancedSearch.setExtent( advSearchExtent.getExtent() );
+                $scope.$apply();
+            });
+
+
+             /**
+             * updates extent when user manually changes coordinate input in view
+             */
+            $scope.updateExtent = function(){
+                advSearchExtent.setExtent($scope.advancedSearch.getExtent());
+            };
+
+
+            /**
+             * resets extent to default (in OL map and search object)
+             */
+            $scope.clearExtent = function(){
+                extent.setExtent(null);
+                $scope.advancedSearch.extent.extent = $scope.defaultExtent;
+            };
+
+
+
+
+		},
+        controllerAs: 'advSearch'
     }
 });
 

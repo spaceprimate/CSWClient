@@ -73,7 +73,10 @@ csw.search = function(){
 
     //sets extent values for extent filter
     this.setExtent = function(extent){
-        this.filters[this.findExtentIndex()].extent = extent;
+        var index = this.findExtentIndex();
+        if (index != null){
+            this.filters[this.findExtentIndex()].extent = extent;
+        }
     };
 
     //returns value of extent filter
