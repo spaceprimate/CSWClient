@@ -35,7 +35,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     }
 
 
-    //set to either "basic" or "advanced"
+    //set to either "basicSearch" or "advancedSearch"
     var curSearch = "basicSearch";
 
     //Create our search objects
@@ -46,11 +46,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     /**
      * Sets curSearch value and calls method to retrieve the first set of pages
      * 
-     * @param {string} either "basic" or "advanced". if param is ommited, "basic" is used
+     * @param {string} either "basicSearch" or "advancedSearch". if param is ommited, "basicSearch" is used
      */
     $scope.submitSearch = function(search){
-        
-        
         if (search ==  undefined){
             curSearch = "basicSearch";
         }
@@ -194,7 +192,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                 i++;
 
             });
-            setTimeout(createPreviews, 100);
+            //setTimeout(createPreviews, 100);
         },
         function(response){console.log(response)});
     };
@@ -203,7 +201,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
 
     /* ===========================================================================================
-     * open layers map
+     * open layers Elements
      */
 
     var feature = new ol.Feature({
@@ -217,11 +215,13 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     });
 
     //
-    var vectorSource = new ol.source.Vector({
+    $scope.vectorSource = new ol.source.Vector({
         url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
         format: new ol.format.GeoJSON()
       });
 
+      //can this be deleted?
+      /*
     var layers = [
           new ol.layer.Tile({
             source: new ol.source.OSM()
@@ -232,6 +232,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
           }),
           layer
         ];
+
+        */
 
     var previewView = new ol.View({
           center: [0, 0],
@@ -245,8 +247,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         source: new ol.source.OSM()
     });
     //Country Outlines layer
-    var countriesLayer = new ol.layer.Vector({
-        source: vectorSource
+    $scope.countriesLayer = new ol.layer.Vector({
+        source: $scope.vectorSource
     });
 
     // Extent preview maps Array: 1 for every item in $scope.curRecords
@@ -260,17 +262,12 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @return {float Array(4)} flipExtent
      */
     function flipExtent(extent){
-        console.log(extent);
+        //console.log(extent);
         return [extent[1], extent[0], extent[3], extent[2]];
     }
 
 
-    // Styles for extent preview maps
-    var mapStroke = new ol.style.Stroke({
-        color: '#f44336',
-        width: 2
-    });
-    var mapStyle = new ol.style.Style({ stroke: mapStroke });
+   
 
 
     /**
@@ -337,6 +334,99 @@ nrlCatalog.directive('basicSearch', function() {
         templateUrl:   'templates/searchBasic.html',
     }
 });
+
+
+nrlCatalog.directive('recordTemplate', function() {
+    return{
+        restrict: 'A',
+        templateUrl:   'templates/record.html',
+
+        controller: function($scope){
+
+            // Extent preview maps Array: 1 for every item in $scope.curRecords
+    // deleted and repopulated on each page load
+    var previewMaps = [];
+
+    /**
+     * Flips the long/lat values in an extent array 
+     * for use in building an OL polygon
+     * @param {float Array(4)} extent
+     * @return {float Array(4)} flipExtent
+     */
+    function flipExtent(extent){
+        //console.log(extent);
+        return [extent[1], extent[0], extent[3], extent[2]];
+    }
+
+             // Styles for extent preview maps
+    var mapStroke = new ol.style.Stroke({
+        color: '#f44336',
+        width: 2
+    });
+    var mapStyle = new ol.style.Style({ stroke: mapStroke });
+
+
+    var vectorSource = new ol.source.Vector({
+                url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
+                format: new ol.format.GeoJSON()
+            });
+
+
+            console.log("THIS EXTENT: ");
+            console.log($scope.record.extent);
+            console.log("THIS id: ");
+            console.log($scope.record.mapID);
+
+
+         // Open Street Maps layer
+            var osmLayer = new ol.layer.Tile({
+                source: new ol.source.OSM()
+            });
+            //Country Outlines layer
+            var countriesLayer = new ol.layer.Vector({
+                source: vectorSource
+            });
+
+            var feature = new ol.Feature({
+                //geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.curRecords[i].extent))
+                geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.record.extent))
+            });
+
+            feature.setStyle(mapStyle);
+
+            var extentLayer = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: [feature]
+                })
+            });
+            setTimeout(addMap, 200);
+            function addMap(){
+                var previewMap = new ol.Map({
+                size: [250,125],
+                layers: [osmLayer, extentLayer],
+                target: $scope.record.mapID,
+                view: new ol.View({
+                  center: [0, 0],
+                  projection: 'EPSG:4326',
+                  zoom: 0,
+                }),
+                controls: []
+              });
+            }
+            
+
+              //console.log(previewMap);
+
+            //previewMap.getView().fit([-90, -180, 90, 180]);
+
+
+
+
+        }
+    }
+});
+
+
 
 nrlCatalog.directive('advancedSearch', function() {
     return{
