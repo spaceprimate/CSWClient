@@ -204,56 +204,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * open layers Elements
      */
 
-    var feature = new ol.Feature({
-        geometry: new ol.geom.Polygon.fromExtent([0,0,90,90])
-    })
-
-    var layer = new ol.layer.Vector({
-        source: new ol.source.Vector({
-            features: [feature]
-        })
-    });
-
-    //
-    $scope.vectorSource = new ol.source.Vector({
-        url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
-        format: new ol.format.GeoJSON()
-      });
-
-      //can this be deleted?
-      /*
-    var layers = [
-          new ol.layer.Tile({
-            source: new ol.source.OSM()
-          }),
-          new ol.layer.Vector({
-            //source: feature
-            source: vectorSource
-          }),
-          layer
-        ];
-
-        */
-
-    var previewView = new ol.View({
-          center: [0, 0],
-          projection: 'EPSG:4326',
-          zoom: 1,
-          minZoom: 1,
-        });
-
-    // Open Street Maps layer
-    var osmLayer = new ol.layer.Tile({
-        source: new ol.source.OSM()
-    });
-    //Country Outlines layer
-    $scope.countriesLayer = new ol.layer.Vector({
-        source: $scope.vectorSource
-    });
-
-    // Extent preview maps Array: 1 for every item in $scope.curRecords
-    // deleted and repopulated on each page load
-    var previewMaps = [];
 
     /**
      * Flips the long/lat values in an extent array 
@@ -261,52 +211,17 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @param {float Array(4)} extent
      * @return {float Array(4)} flipExtent
      */
-    function flipExtent(extent){
-        //console.log(extent);
+    $scope.flipExtent = function(extent){
         return [extent[1], extent[0], extent[3], extent[2]];
     }
 
+    // Styles for extent preview maps
+    var mapStroke = new ol.style.Stroke({
+        color: '#f44336',
+        width: 2
+    });
+    $scope.mapStyle = new ol.style.Style({ stroke: mapStroke });
 
-   
-
-
-    /**
-     * iterates through $scope.curRecords, creating a new OL map for each
-     * with each record's extent displayed in red
-     */
-    function createPreviews(){
-        for (var i = 0; i < $scope.curRecords.length; i++) {
-            
-            var feature = new ol.Feature({
-                geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.curRecords[i].extent))
-            });
-
-            feature.setStyle(mapStyle);
-
-            var extentLayer = new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    features: [feature]
-                })
-            });
-
-            previewMaps[i] = new ol.Map({
-                size: [250,125],
-                layers: [osmLayer, extentLayer],
-                target: $scope.curRecords[i].mapID,
-                view: new ol.View({
-                  center: [0, 0],
-                  projection: 'EPSG:4326',
-                  zoom: 0,
-                }),
-                controls: []
-              });
-
-            previewMaps[i].getView().fit([-90, -180, 90, 180]);
-        }
-    }
-
-
-    
 
     //init
     //$scope.getFirstPage();
@@ -343,62 +258,27 @@ nrlCatalog.directive('recordTemplate', function() {
 
         controller: function($scope){
 
-            // Extent preview maps Array: 1 for every item in $scope.curRecords
-    // deleted and repopulated on each page load
-    var previewMaps = [];
 
-    /**
-     * Flips the long/lat values in an extent array 
-     * for use in building an OL polygon
-     * @param {float Array(4)} extent
-     * @return {float Array(4)} flipExtent
-     */
-    function flipExtent(extent){
-        //console.log(extent);
-        return [extent[1], extent[0], extent[3], extent[2]];
-    }
-
-             // Styles for extent preview maps
-    var mapStroke = new ol.style.Stroke({
-        color: '#f44336',
-        width: 2
-    });
-    var mapStyle = new ol.style.Style({ stroke: mapStroke });
-
-
-    var vectorSource = new ol.source.Vector({
-                url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
-                format: new ol.format.GeoJSON()
-            });
-
-
-            console.log("THIS EXTENT: ");
-            console.log($scope.record.extent);
-            console.log("THIS id: ");
-            console.log($scope.record.mapID);
-
-
-         // Open Street Maps layer
+    
+            // Open Street Maps layer
             var osmLayer = new ol.layer.Tile({
                 source: new ol.source.OSM()
             });
-            //Country Outlines layer
-            var countriesLayer = new ol.layer.Vector({
-                source: vectorSource
-            });
+
 
             var feature = new ol.Feature({
                 //geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.curRecords[i].extent))
-                geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.record.extent))
+                geometry: new ol.geom.Polygon.fromExtent($scope.flipExtent($scope.record.extent))
             });
 
-            feature.setStyle(mapStyle);
+            feature.setStyle($scope.mapStyle);
 
             var extentLayer = new ol.layer.Vector({
                 source: new ol.source.Vector({
                     features: [feature]
                 })
             });
+
             setTimeout(addMap, 200);
             function addMap(){
                 var previewMap = new ol.Map({
@@ -413,15 +293,6 @@ nrlCatalog.directive('recordTemplate', function() {
                 controls: []
               });
             }
-            
-
-              //console.log(previewMap);
-
-            //previewMap.getView().fit([-90, -180, 90, 180]);
-
-
-
-
         }
     }
 });
@@ -440,7 +311,7 @@ nrlCatalog.directive('advancedSearch', function() {
                 url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
                 format: new ol.format.GeoJSON()
             });
-
+            
             // Open Street Maps layer
             var osmLayer = new ol.layer.Tile({
                 source: new ol.source.OSM()
@@ -449,7 +320,6 @@ nrlCatalog.directive('advancedSearch', function() {
             var countriesLayer = new ol.layer.Vector({
                 source: vectorSource
             });
-
 
             /**
              * Map used for drawing extent in Advanced Search
@@ -510,5 +380,3 @@ nrlCatalog.directive('advancedSearch', function() {
         controllerAs: 'advSearch'
     }
 });
-
-
