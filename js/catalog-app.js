@@ -111,7 +111,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.getNextPage = function(){
         setCurPage($scope.pages.curPage + 1);
-        var recordRequest = getRecordRequest();
+        var recordRequest = $scope[curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
     };
 
@@ -121,7 +121,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.getPrevPage = function(){
         setCurPage($scope.pages.curPage - 1);
-        var recordRequest = getRecordRequest();
+        var recordRequest = $scope[curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
     };
 
@@ -132,7 +132,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.goToPage = function(page){
         setCurPage(page);
-        var recordRequest = getRecordRequest();
+        var recordRequest = $scope[curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
     };
 
@@ -258,13 +258,9 @@ nrlCatalog.directive('recordTemplate', function() {
 
         controller: function($scope){
 
-
-    
-            // Open Street Maps layer
             var osmLayer = new ol.layer.Tile({
                 source: new ol.source.OSM()
             });
-
 
             var feature = new ol.Feature({
                 //geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.curRecords[i].extent))
@@ -296,8 +292,6 @@ nrlCatalog.directive('recordTemplate', function() {
         }
     }
 });
-
-
 
 nrlCatalog.directive('advancedSearch', function() {
     return{
@@ -359,14 +353,12 @@ nrlCatalog.directive('advancedSearch', function() {
                 $scope.$apply();
             });
 
-
              /**
              * updates extent when user manually changes coordinate input in view
              */
             $scope.updateExtent = function(){
                 advSearchExtent.setExtent($scope.advancedSearch.getExtent());
             };
-
 
             /**
              * resets extent to default (in OL map and search object)
@@ -375,7 +367,6 @@ nrlCatalog.directive('advancedSearch', function() {
                 extent.setExtent(null);
                 $scope.advancedSearch.extent.extent = $scope.defaultExtent;
             };
-
 		},
         controllerAs: 'advSearch'
     }

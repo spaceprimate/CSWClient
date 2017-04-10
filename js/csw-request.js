@@ -24,18 +24,23 @@ csw.filter = function(){
 //types of text that can be filtered for
 csw.filter.prototype.types = [
         {id: "title", label: "Title"},
-        {id: "extent", label: "Bounding Box"},
-        {id: "test", label: "test"}
+        {id: "AnyText", label: "Any"},
+        {id: "abstract", label: "Abstract"},
+        {id: "keyword", label: "Keyword"},
+        {id: "extent", label: "Bounding Box"}
     ];
 //types of constraints to apply to search terms
 csw.filter.prototype.constraints = [
-        {id: "PropertyIsLike", label: "Property Is Like"},
-        {id: "PropertyIsNotEqualTo", label: "Property Is Not Equal To"}
+        {id: "PropertyIsLike", label: "contains"},
+        {id: "beginsWith", label: "begins with"},
+        {id: "PropertyIsEqualTo", label: "exactly matches"},
+        {id: "PropertyIsNotEqualTo", label: "is not"}
     ];
 //constraints on bbox queries
 csw.filter.prototype.extentConstraints = [
-        {id: "Envelope", label: "Contains"},
-        {id: "test", label: "test"}
+        {id: "Contains", label: "Contains"},
+        {id: "Within", label: "Within"},
+        {id: "Intersects", label: "Intersects"}
     ];
 
 /**
@@ -170,13 +175,26 @@ csw.getFilterXml = function(filter){
  * @return XML string
  */
 csw.getBboxXml = function(filter){
-    var xml =          '<ogc:BBOX>' + 
+    var xml2 =          '<ogc:BBOX>' + 
                       '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
                       '<gml:Envelope>' + 
                         '<gml:lowerCorner>' + filter.extent[0] + ' ' + filter.extent[1] + '</gml:lowerCorner>' + 
                         '<gml:upperCorner>' + filter.extent[2] + ' ' + filter.extent[3] + '</gml:upperCorner>' + 
                       '</gml:Envelope>' + 
                     '</ogc:BBOX>';
+
+    var xml = '<ogc:'+filter.extentConstraint.id+'>'+
+                    '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>'+
+                    '<gml:Envelope>'+
+                        '<gml:lowerCorner>' + filter.extent[0] + ' ' + filter.extent[1] + '</gml:lowerCorner>'+
+                        '<gml:upperCorner>' + filter.extent[2] + ' ' + filter.extent[3] + '</gml:upperCorner>'+
+                    '</gml:Envelope>'+
+                '</ogc:'+filter.extentConstraint.id+'>';
+
+
+
+
+
     return xml;
 }
 
@@ -185,16 +203,36 @@ csw.getBboxXml = function(filter){
  * @return XML string
  */
 csw.getTitleXml = function(filter){
-    var termPrefix, termSuffix, matchCase;
+    var constraint, termPrefix, termSuffix, attributes;
     if (filter.constraint.id == "PropertyIsLike"){
+        constraint = "PropertyIsLike";
         termPrefix = "%";
         termSuffix = "%";
-        matchCase = "false";
+        attributes = ' matchCase="false" wildCard="%" singleChar="_" escapeChar="\"';
+    }
+    else if (filter.constraint.id == "beginsWith"){
+        constraint = "PropertyIsLike";
+        termPrefix = "";
+        termSuffix = "%";
+        attributes = ' matchCase="false" wildCard="%" singleChar="_" escapeChar="\"';
+    }
+    else if (filter.constraint.id == "PropertyIsEqualTo"){
+        constraint = "PropertyIsEqualTo";
+        termPrefix = "";
+        termSuffix = "";
+        attributes = '';
+    }
+    else if (filter.constraint.id == "PropertyIsNotEqualTo"){
+        constraint = "PropertyIsNotEqualTo";
+        termPrefix = "";
+        termSuffix = "";
+        attributes = '';
     }
 
-    var xml =   '<ogc:'+ filter.constraint.id +' matchCase="'+ matchCase +'" wildCard="%" singleChar="_" escapeChar="\">' +
-                '<ogc:PropertyName>dc:' + filter.type.id + '</ogc:PropertyName>' +
-                '<ogc:Literal>' + termPrefix + filter.term + termSuffix + '</ogc:Literal>' +
-            '</ogc:PropertyIsLike>';
+    var xml =   '<ogc:'+ constraint + attributes + '>' +
+                    '<ogc:PropertyName>dc:' + filter.type.id + '</ogc:PropertyName>' +
+                    '<ogc:Literal>' + termPrefix + filter.term + termSuffix + '</ogc:Literal>' +
+                '</ogc:'+ constraint + '>';
+
     return xml;
 };
