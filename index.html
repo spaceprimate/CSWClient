@@ -73,27 +73,19 @@
   </div>
   <div class="container-fluid content" id="main-container">
 
-  
-
-  
 
     <div class="row">
+
       
       
       <div class="col-sm-12"  ng-class="{'col-sm-offset-2 col-sm-10' : !hideSidebar}">
-
-      
-
-
-    
-        
 
 
         <div class="row">
           <div class="col-xs-6">
             <p>
-              <select id="sortingControl"><option value="Relevancy">Sort By Date</option><option value="NewlyAdded">Sort By Size</option><option value="PubDate">Sort By Protocol</option><option value="Rating">Sort By Title</option></select>
-            </p>
+              <select ng-options="item as item.label for item in sortOptions" ng-model="sortOption" ng-change="getFirstPage()"></select>
+              </p>
           </div>
           <div class="col-xs-6">
             

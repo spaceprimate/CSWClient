@@ -36,6 +36,7 @@ csw.filter.prototype.constraints = [
         {id: "PropertyIsEqualTo", label: "exactly matches"},
         {id: "PropertyIsNotEqualTo", label: "is not"}
     ];
+
 //constraints on bbox queries
 csw.filter.prototype.extentConstraints = [
         {id: "Contains", label: "Contains"},
@@ -123,6 +124,8 @@ csw.search.prototype.createRequest = function(pages){
                           '<csw:Query typeNames="csw:Record">' +
                             '<csw:ElementSetName>full</csw:ElementSetName>';
 
+
+        
             if (this.filters == 0){
                 console.log("filters was 0");
                 request +=  '<csw:Constraint version="1.1.0">' +
@@ -151,6 +154,14 @@ csw.search.prototype.createRequest = function(pages){
                                 '</ogc:Filter>' +
                             '</csw:Constraint>';
             }
+
+            request +=   '<ogc:SortBy>' +
+                        '<ogc:SortProperty>' +
+                        '<ogc:PropertyName>dc:title</ogc:PropertyName>' +
+                        '<ogc:SortOrder>ASC</ogc:SortOrder>' +
+                        '</ogc:SortProperty>' +
+                    '</ogc:SortBy>';
+
 
 
         request +=      '</csw:Query>' +

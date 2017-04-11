@@ -16,13 +16,15 @@ var nrlCatalog = angular.module('nrlCatalog', [ ]);
  * injects $scope and $http ( for post requests )
  */
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
-    //if true, app knows to rebuild $scope.pages object
+    //if true, app knows to rebuild $scope.pages object, called during http request
     var newRequest = true;
 
     //after post request, records objects are created and pushed here
     $scope.curRecords= [];
 
     $scope.defaultExtent = [-180, -90, 180, 90];
+
+    $scope.hideSidebar = true;
 
     $scope.pages = {
         curPage: 1,
@@ -34,12 +36,21 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     }
 
+    $scope.tester = "test";
+    $scope.test = "wotcha";
 
     //set to either "basicSearch" or "advancedSearch"
     var curSearch = "basicSearch";
 
     //Create our search objects
     $scope.basicSearch = new csw.search();
+
+    //create options for sort dropdown
+    $scope.sortOptions = [
+        {id: "dc:title", order: "ASC", label: "Title - Ascending"},
+        {id: "dc:title", order: "DESC", label: "Title - Descending"}
+    ];
+    $scope.sortOption = $scope.sortOptions[0];
     
 
 
@@ -54,6 +65,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
         else{
             curSearch = search;
+        }
+        if(search == "advancedSearch"){
+            $scope.minimizeAdvanced = true;
         }
         $scope.getFirstPage();
     };
