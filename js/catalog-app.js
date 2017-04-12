@@ -36,14 +36,22 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     }
 
-    $scope.tester = "test";
-    $scope.test = "wotcha";
+    
+    $scope.searches = {
+        //Create our search objects
+        basicSearch:  new csw.search(),
+        advancedSearch:  new csw.search()
+    };
+    
+
 
     //set to either "basicSearch" or "advancedSearch"
-    var curSearch = "basicSearch";
+    $scope.curSearch = "basicSearch";
+
+    //$scope.advancedSearch = new csw.search();
 
     //Create our search objects
-    $scope.basicSearch = new csw.search();
+    //$scope.basicSearch = new csw.search();
 
     //create options for sort dropdown
     $scope.sortOptions = [
@@ -55,16 +63,16 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
 
     /**
-     * Sets curSearch value and calls method to retrieve the first set of pages
+     * Sets $scope.curSearch value and calls method to retrieve the first set of pages
      * 
      * @param {string} either "basicSearch" or "advancedSearch". if param is ommited, "basicSearch" is used
      */
     $scope.submitSearch = function(search){
         if (search ==  undefined){
-            curSearch = "basicSearch";
+            $scope.curSearch = "basicSearch";
         }
         else{
-            curSearch = search;
+            $scope.curSearch = search;
         }
         if(search == "advancedSearch"){
             $scope.minimizeAdvanced = true;
@@ -106,7 +114,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
 
     /**
-     * Checks curSearch and calls createRequest on appropriate search object
+     * Checks $scope.curSearch and calls createRequest on appropriate search object
      * There are only 2 possible search objects, "basic" and "advanced"
      *
      * @return{String} getRecordRequest - xml string required for csw record request
@@ -115,7 +123,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.pages.curPage = 1;
         $scope.pages.pageLimits = [0, 10];
         newRequest = true;
-        var recordRequest = $scope[curSearch].createRequest($scope.pages);
+        var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
     };
 
@@ -125,7 +133,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.getNextPage = function(){
         setCurPage($scope.pages.curPage + 1);
-        var recordRequest = $scope[curSearch].createRequest($scope.pages);
+        var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
     };
 
@@ -135,7 +143,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.getPrevPage = function(){
         setCurPage($scope.pages.curPage - 1);
-        var recordRequest = $scope[curSearch].createRequest($scope.pages);
+        var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
     };
 
@@ -146,7 +154,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.goToPage = function(page){
         setCurPage(page);
-        var recordRequest = $scope[curSearch].createRequest($scope.pages);
+        var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
     };
 
@@ -258,6 +266,7 @@ nrlCatalog.directive('sidebarTemplate', function() {
 });
 
 nrlCatalog.directive('basicSearch', function() {
+    //    basicSearch:  new csw.search();
     return{
         restrict: 'E',
         templateUrl:   'templates/searchBasic.html',
@@ -313,7 +322,7 @@ nrlCatalog.directive('advancedSearch', function() {
         templateUrl:   'templates/searchAdvanced.html',
         controller: function($scope){
 
-            $scope.advancedSearch = new csw.search();
+            //$scope.advancedSearch = new csw.search();
 
             var vectorSource = new ol.source.Vector({
                 url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
@@ -363,7 +372,7 @@ nrlCatalog.directive('advancedSearch', function() {
                 if (event.keyCode == 16) {
                     advSearchExtent.setActive(false);
                 }
-                $scope.advancedSearch.setExtent( advSearchExtent.getExtent() );
+                $scope.searches.advancedSearch.setExtent( advSearchExtent.getExtent() );
                 $scope.$apply();
             });
 
@@ -371,7 +380,7 @@ nrlCatalog.directive('advancedSearch', function() {
              * updates extent when user manually changes coordinate input in view
              */
             $scope.updateExtent = function(){
-                advSearchExtent.setExtent($scope.advancedSearch.getExtent());
+                advSearchExtent.setExtent($scope.searches.advancedSearch.getExtent());
             };
 
             /**
@@ -379,7 +388,7 @@ nrlCatalog.directive('advancedSearch', function() {
              */
             $scope.clearExtent = function(){
                 extent.setExtent(null);
-                $scope.advancedSearch.extent.extent = $scope.defaultExtent;
+                $scope.searches.advancedSearch.extent.extent = $scope.defaultExtent;
             };
 		},
         controllerAs: 'advSearch'

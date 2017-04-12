@@ -53,6 +53,13 @@ csw.filter.prototype.extentConstraints = [
 csw.search = function(){
     this.filters = [];
 
+     //create options for sort dropdown
+    this.sortOptions = [
+        {id: "dc:title", order: "ASC", label: "Title - Ascending"},
+        {id: "dc:title", order: "DESC", label: "Title - Descending"}
+    ];
+    this.sortOption = this.sortOptions[0];
+
     //only allow 1 extent filter at a time
     this.hasExtent = false;
 
@@ -145,8 +152,9 @@ csw.search.prototype.createRequest = function(pages){
                                             '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
                                             '<ogc:Literal>service</ogc:Literal>' +
                                         '</ogc:PropertyIsNotEqualTo>';
-
+                        console.log(this.filters.length);
                     for (var i = 0; i < this.filters.length; i++) {
+                        console.log(this.filters[i]);
                         request += csw.getFilterXml(this.filters[i]);
                     }
                                         
@@ -155,12 +163,20 @@ csw.search.prototype.createRequest = function(pages){
                             '</csw:Constraint>';
             }
 
+            // request +=   '<ogc:SortBy>' +
+            //             '<ogc:SortProperty>' +
+            //             '<ogc:PropertyName>dc:title</ogc:PropertyName>' +
+            //             '<ogc:SortOrder>ASC</ogc:SortOrder>' +
+            //             '</ogc:SortProperty>' +
+            //         '</ogc:SortBy>';
+
+
             request +=   '<ogc:SortBy>' +
-                        '<ogc:SortProperty>' +
-                        '<ogc:PropertyName>dc:title</ogc:PropertyName>' +
-                        '<ogc:SortOrder>ASC</ogc:SortOrder>' +
-                        '</ogc:SortProperty>' +
-                    '</ogc:SortBy>';
+                            '<ogc:SortProperty>' +
+                            '<ogc:PropertyName>'+ this.sortOption.id + '</ogc:PropertyName>' +
+                            '<ogc:SortOrder>' + this.sortOption.order + '</ogc:SortOrder>' +
+                            '</ogc:SortProperty>' +
+                        '</ogc:SortBy>';
 
 
 
