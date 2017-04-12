@@ -16,6 +16,12 @@ var nrlCatalog = angular.module('nrlCatalog', [ ]);
  * injects $scope and $http ( for post requests )
  */
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
+
+    //location of the pycsw server
+    // var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
+    // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
+
     //if true, app knows to rebuild $scope.pages object, called during http request
     var newRequest = true;
 
@@ -178,7 +184,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.requestRecords = function(recordRequest){
         $http({
-            url: "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2",
+            url: cswUrl,
             method: "POST",
             data: recordRequest,
             headers: {
