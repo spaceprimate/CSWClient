@@ -182,7 +182,7 @@ csw.search.prototype.createRequest = function(pages){
 
         request +=      '</csw:Query>' +
                     '</csw:GetRecords>';
-        console.log(request);
+        //console.log(request);
         return request;
     }
 
