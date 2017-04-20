@@ -23,8 +23,8 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //location of the pycsw server
-    //  var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
-    var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
+     var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    // var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
     // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
@@ -176,6 +176,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @return{[]} getExtentFromCorners
      */
     function getExtentFromCorners(lowerCorner, upperCorner){
+        if (lowerCorner == undefined || upperCorner == undefined){
+            return [null, null, null, null];
+        }
         lc = lowerCorner.split(" ");
         uc = upperCorner.split(" ");
         return lc.concat(uc);
@@ -216,7 +219,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             var jsonData = x2js.xml_str2json(response.data);
 
             //console.log("x2js: ");
-            //console.log(jsonData);
+            console.log(jsonData);
 
 
             var i = 1;
@@ -246,11 +249,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
             // });
 
-
+            // Some CSWs will return a  single 
             jsonData.GetRecordsResponse.SearchResults.Record.forEach(function(e, i) {
                 
                     var item = {};
-                    item.title = e.title.toString();
+                    item.title = getSafe(() => e.title.toString() );
                     item.keywords = [];
                     if ( Array.isArray(e.subject) ){
                         e.subject.forEach(function(el){
@@ -264,9 +267,12 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                         
                     }
                     
-                    item.type = e.type.toString();
-                    item.lowerCorner = e.BoundingBox.LowerCorner.toString();
-                    item.upperCorner = e.BoundingBox.UpperCorner.toString();
+                    item.type = getSafe( () => e.type.toString() );
+                    
+                    item.lowerCorner = getSafe(() => e.BoundingBox.LowerCorner.toString() );
+                    item.upperCorner = getSafe(() => e.BoundingBox.upperCorner.toString() );
+                    //item.lowerCorner = e.BoundingBox.LowerCorner.toString();
+                    // item.upperCorner = e.BoundingBox.UpperCorner.toString();
                     item.extent = getExtentFromCorners(item.lowerCorner, item.upperCorner);
                     item.mapID = "map"+i;
                     $scope.curRecords.push(item);
@@ -470,3 +476,14 @@ nrlCatalog.directive('advancedSearch', function() {
         controllerAs: 'advSearch'
     }
 });
+
+
+
+function getSafe(fn) {
+    try {
+        return fn();
+    } catch (e) {
+        return undefined;
+    }
+}
+
