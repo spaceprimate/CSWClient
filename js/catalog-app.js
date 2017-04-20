@@ -23,9 +23,9 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //location of the pycsw server
-     var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    //  var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
     // var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
-    // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
+    var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
     var newRequest = true;
@@ -53,6 +53,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         basicSearch:  new csw.search(),
         advancedSearch:  new csw.search()
     };
+
+    $scope.noRecordsFound = false;
     
 
 
@@ -248,9 +250,22 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             //     i++;
 
             // });
-
-            // Some CSWs will return a  single 
-            jsonData.GetRecordsResponse.SearchResults.Record.forEach(function(e, i) {
+console.log("number matched: " + jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched);
+            // If there's only 1 record, it won't be in an array. 
+            
+            if(jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched == 0 ){
+                $scope.noRecordsFound = true;
+                console.log("no records found");
+            }
+            
+            
+            else{
+                if ( !Array.isArray(jsonData.GetRecordsResponse.SearchResults.Record) ){
+                    var tmp = jsonData.GetRecordsResponse.SearchResults.Record;
+                    jsonData.GetRecordsResponse.SearchResults.Record = [tmp];
+                    console.log("not an array, one item loaded');")
+                }
+                jsonData.GetRecordsResponse.SearchResults.Record.forEach(function(e, i) {
                 
                     var item = {};
                     item.title = getSafe(() => e.title.toString() );
@@ -287,9 +302,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                     // item.extent = getExtentFromCorners($(record).find("LowerCorner").html(), $(record).find("UpperCorner").html());
                     // item.mapID = "map"+i;
                     //$scope.curRecords.push(item);
-                    console.log(e);
+                    console.log(item);
                     i++;
-            });
+                });
+            }
+            
 
 
             //setTimeout(createPreviews, 100);

@@ -79,8 +79,10 @@
       
       <div class="col-sm-12"  ng-class="{'col-sm-offset-2 col-sm-10' : !hideSidebar}">
 
-
-        <div class="row">
+        <div ng-if="noRecordsFound">
+          <h2>No records found for those parameters.</h2>
+        </div>
+        <div class="row" ng-hide="noRecordsFound">
           <div class="col-xs-6">
             <p>
               <select ng-options="item as item.label for item in searches[curSearch].sortOptions" ng-model="searches[curSearch].sortOption" ng-change="getFirstPage()"></select>
