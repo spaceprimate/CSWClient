@@ -23,9 +23,9 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //location of the pycsw server
-    //  var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+     var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
     // var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
-    var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
+    // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
     var newRequest = true;
@@ -178,6 +178,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @return{[]} getExtentFromCorners
      */
     function getExtentFromCorners(lowerCorner, upperCorner){
+        console.log("lowerCorner: " + lowerCorner + " , upperCorner: " + upperCorner);
         if (lowerCorner == undefined || upperCorner == undefined){
             return [null, null, null, null];
         }
@@ -285,7 +286,7 @@ console.log("number matched: " + jsonData.GetRecordsResponse.SearchResults._numb
                     item.type = getSafe( () => e.type.toString() );
                     
                     item.lowerCorner = getSafe(() => e.BoundingBox.LowerCorner.toString() );
-                    item.upperCorner = getSafe(() => e.BoundingBox.upperCorner.toString() );
+                    item.upperCorner = getSafe(() => e.BoundingBox.UpperCorner.toString() );
                     //item.lowerCorner = e.BoundingBox.LowerCorner.toString();
                     // item.upperCorner = e.BoundingBox.UpperCorner.toString();
                     item.extent = getExtentFromCorners(item.lowerCorner, item.upperCorner);
