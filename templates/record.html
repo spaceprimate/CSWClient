@@ -4,5 +4,5 @@
     <b>abstract: </b> {{record.abstract}}<br>
     <b>keywords: </b> <span ng-repeat="tag in record.keywords" class="small badge">{{tag}}</span>
 </td>
-<td><span ng-repeat="e in record.extent">{{e}}, </span></td>
+<td><span ng-repeat="e in record.extent track by $index">{{e}}, </span></td>
 <td><div id="{{record.mapID}}"  class="map-thumbnail"></div></td>
