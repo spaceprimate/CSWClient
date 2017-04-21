@@ -6,7 +6,7 @@
         <div class="row advanced-search-content" ng-hide="minimizeAdvanced">
 
           <div class="col-xs-7">
-            <form>
+            <form id="advanced-search" name="advanced-search" novalidate>
             <h4>Advanced Search</h4>
             <div ng-repeat="f in searches.advancedSearch.filters" class="form-inline advanced-filter" ng-class="{first:$first}" >
               <!--if no extent filter exists yet -->
@@ -16,7 +16,6 @@
 
               <!--if extent filter exists, filter extent option out -->
               <select  ng-model="f.type" ng-options="o.label for o in f.types | filter:{label :'!Bounding Box'}" ng-change="searches.advancedSearch.setHasExtent()" ng-if="searches.advancedSearch.hasExtent && f.type.label != 'Bounding Box'">
-
               </select>
 
               <div ng-if="f.type.id == 'title'" class="form-group">
@@ -35,10 +34,10 @@
                 <label class="small highlight" ng-if="f.type.id == 'extent'">Hold "Shift" to select extent on map, or eventer values below</label>
                 <div class="clearfix"></div>
 
-                <div class="coord-input"><label class="small">min Long</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[0]" ng-change="updateExtent()" ></div>
-                <div class="coord-input"><label class="small">min Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[1]" ng-change="updateExtent()"></div>
-                <div class="coord-input"><label class="small">max Long</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[2]" ng-change="updateExtent()"></div>
-                <div class="coord-input"><label class="small">max Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[3]" ng-change="updateExtent()"></div>
+                <div class="coord-input"><label class="small">min Long</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[0]" ng-change="updateExtent()" id="min-long" ></div>
+                <div class="coord-input"><label class="small">min Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[1]" ng-change="updateExtent()" id="min-lat"></div>
+                <div class="coord-input"><label class="small">max Long</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[2]" ng-change="updateExtent()" id="max-long"></div>
+                <div class="coord-input"><label class="small">max Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[3]" ng-change="updateExtent()" id="max-lat"></div>
 
                 <div class="clearfix"></div>
               </div>

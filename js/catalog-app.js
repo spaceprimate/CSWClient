@@ -1,7 +1,7 @@
 /*
  * App for interfacing with CSW services to browse and seach records
  * 
- *
+ * - note: This app uses POST XML to request CSW records, requiring the CSW to allow CORS for the client domain
  *
  *
  */
@@ -196,7 +196,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     // check here: http://stackoverflow.com/questions/21455045/angularjs-http-cors-and-http-authentication
     $scope.requestRecords = function(recordRequest){
-        console.log("request made");
+        console.log("record request: ");
+        console.log(recordRequest);
         $http({
             url: cswUrl,
             method: "POST",
@@ -206,68 +207,40 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             }
         })
         .then(function(response){
-            //success
+            // Request successful!
+
             $scope.curRecords = [];   
-            console.log("data is: ");
-            console.log(response.data);
 
-           
-
-
-            var xml = $.parseXML(response.data);
-            console.log(xml);
-
-
-             var x2js = new X2JS();
+            // X2JS converts returned xml data into JSON
+            var x2js = new X2JS();
             var jsonData = x2js.xml_str2json(response.data);
 
-            //console.log("x2js: ");
             console.log(jsonData);
-
 
             var i = 1;
 
-            if (newRequest == true){
-                $scope.pages.totalRecords = $(xml).find("SearchResults").attr('numberOfRecordsMatched');
+            var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
+
+            if (newRequest == true && totalRecords >= 0){
+                $scope.pages.totalRecords = totalRecords;
                 $scope.setPages();
                 newRequest = false;
             }
-            console.log("made it to 206: ");
-            // $(xml).find("csw:Record").each(function(i,record){
-            //     var item = {};
-            //     item.title = $(record).find("title").html();
-            //     item.keywords = [];
-            //     $(record).find("subject").each(function(e, subject){
-            //         item.keywords.push($(subject).html());
-            //     });
-            //     item.abstract = $(record).find("abstract").html();
-            //     item.type = $(record).find("type").html();
-            //     item.lowerCorner = $(record).find("LowerCorner").html();
-            //     item.upperCorner = $(record).find("UpperCorner").html();
-            //     item.extent = getExtentFromCorners($(record).find("LowerCorner").html(), $(record).find("UpperCorner").html());
-            //     item.mapID = "map"+i;
-            //     $scope.curRecords.push(item);
-            //     //console.log(item);
-            //     i++;
 
-            // });
-console.log("number matched: " + jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched);
-            // If there's only 1 record, it won't be in an array. 
-            
-            if(jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched == 0 ){
+            if(totalRecords == 0 || totalRecords == undefined ){
                 $scope.noRecordsFound = true;
                 console.log("no records found");
             }
             
-            
             else{
+                // If there's only 1 record, it won't be in an array. 
                 if ( !Array.isArray(jsonData.GetRecordsResponse.SearchResults.Record) ){
                     var tmp = jsonData.GetRecordsResponse.SearchResults.Record;
                     jsonData.GetRecordsResponse.SearchResults.Record = [tmp];
-                    console.log("not an array, one item loaded');")
+                    console.log("not an array, one item loaded);")
                 }
+
                 jsonData.GetRecordsResponse.SearchResults.Record.forEach(function(e, i) {
-                
                     var item = {};
                     item.title = getSafe(() => e.title.toString() );
                     item.keywords = [];
@@ -276,40 +249,19 @@ console.log("number matched: " + jsonData.GetRecordsResponse.SearchResults._numb
                             item.keywords.push(el.toString());
                         });
                     }
-                    if (e.abstract != undefined){
-                        if (e.abstract.toString != "[object Object]"){
-                            item.abstract = e.abstract.toString();
-                        }
-                        
-                    }
-                    
+                    item.abstract = getSafe( () => e.abstract.toString() );
+                    if (item.abstract ==  "[object Object]"){item.abstract = "";}
                     item.type = getSafe( () => e.type.toString() );
-                    
                     item.lowerCorner = getSafe(() => e.BoundingBox.LowerCorner.toString() );
                     item.upperCorner = getSafe(() => e.BoundingBox.UpperCorner.toString() );
-                    //item.lowerCorner = e.BoundingBox.LowerCorner.toString();
-                    // item.upperCorner = e.BoundingBox.UpperCorner.toString();
                     item.extent = getExtentFromCorners(item.lowerCorner, item.upperCorner);
                     item.mapID = "map"+i;
                     $scope.curRecords.push(item);
-
-                    // $(record).find("subject").each(function(e, subject){
-                    //     item.keywords.push($(subject).html());
-                    // });
-                    // item.abstract = $(record).find("abstract").html();
-                    // item.type = $(record).find("type").html();
-                    // item.lowerCorner = $(record).find("LowerCorner").html();
-                    // item.upperCorner = $(record).find("UpperCorner").html();
-                    // item.extent = getExtentFromCorners($(record).find("LowerCorner").html(), $(record).find("UpperCorner").html());
-                    // item.mapID = "map"+i;
-                    //$scope.curRecords.push(item);
-                    console.log(item);
+                    //console.log(item);
                     i++;
                 });
             }
-            
-
-
+            // if OL maps aren't loading properly, using setTimeout is a quickfix, but not a solution long term
             //setTimeout(createPreviews, 100);
         },
         function(response){
@@ -318,8 +270,6 @@ console.log("number matched: " + jsonData.GetRecordsResponse.SearchResults._numb
             console.log(response);
         });
     };
-
-    
 
 
     /* ===========================================================================================

@@ -171,12 +171,12 @@ csw.search.prototype.createRequest = function(pages){
             //         '</ogc:SortBy>';
 
 
-            request +=   '<ogc:SortBy>' +
-                            '<ogc:SortProperty>' +
-                            '<ogc:PropertyName>'+ this.sortOption.id + '</ogc:PropertyName>' +
-                            '<ogc:SortOrder>' + this.sortOption.order + '</ogc:SortOrder>' +
-                            '</ogc:SortProperty>' +
-                        '</ogc:SortBy>';
+            // request +=   '<ogc:SortBy>' +
+            //                 '<ogc:SortProperty>' +
+            //                 '<ogc:PropertyName>'+ this.sortOption.id + '</ogc:PropertyName>' +
+            //                 '<ogc:SortOrder>' + this.sortOption.order + '</ogc:SortOrder>' +
+            //                 '</ogc:SortProperty>' +
+            //             '</ogc:SortBy>';
 
 
 
@@ -202,13 +202,13 @@ csw.getFilterXml = function(filter){
  * @return XML string
  */
 csw.getBboxXml = function(filter){
-    var xml2 =          '<ogc:BBOX>' + 
-                      '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
-                      '<gml:Envelope>' + 
-                        '<gml:lowerCorner>' + filter.extent[0] + ' ' + filter.extent[1] + '</gml:lowerCorner>' + 
-                        '<gml:upperCorner>' + filter.extent[2] + ' ' + filter.extent[3] + '</gml:upperCorner>' + 
-                      '</gml:Envelope>' + 
-                    '</ogc:BBOX>';
+    // var xml2 =          '<ogc:BBOX>' + 
+    //                   '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
+    //                   '<gml:Envelope>' + 
+    //                     '<gml:lowerCorner>' + filter.extent[0] + ' ' + filter.extent[1] + '</gml:lowerCorner>' + 
+    //                     '<gml:upperCorner>' + filter.extent[2] + ' ' + filter.extent[3] + '</gml:upperCorner>' + 
+    //                   '</gml:Envelope>' + 
+    //                 '</ogc:BBOX>';
 
     var xml = '<ogc:'+filter.extentConstraint.id+'>'+
                     '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>'+
@@ -219,10 +219,15 @@ csw.getBboxXml = function(filter){
                 '</ogc:'+filter.extentConstraint.id+'>';
 
 
-
-
-
+ var xml2 =          '<ogc:BBOX>' + 
+                      '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
+                      '<gml:Envelope>' + 
+                        '<gml:lowerCorner>0 0</gml:lowerCorner>' + 
+                        '<gml:upperCorner>90 90</gml:upperCorner>' + 
+                      '</gml:Envelope>' + 
+                    '</ogc:BBOX>';
     return xml;
+    // return '';
 }
 
 /**
