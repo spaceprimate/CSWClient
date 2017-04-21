@@ -22,7 +22,7 @@ nrlCatalog.config(function($httpProvider) {
  */
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
-    //location of the pycsw server
+    //location of the CSW server
      var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
     // var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
     // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";

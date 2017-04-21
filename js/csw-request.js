@@ -171,12 +171,12 @@ csw.search.prototype.createRequest = function(pages){
             //         '</ogc:SortBy>';
 
 
-            // request +=   '<ogc:SortBy>' +
-            //                 '<ogc:SortProperty>' +
-            //                 '<ogc:PropertyName>'+ this.sortOption.id + '</ogc:PropertyName>' +
-            //                 '<ogc:SortOrder>' + this.sortOption.order + '</ogc:SortOrder>' +
-            //                 '</ogc:SortProperty>' +
-            //             '</ogc:SortBy>';
+            request +=   '<ogc:SortBy>' +
+                            '<ogc:SortProperty>' +
+                            '<ogc:PropertyName>'+ this.sortOption.id + '</ogc:PropertyName>' +
+                            '<ogc:SortOrder>' + this.sortOption.order + '</ogc:SortOrder>' +
+                            '</ogc:SortProperty>' +
+                        '</ogc:SortBy>';
 
 
 
@@ -213,19 +213,19 @@ csw.getBboxXml = function(filter){
     var xml = '<ogc:'+filter.extentConstraint.id+'>'+
                     '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>'+
                     '<gml:Envelope>'+
-                        '<gml:lowerCorner>' + filter.extent[0] + ' ' + filter.extent[1] + '</gml:lowerCorner>'+
-                        '<gml:upperCorner>' + filter.extent[2] + ' ' + filter.extent[3] + '</gml:upperCorner>'+
+                        '<gml:lowerCorner>' + filter.extent[1] + ' ' + filter.extent[0] + '</gml:lowerCorner>'+
+                        '<gml:upperCorner>' + filter.extent[3] + ' ' + filter.extent[2] + '</gml:upperCorner>'+
                     '</gml:Envelope>'+
                 '</ogc:'+filter.extentConstraint.id+'>';
 
 
- var xml2 =          '<ogc:BBOX>' + 
+ var xml2 =          '<ogc:Contains>' + 
                       '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
                       '<gml:Envelope>' + 
                         '<gml:lowerCorner>0 0</gml:lowerCorner>' + 
                         '<gml:upperCorner>90 90</gml:upperCorner>' + 
                       '</gml:Envelope>' + 
-                    '</ogc:BBOX>';
+                    '</ogc:Contains>';
     return xml;
     // return '';
 }
