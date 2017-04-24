@@ -33,7 +33,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     //after post request, records objects are created and pushed here
     $scope.curRecords= [];
 
-    $scope.defaultExtent = [-180, -90, 180, 90];
+    
 
     $scope.hideSidebar = true;
 
@@ -372,6 +372,8 @@ nrlCatalog.directive('advancedSearch', function() {
         templateUrl:   'templates/searchAdvanced.html',
         controller: function($scope){
 
+            $scope.defaultExtent = [-180, -90, 180, 90];
+
             //$scope.advancedSearch = new csw.search();
 
             var vectorSource = new ol.source.Vector({
@@ -402,7 +404,7 @@ nrlCatalog.directive('advancedSearch', function() {
                 })
             });
 
-            //OL extent for advanced search
+            //OpenLayers Extent object, for advanced search
             var advSearchExtent = new ol.interaction.Extent({
                 condition: ol.events.condition.platformModifierKeyOnly
             });
@@ -437,8 +439,10 @@ nrlCatalog.directive('advancedSearch', function() {
              * resets extent to default (in OL map and search object)
              */
             $scope.clearExtent = function(){
-                extent.setExtent(null);
-                $scope.searches.advancedSearch.extent.extent = $scope.defaultExtent;
+                //extent.setExtent(null);
+                //$scope.searches.advancedSearch.extent.extent = [-180, -90, 180, 90];
+                advSearchExtent.setExtent(null);
+                $scope.searches.advancedSearch.setExtent( $scope.defaultExtent );
             };
 		},
         controllerAs: 'advSearch'

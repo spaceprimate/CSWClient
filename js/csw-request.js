@@ -88,7 +88,8 @@ csw.search = function(){
     this.setExtent = function(extent){
         var index = this.findExtentIndex();
         if (index != null){
-            this.filters[this.findExtentIndex()].extent = extent;
+            //this.filters[this.findExtentIndex()].extent = extent;
+            this.filters[index].extent = extent;
         }
     };
 
