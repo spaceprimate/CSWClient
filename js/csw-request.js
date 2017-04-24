@@ -7,6 +7,38 @@ var csw = {};
 //basic strings (components of request) may go here, although it might not be necessary
 csw.components = {};
 
+
+
+var sampleXml = '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="1" maxRecords="10" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
+	'<csw:Query typeNames="csw:Record">' +
+		'<csw:ElementSetName>full</csw:ElementSetName>' +
+		'<csw:Constraint version="1.1.0">' +
+			'<ogc:Filter>' +
+				// '<ogc:And>' +
+				// 	'<ogc:PropertyIsNotEqualTo>' +
+				// 		'<ogc:PropertyName>dc:type</ogc:PropertyName>' +
+				// 		'<ogc:Literal>service</ogc:Literal>' +
+				// 	'</ogc:PropertyIsNotEqualTo>' +
+				// 	'<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="">' +
+				// 		'<ogc:PropertyName>dc:title</ogc:PropertyName>' +
+				// 		'<ogc:Literal>%blue%</ogc:Literal>' +
+				// 	'</ogc:PropertyIsLike>' +
+				// '</ogc:And>' +
+					'<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="">' +
+						'<ogc:PropertyName>dct:abstract</ogc:PropertyName>' +
+						'<ogc:Literal>%map%</ogc:Literal>' +
+					'</ogc:PropertyIsLike>' +
+			'</ogc:Filter>' +
+		'</csw:Constraint>' +
+		'<ogc:SortBy>' +
+			'<ogc:SortProperty>' +
+				'<ogc:PropertyName>dc:title</ogc:PropertyName>' +
+				'<ogc:SortOrder>ASC</ogc:SortOrder>' +
+			'</ogc:SortProperty>' +
+		'</ogc:SortBy>' +
+	'</csw:Query>' +
+'</csw:GetRecords>';
+
 /**
  * Filters to be used in search query
  * Constructor sets all defaults- no need to pass anything
@@ -22,10 +54,11 @@ csw.filter = function(){
     this.extentConstraint = this.extentConstraints[0];
 };
 //types of text that can be filtered for
+// Dublin Core ID and corresponding term
 csw.filter.prototype.types = [
-        {id: "title", label: "Title"},
-        {id: "AnyText", label: "Any"},
-        {id: "abstract", label: "Abstract"},
+        {id: "title", label: "Title", prefix: "dc:"},
+        {id: "AnyText", label: "Any", prefix: "csw:"},
+        {id: "abstract", label: "Abstract", prefix: "dct:"},
         {id: "keyword", label: "Keyword"},
         {id: "extent", label: "Bounding Box"}
     ];
@@ -185,6 +218,7 @@ csw.search.prototype.createRequest = function(pages){
                     '</csw:GetRecords>';
         //console.log(request);
         return request;
+        //return sampleXml;
     }
 
 /**
@@ -194,7 +228,8 @@ csw.search.prototype.createRequest = function(pages){
  * @return XML string
  */
 csw.getFilterXml = function(filter){
-    if (filter.type.id == "title"){ return csw.getTitleXml(filter);}
+    if (filter.type.id == "title" || filter.type.id == "abstract" ){ return csw.getTermXml(filter);}
+    //else if (filter.type.id == "abstract"){ return csw.getAbstractXml(filter);}
     else if (filter.type.id == "extent"){ return csw.getBboxXml(filter);}
 };
 
@@ -235,7 +270,47 @@ csw.getBboxXml = function(filter){
  * @param {csw.filter} 
  * @return XML string
  */
-csw.getTitleXml = function(filter){
+csw.getTermXml = function(filter){
+    var constraint, termPrefix, termSuffix, attributes;
+    if (filter.constraint.id == "PropertyIsLike"){
+        constraint = "PropertyIsLike";
+        termPrefix = "%";
+        termSuffix = "%";
+        attributes = ' matchCase="false" wildCard="%" singleChar="_" escapeChar="\"';
+    }
+    else if (filter.constraint.id == "beginsWith"){
+        constraint = "PropertyIsLike";
+        termPrefix = "";
+        termSuffix = "%";
+        attributes = ' matchCase="false" wildCard="%" singleChar="_" escapeChar="\"';
+    }
+    else if (filter.constraint.id == "PropertyIsEqualTo"){
+        constraint = "PropertyIsEqualTo";
+        termPrefix = "";
+        termSuffix = "";
+        attributes = '';
+    }
+    else if (filter.constraint.id == "PropertyIsNotEqualTo"){
+        constraint = "PropertyIsNotEqualTo";
+        termPrefix = "";
+        termSuffix = "";
+        attributes = '';
+    }
+
+    var xml =   '<ogc:'+ constraint + attributes + '>' +
+                    '<ogc:PropertyName>'+ filter.type.prefix + filter.type.id + '</ogc:PropertyName>' +
+                    '<ogc:Literal>' + termPrefix + filter.term + termSuffix + '</ogc:Literal>' +
+                '</ogc:'+ constraint + '>';
+
+    return xml;
+};
+
+
+/**
+ * @param {csw.filter} 
+ * @return XML string
+ */
+csw.getAbstractXml = function(filter){
     var constraint, termPrefix, termSuffix, attributes;
     if (filter.constraint.id == "PropertyIsLike"){
         constraint = "PropertyIsLike";

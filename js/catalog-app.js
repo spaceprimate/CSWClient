@@ -215,7 +215,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             var x2js = new X2JS();
             var jsonData = x2js.xml_str2json(response.data);
 
-            console.log(jsonData);
+            console.log(response.data);
+            //console.log(jsonData);
 
             var i = 1;
 
