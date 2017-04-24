@@ -228,7 +228,7 @@ csw.search.prototype.createRequest = function(pages){
  * @return XML string
  */
 csw.getFilterXml = function(filter){
-    if (filter.type.id == "title" || filter.type.id == "abstract" ){ return csw.getTermXml(filter);}
+    if (filter.type.id == "title" || filter.type.id == "abstract" || filter.type.id == "AnyText" ){ return csw.getTermXml(filter);}
     //else if (filter.type.id == "abstract"){ return csw.getAbstractXml(filter);}
     else if (filter.type.id == "extent"){ return csw.getBboxXml(filter);}
 };

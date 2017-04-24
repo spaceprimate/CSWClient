@@ -21,10 +21,15 @@
 
               <!-- Filter Constraint Options (by type)  ============================================================================================ -->
                 
-              <!--Title, abstract, and keyword constraint-->
-              <div ng-if="f.type.id == 'title' || f.type.id == 'abstract' || f.type.id == 'keyword' || f.type.id == 'any'" class="form-group">
+              <!--Title and Abstract constraint-->
+              <div ng-if="f.type.id == 'title' || f.type.id == 'abstract' || f.type.id == 'keyword'" class="form-group">
                 <select  ng-model="f.constraint" ng-options="o.label for o in f.constraints track by o.id">
                 </select>
+                <input placeholder="Search term" ng-model="f.term"> 
+              </div>
+
+              <!--AnyText constraint-->
+              <div ng-if="f.type.id == 'AnyText'" class="form-group">
                 <input placeholder="Search term" ng-model="f.term"> 
               </div>
 
