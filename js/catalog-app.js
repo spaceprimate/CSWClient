@@ -90,6 +90,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         if(search == "advancedSearch"){
             $scope.minimizeAdvanced = true;
         }
+        $scope.noRecordsFound = false;
         $scope.getFirstPage();
     };
 
