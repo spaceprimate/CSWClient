@@ -90,7 +90,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         if(search == "advancedSearch"){
             $scope.minimizeAdvanced = true;
         }
-        $scope.noRecordsFound = false;
+        
         $scope.getFirstPage();
     };
 
@@ -139,6 +139,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         newRequest = true;
         var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
+        
     };
 
     /**
@@ -199,6 +200,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.requestRecords = function(recordRequest){
         console.log("record request: ");
         console.log(recordRequest);
+        $scope.noRecordsFound = false;
         $http({
             url: cswUrl,
             method: "POST",

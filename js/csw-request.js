@@ -59,7 +59,7 @@ csw.filter.prototype.types = [
         {id: "title", label: "Title", prefix: "dc:"},
         {id: "AnyText", label: "Any", prefix: "csw:"},
         {id: "abstract", label: "Abstract", prefix: "dct:"},
-        {id: "keyword", label: "Keyword"},
+        {id: "subject", label: "Keyword", prefix: "dc:"},
         {id: "extent", label: "Bounding Box"}
     ];
 //types of constraints to apply to search terms
@@ -228,7 +228,7 @@ csw.search.prototype.createRequest = function(pages){
  * @return XML string
  */
 csw.getFilterXml = function(filter){
-    if (filter.type.id == "title" || filter.type.id == "abstract" || filter.type.id == "AnyText" ){ return csw.getTermXml(filter);}
+    if (filter.type.id == "title" || filter.type.id == "abstract" || filter.type.id == "AnyText" || filter.type.id == "subject" ){ return csw.getTermXml(filter);}
     //else if (filter.type.id == "abstract"){ return csw.getAbstractXml(filter);}
     else if (filter.type.id == "extent"){ return csw.getBboxXml(filter);}
 };
@@ -272,7 +272,8 @@ csw.getBboxXml = function(filter){
  */
 csw.getTermXml = function(filter){
     var constraint, termPrefix, termSuffix, attributes;
-    if (filter.constraint.id == "PropertyIsLike"){
+    // if 'subject', it's a keyword search and we'll set it's constraint manually to keep the filter object simple
+    if (filter.constraint.id == "PropertyIsLike" || filter.type.id == 'subject'){
         constraint = "PropertyIsLike";
         termPrefix = "%";
         termSuffix = "%";
