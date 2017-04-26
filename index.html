@@ -79,10 +79,20 @@
       
       <div class="col-sm-12"  ng-class="{'col-sm-offset-2 col-sm-10' : !hideSidebar}">
 
-        <div ng-if="noRecordsFound">
+        <div ng-show="loadingData" class="text-center ng-cloak">
+          <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
+        </div>
+
+        <div ng-if="!hasData && !hasError && !startScreen && !loadingData" class="ng-cloak">
           <h2>No records found for those parameters.</h2>
         </div>
-        <div class="row" ng-hide="noRecordsFound">
+
+        <div ng-if="hasError" class="ng-cloak">
+          <h2>There was an error with your request</h2>
+          <div class="alert alert-danger">{{errorMessage}}</div>
+        </div>
+
+        <div class="row" ng-show="hasData">
           <div class="col-xs-6">
             <p>
               <select ng-options="item as item.label for item in searches[curSearch].sortOptions" ng-model="searches[curSearch].sortOption" ng-change="getFirstPage()"></select>
@@ -92,7 +102,7 @@
             
           </div>
         </div>
-        <table class="table table-bordered">
+        <table class="table table-bordered" ng-show="hasData">
             <thead>
               <tr>
                 <th colspan="2">Title</th>
@@ -111,7 +121,7 @@
           </table>
 
          
-          <ul class="pagination pull-left pagination-default" ng-show="pages.totalPages > 1">
+          <ul class="pagination pull-left pagination-default" ng-show="pages.totalPages > 1 && hasData">
             <li><a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1">Previous</a></li>
 
             <li ng-if="pages.pageLimits[1] > 10"><a href="#" ng-click="goToPage(1)">1</a></li>

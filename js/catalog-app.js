@@ -47,14 +47,32 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     }
 
-    
+    // Welcome screen, displayed until initial request is submitted
+    $scope.startScreen = true;
+
+    //used in view to display loading icon
+    $scope.loadingData = false;
+
+    // True if results are returned. False if no results or error
+    $scope.hasData = false; 
+
+    // If records request returns an error
+    $scope.hasError = false;
+    $scope.errorMessage = '';
+
+
+
+
+    //phasing out
+    $scope.noRecordsFound = false;
+
     $scope.searches = {
         //Create our search objects
         basicSearch:  new csw.search(),
         advancedSearch:  new csw.search()
     };
 
-    $scope.noRecordsFound = false;
+    
     
 
 
@@ -200,7 +218,13 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.requestRecords = function(recordRequest){
         console.log("record request: ");
         console.log(recordRequest);
-        $scope.noRecordsFound = false;
+
+        //$scope.noRecordsFound = false;
+        $scope.hasError = false;
+        $scope.startScreen = false;
+        $scope.hasData = false;
+        $scope.loadingData = true;
+
         $http({
             url: cswUrl,
             method: "POST",
@@ -219,67 +243,102 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             var jsonData = x2js.xml_str2json(response.data);
 
             console.log(response.data);
-            //console.log(jsonData);
-
-            var i = 1;
+            console.log(jsonData);
 
             var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
 
-            if (newRequest == true && totalRecords >= 0){
-                $scope.pages.totalRecords = totalRecords;
-                $scope.setPages();
-                newRequest = false;
+            //If server returns an exception
+            if(jsonData.ExceptionReport){
+                $scope.loadingData = false;
+                $scope.hasError = true;
+                $scope.errorMessage = "The CSW server returned an error: "
             }
 
-            if(totalRecords == 0 || totalRecords == undefined ){
-                $scope.noRecordsFound = true;
+            // 0 records returned
+            else if(totalRecords == 0 || totalRecords == undefined ){
+                $scope.loadingData = false;
                 console.log("no records found");
             }
-            
-            else{
-                // If there's only 1 record, it won't be in an array. 
-                if ( !Array.isArray(jsonData.GetRecordsResponse.SearchResults.Record) ){
-                    var tmp = jsonData.GetRecordsResponse.SearchResults.Record;
-                    jsonData.GetRecordsResponse.SearchResults.Record = [tmp];
-                    console.log("not an array, one item loaded);")
-                }
 
-                jsonData.GetRecordsResponse.SearchResults.Record.forEach(function(e, i) {
-                    var item = {};
-                    item.title = getSafe(() => e.title.toString() );
-                    item.keywords = [];
-                    if ( Array.isArray(e.subject) ){
-                        e.subject.forEach(function(el){
-                            item.keywords.push(el.toString());
-                        });
-                    }
-                    item.abstract = getSafe( () => e.abstract.toString() );
-                    if (item.abstract ==  "[object Object]"){item.abstract = "";}
-                    item.type = getSafe( () => e.type.toString() );
-                    item.lowerCorner = getSafe(() => e.BoundingBox.LowerCorner.toString() );
-                    item.upperCorner = getSafe(() => e.BoundingBox.UpperCorner.toString() );
-                    item.extent = getExtentFromCorners(item.lowerCorner, item.upperCorner);
-                    item.mapID = "map"+i;
-                    $scope.curRecords.push(item);
-                    //console.log(item);
-                    i++;
-                });
+            // 1 or more records returned
+            else  {
+                addRecords(jsonData.GetRecordsResponse.SearchResults);
             }
+
+
             // if OL maps aren't loading properly, using setTimeout is a quickfix, but not a solution long term
             //setTimeout(createPreviews, 100);
         },
         function(response){
+            $scope.hasData = false;
+            $scope.loadingData = false;
+            $scope.hasError = true;
+            $scope.errorMessage = "The CSW server returned an error: "
             //error
             console.log("Request Error, response follows: ");
             console.log(response);
         });
     };
 
+    /**
+     * takes JSONified record data returned from CSW server request and 
+     * pushes records to $scope.curRecords array
+     * @param {JSON} records 
+     */
+    function addRecords(records){
+
+        var i = 1;
+        var totalRecords = getSafe(() => records._numberOfRecordsMatched );
+
+        //if this is a new requeset, update pagination
+        if (newRequest == true && totalRecords >= 0){
+            $scope.pages.totalRecords = totalRecords;
+            $scope.setPages();
+            newRequest = false;
+        }
+
+        // If there's only 1 record, it won't be in an array, so
+        //replace Record object with an array so the following forEach will work
+        //if ( !Array.isArray(records.Record) ){
+        if ( totalRecords == 1 ){
+            var tmp = records.Record;
+            records.Record = [tmp];
+            console.log("not an array, one item loaded);")
+        }
+
+        records.Record.forEach(function(e, i) {
+            var item = {};
+            item.title = getSafe(() => e.title.toString() );
+            item.keywords = [];
+            if ( Array.isArray(e.subject) ){
+                e.subject.forEach(function(el){
+                    item.keywords.push(el.toString());
+                });
+            }
+            item.abstract = getSafe( () => e.abstract.toString() );
+            if (item.abstract ==  "[object Object]"){item.abstract = "";}
+            item.type = getSafe( () => e.type.toString() );
+            item.lowerCorner = getSafe(() => e.BoundingBox.LowerCorner.toString() );
+            item.upperCorner = getSafe(() => e.BoundingBox.UpperCorner.toString() );
+            item.extent = getExtentFromCorners(item.lowerCorner, item.upperCorner);
+            item.mapID = "map"+i;
+            $scope.curRecords.push(item);
+            //console.log(item);
+            i++;
+        });
+
+        $scope.hasData = true;
+        $scope.loadingData = false;
+    }
+
+
+
+
+
 
     /* ===========================================================================================
      * open layers Elements
      */
-
 
     /**
      * Flips the long/lat values in an extent array 

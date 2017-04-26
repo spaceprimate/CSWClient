@@ -106,3 +106,18 @@ a.left-toggle:hover, a.bottom-toggle:hover{color: #777; background: #e0e0e0;}
 
 .map-thumbnail{width: 250px; height: 125px;}
 
+/* loading icon */
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
