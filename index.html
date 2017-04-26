@@ -79,19 +79,36 @@
       
       <div class="col-sm-12"  ng-class="{'col-sm-offset-2 col-sm-10' : !hideSidebar}">
 
+        <!-- Welcome Message -->
+        <div class="row" ng-show="startScreen">
+          <div class="col-md-4 col-md-offset-4">
+            <h1>CSW Client</h1>
+            <p>
+              A simple GUI for search and browsing CSW records, currently displaying content from: 
+              <b><span style="word-break: break-all;">{{curUrl}}</span></b>
+            </p>
+            <p>Enter term above to get started, or <a href="#" ng-click="viewAllRecords()">view all records</a></p>
+          </div>
+        </div>
+
+        <!-- Loading notification -->
         <div ng-show="loadingData" class="text-center ng-cloak">
           <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...
         </div>
 
+        <!-- No records found message -->
         <div ng-if="!hasData && !hasError && !startScreen && !loadingData" class="ng-cloak">
           <h2>No records found for those parameters.</h2>
         </div>
 
+        <!-- Error Message -->
         <div ng-if="hasError" class="ng-cloak">
           <h2>There was an error with your request</h2>
           <div class="alert alert-danger">{{errorMessage}}</div>
         </div>
 
+
+        <!-- Sort Options -->
         <div class="row" ng-show="hasData">
           <div class="col-xs-6">
             <p>
@@ -102,6 +119,8 @@
             
           </div>
         </div>
+
+        <!--Main Data Table-->
         <table class="table table-bordered" ng-show="hasData">
             <thead>
               <tr>
@@ -120,7 +139,7 @@
             </tbody>
           </table>
 
-         
+         <!-- Pagination -->
           <ul class="pagination pull-left pagination-default" ng-show="pages.totalPages > 1 && hasData">
             <li><a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1">Previous</a></li>
 

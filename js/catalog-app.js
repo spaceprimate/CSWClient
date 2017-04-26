@@ -33,6 +33,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     //after post request, records objects are created and pushed here
     $scope.curRecords= [];
 
+    $scope.curUrl = cswUrl;
+
     
 
     $scope.hideSidebar = true;
@@ -111,6 +113,14 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         
         $scope.getFirstPage();
     };
+
+    /**
+     * Calls an empty search in order to display all available records
+     */
+    $scope.viewAllRecords = function(){
+        $scope.searches.basicSearch.filters[0].term = "";
+        $scope.submitSearch();
+    }
 
     /**
      * based on settings in pages object, this calculates how many pages are required
