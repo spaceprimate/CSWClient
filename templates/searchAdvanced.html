@@ -12,7 +12,7 @@
 
               <!-- Filter Type Select ============================================================================================ -->
                 <!-- if no extent filter exists yet -->
-                <select  ng-model="f.type" ng-options="o.label for o in f.types" ng-change="searches.advancedSearch.setHasExtent()" ng-if="!searches.advancedSearch.hasExtent || f.type.label == 'Bounding Box'">
+                <select  ng-model="f.type" ng-options="o.label for o in f.types" ng-change="extentStatus()" ng-if="!searches.advancedSearch.hasExtent || f.type.label == 'Bounding Box'">
                 </select>
 
                 <!--if extent filter exists, filter extent option out -->

@@ -35,8 +35,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     $scope.curUrl = cswUrl;
 
-    
-
     $scope.hideSidebar = true;
 
     $scope.pages = {
@@ -466,40 +464,69 @@ nrlCatalog.directive('advancedSearch', function() {
             /**
              * Map used for drawing extent in Advanced Search
              */
-            var advSearchMap = new ol.Map({
-                layers: [osmLayer, countriesLayer],
-                target: 'adv-search-map',
-                view: new ol.View({
-                    center: [0, 0],
-                    projection: 'EPSG:4326',
-                    zoom: 1,
-                    minZoom: 1,
-                })
-            });
+            // var advSearchMap = new ol.Map({
+            //     layers: [osmLayer, countriesLayer],
+            //     target: 'adv-search-map',
+            //     view: new ol.View({
+            //         center: [0, 0],
+            //         projection: 'EPSG:4326',
+            //         zoom: 1,
+            //         minZoom: 1,
+            //     })
+            // });
+
+            var mapCreated = false;
+
+            $scope.extentStatus = function(){
+                $scope.searches.advancedSearch.setHasExtent();
+                if ($scope.searches.advancedSearch.hasExtent && mapCreated == false){
+                    // addMap();
+                    setTimeout(addMap, 200);
+                    mapCreated = true;
+                }
+            };
+
+
+            function addMap(){
+
+                    var advSearchMap = new ol.Map({
+                        layers: [osmLayer, countriesLayer],
+                        target: 'adv-search-map',
+                        view: new ol.View({
+                            center: [0, 0],
+                            projection: 'EPSG:4326',
+                            zoom: 1,
+                            minZoom: 1,
+                        })
+                    });
+
+                    advSearchMap.addInteraction(advSearchExtent);
+                    advSearchExtent.setActive(false);
+
+                    //Enable interaction by holding shift
+                    document.addEventListener('keydown', function(event) {
+                        if (event.keyCode == 16) {
+                            advSearchExtent.setActive(true);
+                        }
+                    });
+
+                    //stop extent interaction when the shift key releases
+                    /** this is being called constantly and causes warnings, should only be called when interaction with the map **/
+                    document.addEventListener('keyup', function(event) {
+                        if (event.keyCode == 16) {
+                            advSearchExtent.setActive(false);
+                        }
+                        $scope.searches.advancedSearch.setExtent( advSearchExtent.getExtent() );
+                        $scope.$apply();
+                    });
+
+            }
 
             //OpenLayers Extent object, for advanced search
             var advSearchExtent = new ol.interaction.Extent({
                 condition: ol.events.condition.platformModifierKeyOnly
             });
-            advSearchMap.addInteraction(advSearchExtent);
-            advSearchExtent.setActive(false);
-
-            //Enable interaction by holding shift
-            document.addEventListener('keydown', function(event) {
-                if (event.keyCode == 16) {
-                    advSearchExtent.setActive(true);
-                }
-            });
-
-            //stop extent interaction when the shift key releases
-            /** this is being called constantly and causes warnings, should only be called when interaction with the map **/
-            document.addEventListener('keyup', function(event) {
-                if (event.keyCode == 16) {
-                    advSearchExtent.setActive(false);
-                }
-                $scope.searches.advancedSearch.setExtent( advSearchExtent.getExtent() );
-                $scope.$apply();
-            });
+            
 
              /**
              * updates extent when user manually changes coordinate input in view
