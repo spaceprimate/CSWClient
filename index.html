@@ -81,13 +81,14 @@
 
         <!-- Welcome Message -->
         <div class="row" ng-show="startScreen">
-          <div class="col-md-4 col-md-offset-4">
+          <div class="col-md-6 col-md-offset-3">
             <h1>CSW Client</h1>
-            <p>
+            <hr>
+            <p class="lead">
               A simple GUI for search and browsing CSW records, currently displaying content from: 
               <b><span style="word-break: break-all;">{{curUrl}}</span></b>
             </p>
-            <p>Enter term above to get started, or <a href="#" ng-click="viewAllRecords()">view all records</a></p>
+            <p class="lead">Enter term above to get started, or <b><a href="#" ng-click="viewAllRecords()">view all records</a></b></p>
           </div>
         </div>
 
@@ -120,24 +121,15 @@
           </div>
         </div>
 
-        <!--Main Data Table-->
-        <table class="table table-bordered" ng-show="hasData">
-            <thead>
-              <tr>
-                <th colspan="2">Title</th>
-                
-                <th>Extent</th>
-                <th></th>
+        <!--Main Data-->
+        <div ng-show="hasData">
+            
+              <article ng-repeat="record in curRecords" record-template index="{{$index}}">
 
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="record in curRecords" record-template index="{{$index}}">
+              </article>
 
-                
-              </tr>
-            </tbody>
-          </table>
+        </div>
+ 
 
          <!-- Pagination -->
           <ul class="pagination pull-left pagination-default" ng-show="pages.totalPages > 1 && hasData">

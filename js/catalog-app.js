@@ -23,7 +23,7 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //location of the CSW server
-     var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
     // var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
     // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
 
@@ -329,9 +329,35 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             item.lowerCorner = getSafe(() => e.BoundingBox.LowerCorner.toString() );
             item.upperCorner = getSafe(() => e.BoundingBox.UpperCorner.toString() );
             item.extent = getExtentFromCorners(item.lowerCorner, item.upperCorner);
+
+            item.info = [];
+            if ( getSafe(() => e.date.toString()) != undefined ){ item.info.push(["Date", e.date.toString()]);}
+            if ( getSafe(() => e.modified.toString()) != undefined ){ item.info.push(["Modified", e.modified.toString()]);}
+            if ( getSafe(() => e.source.toString()) != undefined ){ item.info.push(["Source", e.source.toString()]);}
+            if ( getSafe(() => e.references.toString()) != undefined ){ item.info.push(["References", e.references.toString()]);}
+            if ( getSafe(() => e.type.toString()) != undefined ){ item.info.push(["Type", e.type.toString()]);}
+            if ( getSafe(() => e.language.toString()) != undefined ){ item.info.push(["Language", e.language.toString()]);}
+            if ( getSafe(() => e.rights.toString()) != undefined ){ item.info.push(["Rights", e.rights.toString()]);}
+            if ( getSafe(() => e.format.toString()) != undefined ){ item.info.push(["Format", e.format.toString()]);}
+
+
+
             item.mapID = "map"+i;
             $scope.curRecords.push(item);
             //console.log(item);
+
+/*
+    Elements supported by all CSWs seem to be: 
+        identifier, abstract, title, type
+
+    Selectively supported are: 
+        source, references (string or array of strings), subject
+        type, date, language, rights, bbox, format, references
+    
+    eventually, this should section should address this
+
+*/
+
             i++;
         });
 
@@ -401,6 +427,8 @@ nrlCatalog.directive('recordTemplate', function() {
         templateUrl:   'templates/record.html',
 
         controller: function($scope){
+
+            $scope.viewAll = false;
 
             var osmLayer = new ol.layer.Tile({
                 source: new ol.source.OSM()

@@ -3,6 +3,8 @@
 .navbar-nav>li>a{padding-top: 5px; padding-bottom: 5px;}
 
 
+.pointer{cursor: pointer;}
+
 .advanced-search-content{padding-bottom: 17px;}
 
 #search-bar{
