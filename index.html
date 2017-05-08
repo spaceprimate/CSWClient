@@ -80,17 +80,7 @@
       <div class="col-sm-12"  ng-class="{'col-sm-offset-2 col-sm-10' : !hideSidebar}">
 
         <!-- Welcome Message -->
-        <div class="row" ng-show="startScreen">
-          <div class="col-md-6 col-md-offset-3">
-            <h1>CSW Client</h1>
-            <hr>
-            <p class="lead">
-              A simple GUI for search and browsing CSW records, currently displaying content from: 
-              <b><span style="word-break: break-all;">{{curUrl}}</span></b>
-            </p>
-            <p class="lead">Enter term above to get started, or <b><a href="#" ng-click="viewAllRecords()">view all records</a></b></p>
-          </div>
-        </div>
+        <welcome></welcome>
 
         <!-- Loading notification -->
         <div ng-show="loadingData" class="text-center ng-cloak">
