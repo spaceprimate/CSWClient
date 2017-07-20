@@ -4,15 +4,26 @@
 
 <h3>{{record.title}}</h3>
 <p>{{record.abstract}}</p>
-<p><span ng-repeat="tag in record.keywords" class="small badge">{{tag}}</span></p>
-<p><span ng-repeat="e in record.extent track by $index">{{e}}, </span></p>
-<p><a ng-click="viewAll = !viewAll" class="pointer"><span class="glyphicon" ng-class=" viewAll ? 'glyphicon-menu-up' : 'glyphicon-menu-down' "></span> <span ng-hide="viewAll">More</span> <span ng-show="viewAll">Less</span> Info</a>
+<p><span ng-repeat="tag in record.keywords track by $index" class="small badge tag">{{tag}}</span></p>
+<p><span ng-repeat="e in record.extent track by $index" ng-if="record.extent[0] != null">{{e}} <span ng-if="$index < 3">, </span></span></p>
+<p><a ng-click="viewAll = !viewAll" class="pointer no-underline"><span class="glyphicon" ng-class=" viewAll ? 'glyphicon-triangle-bottom' : 'glyphicon-triangle-right' "></span> Details</a>
 <div ng-if="viewAll">
-    <ul>
-        <li ng-repeat="i in record.info">
-            {{i[0]}}: {{i[1]}}
-        </li>
-    </ul>
+    <table class="table table-striped table-auto">
+        <tr ng-repeat="i in record.info" ng-switch="i[0]">
+            <td>{{i[0]}}</td>
+            <td ng-switch-when="References">
+                    <ul style="margin: 0px; padding-left: 15px;">
+                        <li ng-repeat="ref in i[1].split(',')"><a href="{{ref}}">{{ref}}</a></li>
+                    </ul>
+            </td>
+            <td ng-switch-when="Source">
+                <a href="{{i[1]}}">{{i[1]}}</a>
+            </td>
+            <td ng-switch-default>
+                {{i[1]}}
+            </td>
+        </tr>
+    </table>
 </div>
 <div class="clearfix"></div>
 <hr>

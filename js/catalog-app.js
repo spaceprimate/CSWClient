@@ -1,15 +1,11 @@
 /*
  * App for interfacing with CSW services to browse and seach records
- * 
  * - note: This app uses POST XML to request CSW records, requiring the CSW to allow CORS for the client domain
- *
- *
  */
 
 
 // Site Module- instatiated above
 var nrlCatalog = angular.module('nrlCatalog', [ ]);
-//var app = angular.module('store', [ ]);
 
 nrlCatalog.config(function($httpProvider) {
     //Enable cross domain calls
@@ -23,8 +19,8 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //location of the CSW server
-    // var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
-    var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
+    var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    // var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
     // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
@@ -35,7 +31,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     $scope.curUrl = cswUrl;
 
-    $scope.hideSidebar = true;
+
 
     $scope.pages = {
         curPage: 1,
@@ -59,9 +55,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     // If records request returns an error
     $scope.hasError = false;
     $scope.errorMessage = '';
-
-
-
 
     //phasing out
     $scope.noRecordsFound = false;
@@ -108,6 +101,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         if(search == "advancedSearch"){
             $scope.minimizeAdvanced = true;
         }
+
+        console.log("called submit search");
         
         $scope.getFirstPage();
     };
@@ -149,6 +144,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.pages.curPage = curPage;
         $scope.pages.pageLimits[1] = Math.ceil(curPage / 10) * 10;
         $scope.pages.pageLimits[0] = $scope.pages.pageLimits[1] - 10;
+        console.log("setCurPage called: ");
+        console.log($scope.pages);
     }
 
 
@@ -165,6 +162,24 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         newRequest = true;
         var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
         $scope.requestRecords(recordRequest);
+        
+    };
+
+    /**
+     * gets page numbers in sets of 10
+     */
+    $scope.getPageNumbers = function(){
+
+        console.log("this got called ys: ");
+        // page > pages.pageLimits[0] && page <= pages.pageLimits[1]
+        var arr = [];
+        // var i = page.pageLimits[0];
+        
+        for (i = $scope.pages.pageLimits[0] + 1; i <= $scope.pages.pageLimits[1] && i <= $scope.pages.totalPages; i++){
+            arr.push(i);
+        }
+
+        return arr;
         
     };
 
@@ -250,8 +265,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             var x2js = new X2JS();
             var jsonData = x2js.xml_str2json(response.data);
 
-            console.log(response.data);
-            console.log(jsonData);
+            // console.log(response.data);
+            // console.log(jsonData);
 
             var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
 
@@ -405,12 +420,12 @@ nrlCatalog.directive('headerTemplate', function() {
     }
 });
 
-nrlCatalog.directive('sidebarTemplate', function() {
-    return{
-        restrict: 'E',
-        templateUrl:   'templates/sidebar.html',
-    }
-});
+// nrlCatalog.directive('sidebarTemplate', function() {
+//     return{
+//         restrict: 'E',
+//         templateUrl:   'templates/sidebar.html',
+//     }
+// });
 
 nrlCatalog.directive('basicSearch', function() {
     //    basicSearch:  new csw.search();

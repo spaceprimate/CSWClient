@@ -1,5 +1,6 @@
-.navbar{min-height: 30px; height: 30px; position: fixed; top:0px; left: 0px; right: 0px;}
-.navbar-brand{min-height: 30px; height: 30px;     padding: 6px 15px;}
+.navbar{min-height: 30px; height: 30px; margin-bottom: 0px; background: #4CAF50; border-bottom: 0px;}
+.navbar-brand{min-height: 30px; height: 30px;     padding: 6px 15px; color: #fff;}
+.navbar-inverse .navbar-brand{color: #fff;}
 .navbar-nav>li>a{padding-top: 5px; padding-bottom: 5px;}
 
 
@@ -44,16 +45,12 @@ label.highlight{    color: #337ab7; font-weight: 400; font-style: italic;
 .map{border: 2px solid #a2a2a2; margin-bottom: 0px; max-width: 480px; max-height: }
 
 #main-container{
-	margin-top: 80px;
-    padding-top: 18px;
+	margin-top: 0px;
+    padding-top: 30px;
 }
 
 #search-container{
-    position: fixed;
-    top: 30px;
 
-    right: 0px;
-    left: 0px;
     overflow: auto;
         box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.26);
     z-index: 3000;
@@ -76,6 +73,8 @@ body .sidebar-fixed li .badge{background: #f3f3f3; font-weight: 400; padding: 2p
     color: #868686; font-size: 11px; float: right; margin-top: 2px;}
 body ul.list-unstyled.lined li{margin-top:3px; padding-bottom: 3px; border-bottom: #ececec 1px solid;}
 body ul.list-unstyled.lined li a{color: #333;}
+
+.badge.tag{border-radius: 4px; margin-right: 8px; margin-bottom: 8px; font-weight: 400; color: #5d5d5d; background: #ececec;}
 
 a.left-toggle{    
     display: block;
@@ -105,6 +104,10 @@ a.bottom-toggle{
     line-height: 9px;
 }
 a.left-toggle:hover, a.bottom-toggle:hover{color: #777; background: #e0e0e0;}
+
+.no-underline, .no-underline:hover, .no-underline:active, .no-underline:focus{text-decoration:none; }
+.table-auto{width: auto;}
+
 
 .map-thumbnail{width: 250px; height: 125px;}
 
