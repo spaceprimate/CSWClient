@@ -23,6 +23,13 @@
     border-right: 1px solid #dedede;
     z-index: 3100;
 }
+
+tr.record-table td{min-width: 100px;}
+
+.record-info{padding-right: 120px;}
+.record-thumbnail{min-width: 1px;}
+
+.break-word, tr.break-word td{word-break: break-all;}
 .add-remove-buttons{display: inline-block; position: absolute; right: 3px; top: 50%; margin-top:-10px;}
 .add-remove-buttons a{color: #333;}
 

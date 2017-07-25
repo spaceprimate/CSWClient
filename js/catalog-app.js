@@ -21,8 +21,8 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //location of the CSW server
-    var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
-    // var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
+    // var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
     // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
@@ -457,44 +457,13 @@ nrlCatalog.directive('recordTemplate', function() {
 
             $scope.viewAll = false;
 
-            var osmLayer = new ol.layer.Tile({
-                source: new ol.source.OSM()
-            });
+           
 
-            var feature = new ol.Feature({
-                //geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.curRecords[i].extent))
-                geometry: new ol.geom.Polygon.fromExtent($scope.flipExtent($scope.record.extent))
-            });
 
-            // var temp = $scope.record.extent;
-            // var temptest = extentMap.getBoxStyle(temp);
-            // console.log("extent follows: ");
-            // console.log($scope.record.extent);
             
             $scope.boxStyle = extentMap.getBoxStyle($scope.flipExtent($scope.record.extent));
 
-            feature.setStyle($scope.mapStyle);
-
-            var extentLayer = new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    features: [feature]
-                })
-            });
-
-            setTimeout(addMap, 200);
-            function addMap(){
-                var previewMap = new ol.Map({
-                size: [250,125],
-                layers: [osmLayer, extentLayer],
-                target: $scope.record.mapID,
-                view: new ol.View({
-                  center: [0, 0],
-                  projection: 'EPSG:4326',
-                  zoom: 0,
-                }),
-                controls: []
-              });
-            }
+            
         }
     }
 });
