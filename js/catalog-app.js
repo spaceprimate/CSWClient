@@ -7,6 +7,8 @@
 // Site Module- instatiated above
 var nrlCatalog = angular.module('nrlCatalog', [ ]);
 
+var extentMap = new extenty();
+
 nrlCatalog.config(function($httpProvider) {
     //Enable cross domain calls
     $httpProvider.defaults.useXDomain = true;
@@ -30,6 +32,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.curRecords= [];
 
     $scope.curUrl = cswUrl;
+
+    
 
 
 
@@ -461,6 +465,13 @@ nrlCatalog.directive('recordTemplate', function() {
                 //geometry: new ol.geom.Polygon.fromExtent(flipExtent($scope.curRecords[i].extent))
                 geometry: new ol.geom.Polygon.fromExtent($scope.flipExtent($scope.record.extent))
             });
+
+            // var temp = $scope.record.extent;
+            // var temptest = extentMap.getBoxStyle(temp);
+            // console.log("extent follows: ");
+            // console.log($scope.record.extent);
+            
+            $scope.boxStyle = extentMap.getBoxStyle($scope.flipExtent($scope.record.extent));
 
             feature.setStyle($scope.mapStyle);
 
