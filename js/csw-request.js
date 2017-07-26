@@ -7,38 +7,6 @@ var csw = {};
 //basic strings (components of request) may go here, although it might not be necessary
 csw.components = {};
 
-
-
-var sampleXml = '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="1" maxRecords="10" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
-	'<csw:Query typeNames="csw:Record">' +
-		'<csw:ElementSetName>full</csw:ElementSetName>' +
-		'<csw:Constraint version="1.1.0">' +
-			'<ogc:Filter>' +
-				// '<ogc:And>' +
-				// 	'<ogc:PropertyIsNotEqualTo>' +
-				// 		'<ogc:PropertyName>dc:type</ogc:PropertyName>' +
-				// 		'<ogc:Literal>service</ogc:Literal>' +
-				// 	'</ogc:PropertyIsNotEqualTo>' +
-				// 	'<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="">' +
-				// 		'<ogc:PropertyName>dc:title</ogc:PropertyName>' +
-				// 		'<ogc:Literal>%blue%</ogc:Literal>' +
-				// 	'</ogc:PropertyIsLike>' +
-				// '</ogc:And>' +
-					'<ogc:PropertyIsLike matchCase="false" wildCard="%" singleChar="_" escapeChar="">' +
-						'<ogc:PropertyName>dct:abstract</ogc:PropertyName>' +
-						'<ogc:Literal>%map%</ogc:Literal>' +
-					'</ogc:PropertyIsLike>' +
-			'</ogc:Filter>' +
-		'</csw:Constraint>' +
-		'<ogc:SortBy>' +
-			'<ogc:SortProperty>' +
-				'<ogc:PropertyName>dc:title</ogc:PropertyName>' +
-				'<ogc:SortOrder>ASC</ogc:SortOrder>' +
-			'</ogc:SortProperty>' +
-		'</ogc:SortBy>' +
-	'</csw:Query>' +
-'</csw:GetRecords>';
-
 /**
  * Filters to be used in search query
  * Constructor sets all defaults- no need to pass anything
@@ -165,10 +133,7 @@ csw.search.prototype.createRequest = function(pages){
                           '<csw:Query typeNames="csw:Record">' +
                             '<csw:ElementSetName>full</csw:ElementSetName>';
 
-
-        
             if (this.filters == 0){
-                console.log("filters was 0");
                 request +=  '<csw:Constraint version="1.1.0">' +
                                 '<ogc:Filter>' + 
                                     '<ogc:PropertyIsNotEqualTo>' +
@@ -186,9 +151,7 @@ csw.search.prototype.createRequest = function(pages){
                                             '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
                                             '<ogc:Literal>service</ogc:Literal>' +
                                         '</ogc:PropertyIsNotEqualTo>';
-                        console.log(this.filters.length);
                     for (var i = 0; i < this.filters.length; i++) {
-                        console.log(this.filters[i]);
                         request += csw.getFilterXml(this.filters[i]);
                     }
                                         
@@ -196,13 +159,6 @@ csw.search.prototype.createRequest = function(pages){
                                 '</ogc:Filter>' +
                             '</csw:Constraint>';
             }
-
-            // request +=   '<ogc:SortBy>' +
-            //             '<ogc:SortProperty>' +
-            //             '<ogc:PropertyName>dc:title</ogc:PropertyName>' +
-            //             '<ogc:SortOrder>ASC</ogc:SortOrder>' +
-            //             '</ogc:SortProperty>' +
-            //         '</ogc:SortBy>';
 
 
             request +=   '<ogc:SortBy>' +
@@ -212,18 +168,13 @@ csw.search.prototype.createRequest = function(pages){
                             '</ogc:SortProperty>' +
                         '</ogc:SortBy>';
 
-
-
         request +=      '</csw:Query>' +
                     '</csw:GetRecords>';
-        //console.log(request);
         return request;
-        //return sampleXml;
     }
 
 /**
  * Determines which type of filter it's processing and returns result of appropriate method
- *
  * @param {csw.filter} 
  * @return XML string
  */
@@ -234,18 +185,11 @@ csw.getFilterXml = function(filter){
 };
 
 /**
+ * builds xml string for bbox filters
  * @param {csw.filter} 
  * @return XML string
  */
 csw.getBboxXml = function(filter){
-    // var xml2 =          '<ogc:BBOX>' + 
-    //                   '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
-    //                   '<gml:Envelope>' + 
-    //                     '<gml:lowerCorner>' + filter.extent[0] + ' ' + filter.extent[1] + '</gml:lowerCorner>' + 
-    //                     '<gml:upperCorner>' + filter.extent[2] + ' ' + filter.extent[3] + '</gml:upperCorner>' + 
-    //                   '</gml:Envelope>' + 
-    //                 '</ogc:BBOX>';
-
     var xml = '<ogc:'+filter.extentConstraint.id+'>'+
                     '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>'+
                     '<gml:Envelope>'+
@@ -253,20 +197,11 @@ csw.getBboxXml = function(filter){
                         '<gml:upperCorner>' + filter.extent[3] + ' ' + filter.extent[2] + '</gml:upperCorner>'+
                     '</gml:Envelope>'+
                 '</ogc:'+filter.extentConstraint.id+'>';
-
-
- var xml2 =          '<ogc:Contains>' + 
-                      '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>' + 
-                      '<gml:Envelope>' + 
-                        '<gml:lowerCorner>0 0</gml:lowerCorner>' + 
-                        '<gml:upperCorner>90 90</gml:upperCorner>' + 
-                      '</gml:Envelope>' + 
-                    '</ogc:Contains>';
     return xml;
-    // return '';
 }
 
 /**
+ * Builds xml string for a given filter
  * @param {csw.filter} 
  * @return XML string
  */
@@ -300,46 +235,6 @@ csw.getTermXml = function(filter){
 
     var xml =   '<ogc:'+ constraint + attributes + '>' +
                     '<ogc:PropertyName>'+ filter.type.prefix + filter.type.id + '</ogc:PropertyName>' +
-                    '<ogc:Literal>' + termPrefix + filter.term + termSuffix + '</ogc:Literal>' +
-                '</ogc:'+ constraint + '>';
-
-    return xml;
-};
-
-
-/**
- * @param {csw.filter} 
- * @return XML string
- */
-csw.getAbstractXml = function(filter){
-    var constraint, termPrefix, termSuffix, attributes;
-    if (filter.constraint.id == "PropertyIsLike"){
-        constraint = "PropertyIsLike";
-        termPrefix = "%";
-        termSuffix = "%";
-        attributes = ' matchCase="false" wildCard="%" singleChar="_" escapeChar="\"';
-    }
-    else if (filter.constraint.id == "beginsWith"){
-        constraint = "PropertyIsLike";
-        termPrefix = "";
-        termSuffix = "%";
-        attributes = ' matchCase="false" wildCard="%" singleChar="_" escapeChar="\"';
-    }
-    else if (filter.constraint.id == "PropertyIsEqualTo"){
-        constraint = "PropertyIsEqualTo";
-        termPrefix = "";
-        termSuffix = "";
-        attributes = '';
-    }
-    else if (filter.constraint.id == "PropertyIsNotEqualTo"){
-        constraint = "PropertyIsNotEqualTo";
-        termPrefix = "";
-        termSuffix = "";
-        attributes = '';
-    }
-
-    var xml =   '<ogc:'+ constraint + attributes + '>' +
-                    '<ogc:PropertyName>dc:' + filter.type.id + '</ogc:PropertyName>' +
                     '<ogc:Literal>' + termPrefix + filter.term + termSuffix + '</ogc:Literal>' +
                 '</ogc:'+ constraint + '>';
 
