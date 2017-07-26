@@ -69,6 +69,12 @@ tr.break-word td {
     padding: 7px 15px 8px 30px;
     border-bottom: 1px solid #cacaca;
 }
+
+h4 a.sm{
+    padding: 4px 0 0 12px;
+    font-size: 14px;
+    font-weight: 400;
+}
 .sidebar-fixed {
     position: fixed;
     top: 30px;

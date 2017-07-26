@@ -1,14 +1,9 @@
 <section ng-hide="showAdvancedSearch">
-        <form class="form-inline text-center"> 
-          <div class="form-group"> 
-             
+    <form class="form-inline text-center">
+        <div class="form-group">
             <input class="form-control" placeholder="Search" ng-model="searches.basicSearch.filters[0].term">
-
-
-            <button type="submit" class="btn btn-primary" ng-click="submitSearch()">Search</button> 
-          </div>
-          <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showAdvancedSearch = !showAdvancedSearch">Advanced Search</a>
-        </form>
-
-
-      </section>
+            <button type="submit" class="btn btn-primary" ng-click="submitSearch()">Search</button>
+        </div>
+        <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showAdvancedSearch = !showAdvancedSearch">Advanced Search</a>
+    </form>
+</section>

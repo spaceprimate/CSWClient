@@ -1,88 +1,74 @@
 <section ng-show="showAdvancedSearch">
-        <div ng-show="minimizeAdvanced">
-          <h4>Advanced Search</h4>
-        </div>
+    <div ng-show="minimizeAdvanced">
+        <h4>Advanced Search <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showAdvancedSearch = !showAdvancedSearch">Basic Search</a></h4>
+    </div>
 
-        <div class="row advanced-search-content" ng-hide="minimizeAdvanced">
+    <div class="row advanced-search-content" ng-hide="minimizeAdvanced">
 
-          <div class="col-xs-7">
+        <div class="col-xs-7">
             <form id="advanced-search" name="advanced-search" novalidate>
-            <h4>Advanced Search</h4>
-            <div ng-repeat="f in searches.advancedSearch.filters" class="form-inline advanced-filter" ng-class="{first:$first}" >
+                <h4>Advanced Search <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showAdvancedSearch = !showAdvancedSearch">Basic Search</a></h4>
+                <div ng-repeat="f in searches.advancedSearch.filters" class="form-inline advanced-filter" ng-class="{first:$first}">
 
-              <!-- Filter Type Select ============================================================================================ -->
-                <!-- if no extent filter exists yet -->
-                <select  ng-model="f.type" ng-options="o.label for o in f.types" ng-change="extentStatus()" ng-if="!searches.advancedSearch.hasExtent || f.type.label == 'Bounding Box'">
-                </select>
+                    <!-- Filter Type Select ============================================================================================ -->
+                    <!-- if no extent filter exists yet -->
+                    <select ng-model="f.type" ng-options="o.label for o in f.types" ng-change="extentStatus()" 
+                        ng-if="!searches.advancedSearch.hasExtent || f.type.label == 'Bounding Box'">
+                    </select>
 
-                <!--if extent filter exists, filter extent option out -->
-                <select  ng-model="f.type" ng-options="o.label for o in f.types | filter:{label :'!Bounding Box'}" ng-change="searches.advancedSearch.setHasExtent()" ng-if="searches.advancedSearch.hasExtent && f.type.label != 'Bounding Box'">
-                </select>
+                    <!--if extent filter exists, filter extent option out -->
+                    <select ng-model="f.type" ng-options="o.label for o in f.types | filter:{label :'!Bounding Box'}" ng-change="searches.advancedSearch.setHasExtent()"
+                        ng-if="searches.advancedSearch.hasExtent && f.type.label != 'Bounding Box'">
+                    </select>
 
-              <!-- Filter Constraint Options (by type)  ============================================================================================ -->
-                
-              <!--Title and Abstract constraint-->
-              <div ng-if="f.type.id == 'title' || f.type.id == 'abstract'" class="form-group">
-                <select  ng-model="f.constraint" ng-options="o.label for o in f.constraints track by o.id">
-                </select>
-                <input placeholder="Search term" ng-model="f.term"> 
-              </div>
+                    <!-- Filter Constraint Options (by type)  ============================================================================================ -->
 
-              <!--AnyText constraint-->
-              <div ng-if="f.type.id == 'AnyText' || f.type.id == 'subject'" class="form-group">
-                <input placeholder="Search term" ng-model="f.term"> 
-              </div>
+                    <!--Title and Abstract constraint-->
+                    <div ng-if="f.type.id == 'title' || f.type.id == 'abstract'" class="form-group">
+                        <select ng-model="f.constraint" ng-options="o.label for o in f.constraints track by o.id"></select>
+                        <input placeholder="Search term" ng-model="f.term">
+                    </div>
 
+                    <!--AnyText constraint-->
+                    <div ng-if="f.type.id == 'AnyText' || f.type.id == 'subject'" class="form-group">
+                        <input placeholder="Search term" ng-model="f.term">
+                    </div>
 
+                    <!--Extent constraints-->
+                    <select ng-if="f.type.id == 'extent'" ng-model="f.extentConstraint" ng-options="o.label for o in f.extentConstraints"></select>
+                    <div ng-if="f.type.id == 'extent'">
+                        <label class="small highlight" ng-if="f.type.id == 'extent'">Hold "Shift" to select extent on map, or eventer values below</label>
+                        <div class="clearfix"></div>
+                        <div class="coord-input"><label class="small">min Long</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[0]"
+                                ng-change="updateExtent()" id="min-long"></div>
+                        <div class="coord-input"><label class="small">min Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[1]"
+                                ng-change="updateExtent()" id="min-lat"></div>
+                        <div class="coord-input"><label class="small">max Long</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[2]"
+                                ng-change="updateExtent()" id="max-long"></div>
+                        <div class="coord-input"><label class="small">max Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[3]"
+                                ng-change="updateExtent()" id="max-lat"></div>
+                        <a href="#" class="" style="margin:23px 0 0 2px; display: inline-block;" ng-click="clearExtent()" ng-hide="searches.advancedSearch.extent.extent == defaultExtent">clear</a>
+                        <div class="clearfix"></div>
+                    </div>
 
-              <!--Extent constraints-->
-              <select ng-if="f.type.id == 'extent'" ng-model="f.extentConstraint" ng-options="o.label for o in f.extentConstraints"></select>
-              <div ng-if="f.type.id == 'extent'">
-                <label class="small highlight" ng-if="f.type.id == 'extent'">Hold "Shift" to select extent on map, or eventer values below</label>
-                <div class="clearfix"></div>
-                <div class="coord-input"><label class="small">min Long</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[0]" ng-change="updateExtent()" id="min-long" ></div>
-                <div class="coord-input"><label class="small">min Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[1]" ng-change="updateExtent()" id="min-lat"></div>
-                <div class="coord-input"><label class="small">max Long</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[2]" ng-change="updateExtent()" id="max-long"></div>
-                <div class="coord-input"><label class="small">max Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[3]" ng-change="updateExtent()" id="max-lat"></div>
-                <a href="#" class="" style="margin:23px 0 0 2px; display: inline-block;" ng-click="clearExtent()" ng-hide="searches.advancedSearch.extent.extent == defaultExtent">clear</a>
-                <div class="clearfix"></div>
-              </div>
+                    <!--Buttons to add or remove filters-->
+                    <div class="add-remove-buttons">
+                        <a href="#" ng-click="searches.advancedSearch.addFilter()" ng-if="$index == searches.advancedSearch.filters.length - 1"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a href="#" ng-click="searches.advancedSearch.removeFilter($index)" ng-if="searches.advancedSearch.filters.length > 1"><span class="glyphicon glyphicon-minus"></span></a>
+                    </div>
+                </div>
 
-              <!--Buttons to add or remove filters-->
-              <div class="add-remove-buttons">
-                <a href="#" ng-click="searches.advancedSearch.addFilter()" ng-if="$index == searches.advancedSearch.filters.length - 1"><span class="glyphicon glyphicon-plus"></span></a>
-                <a href="#" ng-click="searches.advancedSearch.removeFilter($index)" ng-if="searches.advancedSearch.filters.length > 1"><span class="glyphicon glyphicon-minus"></span></a>
-              </div>
-            </div>
-
-            <div style="margin-top:12px;">
-
-              <button class="btn btn-primary" ng-click="submitSearch('advancedSearch')">Search</button>
-              <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="searches.advancedSearch.clear()">Reset</a> 
-              <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showAdvancedSearch = !showAdvancedSearch">Basic Search</a>
-            </div>
+                <div style="margin-top:12px;">
+                    <button class="btn btn-primary" ng-click="submitSearch('advancedSearch')">Search</button>
+                    <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="searches.advancedSearch.clear()">Reset</a>
+                </div>
             </form>
-          </div><!-- /.col-xs-7 -->
-          <div class="col-xs-5">
-            
+        </div><!-- /.col-xs-7 -->
+        <div class="col-xs-5">
             <div class="clearfix"></div>
             <div style="width: 100%; min-height: 1px;">
-              <div id="adv-search-map" class="map" ng-show="searches.advancedSearch.hasExtent"></div>
+                <div id="adv-search-map" class="map" ng-show="searches.advancedSearch.hasExtent"></div>
             </div>
-
-
-
-
-
-
-                
-          </div>
-
-
-          
-        </div>
-
-      
-
-        
-      </section>
+        </div><!-- /.col-xs-5 -->
+    </div>
+</section>

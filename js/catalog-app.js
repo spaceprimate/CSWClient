@@ -3,10 +3,10 @@
  * - note: This app uses POST XML to request CSW records, requiring the CSW to allow CORS for the client domain
  */
 
-
-// Site Module- instatiated above
+// Site Module
 var nrlCatalog = angular.module('nrlCatalog', [ ]);
 
+// init extenty- handles extent thumbnails
 var extentMap = new extenty();
 
 nrlCatalog.config(function($httpProvider) {
@@ -20,7 +20,7 @@ nrlCatalog.config(function($httpProvider) {
  */
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
-    //location of the CSW server
+    //location of the CSW servers
     // var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
     var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
     // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
@@ -32,10 +32,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.curRecords= [];
 
     $scope.curUrl = cswUrl;
-
-    
-
-
 
     $scope.pages = {
         curPage: 1,
@@ -69,17 +65,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         advancedSearch:  new csw.search()
     };
 
-    
-    
-
-
     //set to either "basicSearch" or "advancedSearch"
     $scope.curSearch = "basicSearch";
-
-    //$scope.advancedSearch = new csw.search();
-
-    //Create our search objects
-    //$scope.basicSearch = new csw.search();
 
     //create options for sort dropdown
     $scope.sortOptions = [
@@ -88,11 +75,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     ];
     $scope.sortOption = $scope.sortOptions[0];
     
-
-
     /**
      * Sets $scope.curSearch value and calls method to retrieve the first set of pages
-     * 
      * @param {string} either "basicSearch" or "advancedSearch". if param is ommited, "basicSearch" is used
      */
     $scope.submitSearch = function(search){
@@ -105,9 +89,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         if(search == "advancedSearch"){
             $scope.minimizeAdvanced = true;
         }
-
-        console.log("called submit search");
-        
         $scope.getFirstPage();
     };
 
@@ -148,8 +129,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.pages.curPage = curPage;
         $scope.pages.pageLimits[1] = Math.ceil(curPage / 10) * 10;
         $scope.pages.pageLimits[0] = $scope.pages.pageLimits[1] - 10;
-        console.log("setCurPage called: ");
-        console.log($scope.pages);
     }
 
 
@@ -173,18 +152,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * gets page numbers in sets of 10
      */
     $scope.getPageNumbers = function(){
-
-        console.log("this got called ys: ");
-        // page > pages.pageLimits[0] && page <= pages.pageLimits[1]
         var arr = [];
-        // var i = page.pageLimits[0];
-        
         for (i = $scope.pages.pageLimits[0] + 1; i <= $scope.pages.pageLimits[1] && i <= $scope.pages.totalPages; i++){
             arr.push(i);
         }
-
         return arr;
-        
     };
 
     /**
@@ -225,7 +197,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @return{[]} getExtentFromCorners
      */
     function getExtentFromCorners(lowerCorner, upperCorner){
-        console.log("lowerCorner: " + lowerCorner + " , upperCorner: " + upperCorner);
         if (lowerCorner == undefined || upperCorner == undefined){
             return [null, null, null, null];
         }
@@ -240,13 +211,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      *
      * @param {String} recordRequest - string containing xml for request
      */
-
     // check here: http://stackoverflow.com/questions/21455045/angularjs-http-cors-and-http-authentication
     $scope.requestRecords = function(recordRequest){
-        console.log("record request: ");
-        console.log(recordRequest);
-
-        //$scope.noRecordsFound = false;
         $scope.hasError = false;
         $scope.startScreen = false;
         $scope.hasData = false;
@@ -268,10 +234,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             // X2JS converts returned xml data into JSON
             var x2js = new X2JS();
             var jsonData = x2js.xml_str2json(response.data);
-
-            // console.log(response.data);
-            // console.log(jsonData);
-
             var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
 
             //If server returns an exception
@@ -292,9 +254,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                 addRecords(jsonData.GetRecordsResponse.SearchResults);
             }
 
-
-            // if OL maps aren't loading properly, using setTimeout is a quickfix, but not a solution long term
-            //setTimeout(createPreviews, 100);
         },
         function(response){
             $scope.hasData = false;
@@ -359,34 +318,25 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             if ( getSafe(() => e.rights.toString()) != undefined ){ item.info.push(["Rights", e.rights.toString()]);}
             if ( getSafe(() => e.format.toString()) != undefined ){ item.info.push(["Format", e.format.toString()]);}
 
-
-
             item.mapID = "map"+i;
             $scope.curRecords.push(item);
-            //console.log(item);
 
-/*
-    Elements supported by all CSWs seem to be: 
-        identifier, abstract, title, type
+            /*
+                Elements supported by all CSWs seem to be: 
+                    identifier, abstract, title, type
 
-    Selectively supported are: 
-        source, references (string or array of strings), subject
-        type, date, language, rights, bbox, format, references
-    
-    eventually, this should section should address this
-
-*/
-
+                Selectively supported are: 
+                    source, references (string or array of strings), subject
+                    type, date, language, rights, bbox, format, references
+                
+                eventually, this should section should address this
+            */
             i++;
         });
 
         $scope.hasData = true;
         $scope.loadingData = false;
     }
-
-
-
-
 
 
     /* ===========================================================================================
@@ -410,13 +360,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     });
     $scope.mapStyle = new ol.style.Style({ stroke: mapStroke });
 
-
-    //init
-    //$scope.getFirstPage();
-
 }]);
 
-
+// Angular Directives --
 nrlCatalog.directive('headerTemplate', function() {
     return{
         restrict: 'E',
@@ -447,23 +393,13 @@ nrlCatalog.directive('welcome', function() {
     }
 });
 
-
 nrlCatalog.directive('recordTemplate', function() {
     return{
         restrict: 'A',
         templateUrl:   'templates/record.html',
-
         controller: function($scope){
-
             $scope.viewAll = false;
-
-           
-
-
-            
             $scope.boxStyle = extentMap.getBoxStyle($scope.flipExtent($scope.record.extent));
-
-            
         }
     }
 });
@@ -492,34 +428,19 @@ nrlCatalog.directive('advancedSearch', function() {
                 source: vectorSource
             });
 
-            /**
-             * Map used for drawing extent in Advanced Search
-             */
-            // var advSearchMap = new ol.Map({
-            //     layers: [osmLayer, countriesLayer],
-            //     target: 'adv-search-map',
-            //     view: new ol.View({
-            //         center: [0, 0],
-            //         projection: 'EPSG:4326',
-            //         zoom: 1,
-            //         minZoom: 1,
-            //     })
-            // });
-
             var mapCreated = false;
 
+            // called from template when user selects Bounding Box from dropdown
             $scope.extentStatus = function(){
                 $scope.searches.advancedSearch.setHasExtent();
                 if ($scope.searches.advancedSearch.hasExtent && mapCreated == false){
-                    // addMap();
                     setTimeout(addMap, 200);
                     mapCreated = true;
                 }
             };
 
-
+            // adds openlayers map, allowing users to draw bounding box
             function addMap(){
-
                     var advSearchMap = new ol.Map({
                         layers: [osmLayer, countriesLayer],
                         target: 'adv-search-map',
@@ -550,7 +471,6 @@ nrlCatalog.directive('advancedSearch', function() {
                         $scope.searches.advancedSearch.setExtent( advSearchExtent.getExtent() );
                         $scope.$apply();
                     });
-
             }
 
             //OpenLayers Extent object, for advanced search
@@ -558,7 +478,6 @@ nrlCatalog.directive('advancedSearch', function() {
                 condition: ol.events.condition.platformModifierKeyOnly
             });
             
-
              /**
              * updates extent when user manually changes coordinate input in view
              */
@@ -581,7 +500,7 @@ nrlCatalog.directive('advancedSearch', function() {
 });
 
 
-
+// safely check if object exists or not
 function getSafe(fn) {
     try {
         return fn();
@@ -589,4 +508,3 @@ function getSafe(fn) {
         return undefined;
     }
 }
-
