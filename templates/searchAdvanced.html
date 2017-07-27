@@ -1,13 +1,19 @@
 <section ng-show="showAdvancedSearch">
     <div ng-show="minimizeAdvanced">
-        <h4>Advanced Search <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showAdvancedSearch = !showAdvancedSearch">Basic Search</a></h4>
+        <h4>Advanced Search <a href="#" class="sm" ng-click="showAdvancedSearch = !showAdvancedSearch">Basic Search</a></h4>
     </div>
 
-    <div class="row advanced-search-content" ng-hide="minimizeAdvanced">
+    <div class="advanced-search-content" ng-hide="minimizeAdvanced">
 
-        <div class="col-xs-7">
+        <!-- MAP -->
+        <div style="float:right; width: 512px;">
+            <div style="">
+                <div id="adv-search-map" class="map" ng-show="searches.advancedSearch.hasExtent" style="height: 512px; height: 256px;"></div>
+            </div>
+        </div><!-- /.col-xs-5 -->
+        <div style="width: 100%; padding-right: 531px;">
             <form id="advanced-search" name="advanced-search" novalidate>
-                <h4>Advanced Search <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showAdvancedSearch = !showAdvancedSearch">Basic Search</a></h4>
+                <h4>Advanced Search <a href="#" class="sm" ng-click="showAdvancedSearch = !showAdvancedSearch">Basic Search</a></h4>
                 <div ng-repeat="f in searches.advancedSearch.filters" class="form-inline advanced-filter" ng-class="{first:$first}">
 
                     <!-- Filter Type Select ============================================================================================ -->
@@ -37,8 +43,8 @@
                     <!--Extent constraints-->
                     <select ng-if="f.type.id == 'extent'" ng-model="f.extentConstraint" ng-options="o.label for o in f.extentConstraints"></select>
                     <div ng-if="f.type.id == 'extent'">
-                        <label class="small highlight" ng-if="f.type.id == 'extent'">Hold "Shift" to select extent on map, or eventer values below</label>
-                        <div class="clearfix"></div>
+                        <label class="small highlight" ng-if="f.type.id == 'extent'">Hold "Shift" to select extent on map, or enter values below</label>
+                        <div class="clear-left"></div>
                         <div class="coord-input"><label class="small">min Long</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[0]"
                                 ng-change="updateExtent()" id="min-long"></div>
                         <div class="coord-input"><label class="small">min Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[1]"
@@ -48,7 +54,7 @@
                         <div class="coord-input"><label class="small">max Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[3]"
                                 ng-change="updateExtent()" id="max-lat"></div>
                         <a href="#" class="" style="margin:23px 0 0 2px; display: inline-block;" ng-click="clearExtent()" ng-hide="searches.advancedSearch.extent.extent == defaultExtent">clear</a>
-                        <div class="clearfix"></div>
+                        <div class="clear-left"></div>
                     </div>
 
                     <!--Buttons to add or remove filters-->
@@ -63,12 +69,7 @@
                     <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="searches.advancedSearch.clear()">Reset</a>
                 </div>
             </form>
-        </div><!-- /.col-xs-7 -->
-        <div class="col-xs-5">
-            <div class="clearfix"></div>
-            <div style="width: 100%; min-height: 1px;">
-                <div id="adv-search-map" class="map" ng-show="searches.advancedSearch.hasExtent"></div>
-            </div>
-        </div><!-- /.col-xs-5 -->
+        </div>
+        <div class="clearfix"></div>
     </div>
 </section>

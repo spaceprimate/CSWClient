@@ -21,8 +21,8 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //location of the CSW servers
-    // var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
-    var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
+    var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    // var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
     // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
@@ -429,6 +429,8 @@ nrlCatalog.directive('advancedSearch', function() {
             });
 
             var mapCreated = false;
+        
+            var bboxSelected = 0; // needed in the rare case a user changes browser size after map has loaded, then been hidden
 
             // called from template when user selects Bounding Box from dropdown
             $scope.extentStatus = function(){
@@ -437,47 +439,88 @@ nrlCatalog.directive('advancedSearch', function() {
                     setTimeout(addMap, 200);
                     mapCreated = true;
                 }
+                else{
+                    setTimeout(function(){advSearchMap.updateSize()}, 200);
+                }
             };
+
+            var advSearchMap;
+
+            
 
             // adds openlayers map, allowing users to draw bounding box
             function addMap(){
-                    var advSearchMap = new ol.Map({
-                        layers: [osmLayer, countriesLayer],
-                        target: 'adv-search-map',
-                        view: new ol.View({
-                            center: [0, 0],
-                            projection: 'EPSG:4326',
-                            zoom: 1,
-                            minZoom: 1,
-                        })
-                    });
+                console.log("map was added");
+                advSearchMap = new ol.Map({
+                    layers: [osmLayer, countriesLayer],
+                    target: 'adv-search-map',
+                    controls: ol.control.defaults({
+                    zoom: true,
+                    attribution: false,
+                    rotate: false
+                    }),
+                    view: new ol.View({
+                        center: [0, 0],
+                        projection: 'EPSG:4326',
+                        zoom: 1,
+                        minZoom: 1,
+                    })
+                });
 
-                    advSearchMap.addInteraction(advSearchExtent);
-                    advSearchExtent.setActive(false);
+                advSearchMap.addInteraction(advSearchExtent);
+                advSearchExtent.setActive(false);
 
-                    //Enable interaction by holding shift
-                    document.addEventListener('keydown', function(event) {
-                        if (event.keyCode == 16) {
-                            advSearchExtent.setActive(true);
-                        }
-                    });
+                //Enable interaction by holding shift
+                document.addEventListener('keydown', function(event) {
+                    console.log("shift pressed");
+                    if (event.keyCode == 16) {
+                        advSearchExtent.setActive(true);
+                    }
+                });
 
-                    //stop extent interaction when the shift key releases
-                    /** this is being called constantly and causes warnings, should only be called when interaction with the map **/
-                    document.addEventListener('keyup', function(event) {
-                        if (event.keyCode == 16) {
-                            advSearchExtent.setActive(false);
-                        }
-                        $scope.searches.advancedSearch.setExtent( advSearchExtent.getExtent() );
-                        $scope.$apply();
-                    });
+                //stop extent interaction when the shift key releases
+                /** this is being called constantly and causes warnings, should only be called when interaction with the map **/
+                document.addEventListener('keyup', function(event) {
+                    if (event.keyCode == 16) {
+                        advSearchExtent.setActive(false);
+                    }
+                    $scope.searches.advancedSearch.setExtent( advSearchExtent.getExtent() );
+                    $scope.$apply();
+                });
+
+                $scope.$watch('minimizeAdvanced', function(newValue, oldValue) {
+                    if (newValue !== oldValue) {
+                        advSearchMap.updateSize();
+                    }
+                });
+                $scope.$watch('showAdvancedSearch', function(newValue, oldValue) {
+                    if (newValue !== oldValue) {
+                        advSearchMap.updateSize();
+                    }
+                });
+                
+
+                
             }
+
+            var extentStyle = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: 'rgb(255, 34, 34)',
+                    width: 1,
+                }),
+                fill: new ol.style.Fill({
+                    color: 'rgba(255, 34, 34, 0.2)'
+                })
+            });
 
             //OpenLayers Extent object, for advanced search
             var advSearchExtent = new ol.interaction.Extent({
-                condition: ol.events.condition.platformModifierKeyOnly
+                condition: ol.events.condition.platformModifierKeyOnly,
+                boxStyle: [extentStyle]
             });
-            
+            console.log("search extent");
+            console.log(advSearchExtent);
+
              /**
              * updates extent when user manually changes coordinate input in view
              */

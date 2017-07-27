@@ -35,7 +35,7 @@ tr.break-word td {
 .table-auto {
     width: auto;
 }
-
+.clear-left, .clearleft{clear:left;}
 
 /* navbar */
 .navbar {
@@ -62,7 +62,7 @@ tr.break-word td {
 
 /* search */
 .advanced-search-content {
-    padding-bottom: 17px;
+    padding-bottom: 9px;
 }
 #search-bar {
     background: #f8f8f8;
@@ -112,7 +112,7 @@ h4 a.sm{
 .map {
     border: 2px solid #a2a2a2;
     margin-bottom: 0px;
-    max-width: 480px;
+    max-width: 512px;
 }
 .button-slide-up {
     display: block;
