@@ -234,7 +234,13 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             // X2JS converts returned xml data into JSON
             var x2js = new X2JS();
             var jsonData = x2js.xml_str2json(response.data);
-            var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
+            //var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
+            var totalRecords = getSafe(function(){return jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched });
+
+
+            console.log("total records: ");
+            console.log(totalRecords);
+
 
             //If server returns an exception
             if(jsonData.ExceptionReport){
@@ -274,7 +280,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     function addRecords(records){
 
         var i = 1;
-        var totalRecords = getSafe(() => records._numberOfRecordsMatched );
+        var totalRecords = getSafe(function(){ return records._numberOfRecordsMatched } );
 
         //if this is a new requeset, update pagination
         if (newRequest == true && totalRecords >= 0){
@@ -294,29 +300,29 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
         records.Record.forEach(function(e, i) {
             var item = {};
-            item.title = getSafe(() => e.title.toString() );
+            item.title = getSafe(function(){ return  e.title.toString() });
             item.keywords = [];
             if ( Array.isArray(e.subject) ){
                 e.subject.forEach(function(el){
                     item.keywords.push(el.toString());
                 });
             }
-            item.abstract = getSafe( () => e.abstract.toString() );
+            item.abstract = getSafe( function(){ return e.abstract.toString() });
             if (item.abstract ==  "[object Object]"){item.abstract = "";}
-            item.type = getSafe( () => e.type.toString() );
-            item.lowerCorner = getSafe(() => e.BoundingBox.LowerCorner.toString() );
-            item.upperCorner = getSafe(() => e.BoundingBox.UpperCorner.toString() );
+            item.type = getSafe( function(){ return  e.type.toString() });
+            item.lowerCorner = getSafe( function(){ return  e.BoundingBox.LowerCorner.toString() });
+            item.upperCorner = getSafe( function(){ return e.BoundingBox.UpperCorner.toString() });
             item.extent = getExtentFromCorners(item.lowerCorner, item.upperCorner);
 
             item.info = [];
-            if ( getSafe(() => e.date.toString()) != undefined ){ item.info.push(["Date", e.date.toString()]);}
-            if ( getSafe(() => e.modified.toString()) != undefined ){ item.info.push(["Modified", e.modified.toString()]);}
-            if ( getSafe(() => e.source.toString()) != undefined ){ item.info.push(["Source", e.source.toString()]);}
-            if ( getSafe(() => e.references.toString()) != undefined ){ item.info.push(["References", e.references.toString()]);}
-            if ( getSafe(() => e.type.toString()) != undefined ){ item.info.push(["Type", e.type.toString()]);}
-            if ( getSafe(() => e.language.toString()) != undefined ){ item.info.push(["Language", e.language.toString()]);}
-            if ( getSafe(() => e.rights.toString()) != undefined ){ item.info.push(["Rights", e.rights.toString()]);}
-            if ( getSafe(() => e.format.toString()) != undefined ){ item.info.push(["Format", e.format.toString()]);}
+            if ( getSafe( function(){ return e.date.toString()        }) != undefined ){ item.info.push(["Date", e.date.toString()]);}
+            if ( getSafe( function(){ return e.modified.toString()    }) != undefined ){ item.info.push(["Modified", e.modified.toString()]);}
+            if ( getSafe( function(){ return e.source.toString()      }) != undefined ){ item.info.push(["Source", e.source.toString()]);}
+            if ( getSafe( function(){ return e.references.toString()  }) != undefined ){ item.info.push(["References", e.references.toString()]);}
+            if ( getSafe( function(){ return e.type.toString()        }) != undefined ){ item.info.push(["Type", e.type.toString()]);}
+            if ( getSafe( function(){ return e.language.toString()    }) != undefined ){ item.info.push(["Language", e.language.toString()]);}
+            if ( getSafe( function(){ return e.rights.toString()      }) != undefined ){ item.info.push(["Rights", e.rights.toString()]);}
+            if ( getSafe( function(){ return e.format.toString()      }) != undefined ){ item.info.push(["Format", e.format.toString()]);}
 
             item.mapID = "map"+i;
             $scope.curRecords.push(item);
