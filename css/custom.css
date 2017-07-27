@@ -37,6 +37,8 @@ tr.break-word td {
 }
 .clear-left, .clearleft{clear:left;}
 
+#loading-indicator{width: 250px; margin: auto; font-weight: 300; font-size: 18px;}
+
 /* navbar */
 .navbar {
     min-height: 30px;
@@ -211,27 +213,4 @@ body ul.list-unstyled.lined li {
 }
 body ul.list-unstyled.lined li a {
     color: #333;
-}
-
-
-/* loading icon */
-.glyphicon-refresh-animate {
-    -animation: spin .7s infinite linear;
-    -webkit-animation: spin2 .7s infinite linear;
-}
-@-webkit-keyframes spin2 {
-    from {
-        -webkit-transform: rotate(0deg);
-    }
-    to {
-        -webkit-transform: rotate(360deg);
-    }
-}
-@keyframes spin {
-    from {
-        transform: scale(1) rotate(0deg);
-    }
-    to {
-        transform: scale(1) rotate(360deg);
-    }
 }
