@@ -445,7 +445,7 @@ nrlCatalog.directive('advancedSearch', function() {
                     setTimeout(addMap, 200);
                     mapCreated = true;
                 }
-                else{
+                else if(mapCreated == true){
                     setTimeout(function(){advSearchMap.updateSize()}, 200);
                 }
             };
