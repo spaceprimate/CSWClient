@@ -131,8 +131,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.pages.pageLimits[0] = $scope.pages.pageLimits[1] - 10;
     }
 
-
-
     /**
      * Checks $scope.curSearch and calls createRequest on appropriate search object
      * There are only 2 possible search objects, "basic" and "advanced"
@@ -236,17 +234,15 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             var jsonData = x2js.xml_str2json(response.data);
             //var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
             var totalRecords = getSafe(function(){return jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched });
-
-
-            console.log("total records: ");
-            console.log(totalRecords);
-
+            // console.log("total records: ");
+            // console.log(totalRecords);
 
             //If server returns an exception
             if(jsonData.ExceptionReport){
                 $scope.loadingData = false;
                 $scope.hasError = true;
-                $scope.errorMessage = "The CSW server returned an error: ";
+                $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
+                console.log("Error: ");
                 console.log(jsonData.ExceptionReport);
             }
 
@@ -266,7 +262,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             $scope.hasData = false;
             $scope.loadingData = false;
             $scope.hasError = true;
-            $scope.errorMessage = "The CSW server returned an error: "
+            $scope.errorMessage = "The CSW server returned an error."
             //error
             console.log("Request Error, response follows: ");
             console.log(response);
@@ -296,7 +292,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         if ( totalRecords == 1 ){
             var tmp = records.Record;
             records.Record = [tmp];
-            console.log("not an array, one item loaded);")
+            // console.log("not an array, one item loaded);")
         }
 
         records.Record.forEach(function(e, i) {
@@ -453,11 +449,9 @@ nrlCatalog.directive('advancedSearch', function() {
 
             var advSearchMap;
 
-            
-
             // adds openlayers map, allowing users to draw bounding box
             function addMap(){
-                console.log("map was added");
+                // console.log("map was added");
                 advSearchMap = new ol.Map({
                     layers: [osmLayer, countriesLayer],
                     target: 'adv-search-map',
@@ -479,7 +473,6 @@ nrlCatalog.directive('advancedSearch', function() {
 
                 //Enable interaction by holding shift
                 document.addEventListener('keydown', function(event) {
-                    console.log("shift pressed");
                     if (event.keyCode == 16) {
                         advSearchExtent.setActive(true);
                     }
@@ -505,9 +498,6 @@ nrlCatalog.directive('advancedSearch', function() {
                         advSearchMap.updateSize();
                     }
                 });
-                
-
-                
             }
 
             var extentStyle = new ol.style.Style({
@@ -525,8 +515,6 @@ nrlCatalog.directive('advancedSearch', function() {
                 condition: ol.events.condition.platformModifierKeyOnly,
                 boxStyle: [extentStyle]
             });
-            console.log("search extent");
-            console.log(advSearchExtent);
 
              /**
              * updates extent when user manually changes coordinate input in view
@@ -548,7 +536,6 @@ nrlCatalog.directive('advancedSearch', function() {
         controllerAs: 'advSearch'
     }
 });
-
 
 // safely check if object exists or not
 function getSafe(fn) {
