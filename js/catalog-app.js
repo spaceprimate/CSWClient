@@ -246,7 +246,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             if(jsonData.ExceptionReport){
                 $scope.loadingData = false;
                 $scope.hasError = true;
-                $scope.errorMessage = "The CSW server returned an error: "
+                $scope.errorMessage = "The CSW server returned an error: ";
+                console.log(jsonData.ExceptionReport);
             }
 
             // 0 records returned
