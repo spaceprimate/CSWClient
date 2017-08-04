@@ -216,6 +216,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.hasData = false;
         $scope.loadingData = true;
 
+        console.log("record request is: ");
+        console.log(recordRequest);
+
         $http({
             url: cswUrl,
             method: "POST",
