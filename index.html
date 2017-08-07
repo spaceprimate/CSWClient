@@ -61,8 +61,11 @@
             </div>
         </div>
         <div class="container content" id="main-container">
-            <div class="row">
-                <div class="col-sm-12"  ng-class="{'col-sm-offset-2 col-sm-10' : !hideSidebar}">
+
+
+
+
+                
 
                     <!-- Welcome Message -->
                     <welcome></welcome>
@@ -88,6 +91,8 @@
                         <div class="alert alert-danger ng-cloak">{{errorMessage}}</div>
                     </div>
 
+
+
                     <!-- Sort Options -->
                     <div class="row" ng-show="hasData">
                         <div class="col-xs-6">
@@ -102,9 +107,17 @@
                         </div>
                     </div>
 
+                    
+                    <button ng-click="testRequest()">TEST</button>
+                    
                     <!--Main Data-->
-                    <div ng-show="hasData">
-                        <article ng-repeat="record in curRecords" record-template index="{{$index}}" class="record"></article>
+                    <div ng-show="hasData" class="row">
+                        <div class="col-sm-2">
+                           
+                        </div>
+                        <div class="col-sm-10">
+                            <article ng-repeat="record in curRecords" record-template index="{{$index}}" class="record"></article>
+                        </div>
                     </div>
 
                     <!-- Pagination -->
@@ -138,8 +151,8 @@
 
                     <div class="clearfix"></div>
                     <hr>
-                </div>
-            </div>
+                
+            
         </div>
     </div>
     <!-- /#nrl-catalog -->
@@ -154,6 +167,8 @@
     <script type="text/javascript" src="libs/openlayers/ol-debug.js"></script>
     <script src="js/catalog-app.js"></script>
     <script src="js/csw-request.js"></script>
+
+
     
 
 </body>

@@ -43,6 +43,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     }
 
+
+
     // Welcome screen, displayed until initial request is submitted
     $scope.startScreen = true;
 
@@ -203,6 +205,168 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         return lc.concat(uc);
     }
 
+
+
+    $scope.requestDomain = function (property){
+        var query =   '<csw:GetDomain xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" version="2.0.2" service="CSW">' +
+                                '<csw:PropertyName>dc:' + property + '</csw:PropertyName>' +                            
+                            '</csw:GetDomain>';
+
+        $http({
+            url: cswUrl,
+            method: "POST",
+            data: query,
+            headers: {
+                'Accept': 'application/xml',
+            }
+        })
+        .then(function(response){
+            // Request successful!
+
+            $scope.curRecords = [];   
+
+            // X2JS converts returned xml data into JSON
+            var x2js = new X2JS();
+            var jsonData = x2js.xml_str2json(response.data);
+            //var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
+            // var totalRecords = getSafe(function(){return jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched });
+            // console.log("total records: ");
+            // console.log(totalRecords);
+
+            console.log("domain request response data: ");
+            console.log(response.data);
+
+            //If server returns an exception
+            if(jsonData.ExceptionReport){
+                //$scope.loadingData = false;
+                $scope.hasError = true;
+                $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
+                console.log("Error: ");
+                console.log(jsonData.ExceptionReport);
+            }
+
+            // 0 records returned
+            // else if(totalRecords == 0 || totalRecords == undefined ){
+            //    // $scope.loadingData = false;
+            //     console.log("no records found");
+            // }
+
+            // 1 or more records returned
+            else  {
+                //addRecords(jsonData.GetRecordsResponse.SearchResults);
+
+                updateDomain();
+            }
+
+        },
+        function(response){
+            $scope.hasData = false;
+            $scope.loadingData = false;
+            $scope.hasError = true;
+            $scope.errorMessage = "The CSW server returned an error."
+            //error
+            console.log("Request Error, response follows: ");
+            console.log(response);
+        });
+
+    };
+
+    updateDomain = function(){
+        console.log("you still need to create this part");
+    }
+
+
+
+    /**
+     * TEMP O RARY! just testin'
+     */
+    // check here: http://stackoverflow.com/questions/21455045/angularjs-http-cors-and-http-authentication
+    $scope.testRequestRecords = function(recordRequest){
+        $scope.hasError = false;
+        $scope.startScreen = false;
+        $scope.hasData = false;
+        $scope.loadingData = true;
+
+        console.log("record request is: ");
+        console.log(recordRequest);
+
+        $http({
+            url: cswUrl,
+            method: "POST",
+            data: recordRequest,
+            headers: {
+                'Accept': 'application/xml',
+            }
+        })
+        .then(function(response){
+            // Request successful!
+
+            $scope.curRecords = [];   
+
+            // X2JS converts returned xml data into JSON
+            var x2js = new X2JS();
+            var jsonData = x2js.xml_str2json(response.data);
+            //var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
+            var totalRecords = getSafe(function(){return jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched });
+            console.log("total records: ");
+            console.log(totalRecords);
+
+            console.log("response data: ");
+            console.log(response.data);
+
+            //If server returns an exception
+            if(jsonData.ExceptionReport){
+                $scope.loadingData = false;
+                $scope.hasError = true;
+                $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
+                console.log("Error: ");
+                console.log(jsonData.ExceptionReport);
+            }
+
+            // 0 records returned
+            else if(totalRecords == 0 || totalRecords == undefined ){
+                $scope.loadingData = false;
+                console.log("no records found");
+            }
+
+            // 1 or more records returned
+            else  {
+                //addRecords(jsonData.GetRecordsResponse.SearchResults);
+            }
+
+        },
+        function(response){
+            $scope.hasData = false;
+            $scope.loadingData = false;
+            $scope.hasError = true;
+            $scope.errorMessage = "The CSW server returned an error."
+            //error
+            console.log("Request Error, response follows: ");
+            console.log(response);
+        });
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Makes angular http POST request to CSW Server
      * iterates through results, creating and pushing record objects to $scope.curRecords
@@ -237,8 +401,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             var jsonData = x2js.xml_str2json(response.data);
             //var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
             var totalRecords = getSafe(function(){return jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched });
-            // console.log("total records: ");
-            // console.log(totalRecords);
+            console.log("total records: ");
+            console.log(totalRecords);
+
+            console.log("response data: ");
+            console.log(response.data);
 
             //If server returns an exception
             if(jsonData.ExceptionReport){
@@ -340,6 +507,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             i++;
         });
 
+
+        
+
         $scope.hasData = true;
         $scope.loadingData = false;
     }
@@ -376,12 +546,17 @@ nrlCatalog.directive('headerTemplate', function() {
     }
 });
 
-// nrlCatalog.directive('sidebarTemplate', function() {
-//     return{
-//         restrict: 'E',
-//         templateUrl:   'templates/sidebar.html',
-//     }
-// });
+nrlCatalog.directive('sidebarTemplate', function() {
+    return{
+        restrict: 'E',
+        templateUrl:   'templates/sidebar.html',
+        controller: function($scope){
+            // $scope.sidebarHeight = angular.element("#main-container")[0].height;
+            // console.log("offsetheight is: " + $scope.sidebarHeight);
+            // $scope.mystyle = {'top': $scope.sidebarHeight + 'px'};
+        }
+    }
+});
 
 nrlCatalog.directive('basicSearch', function() {
     //    basicSearch:  new csw.search();
@@ -449,6 +624,9 @@ nrlCatalog.directive('advancedSearch', function() {
                     setTimeout(function(){advSearchMap.updateSize()}, 200);
                 }
             };
+
+            
+            
 
             var advSearchMap;
 
