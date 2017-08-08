@@ -26,6 +26,9 @@ tr.break-word td {
     color: #5d5d5d;
     background: #ececec;
 }
+.tagcloud > .badge.tag{cursor: pointer;}
+.tagcloud > .badge.tag:hover{background: #337ab7; color: #fff;}
+
 .no-underline,
 .no-underline:hover,
 .no-underline:active,

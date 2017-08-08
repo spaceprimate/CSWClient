@@ -43,6 +43,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     }
 
+    $scope.keywords = {};
+
 
 
     // Welcome screen, displayed until initial request is submitted
@@ -206,7 +208,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     }
 
 
-
+    /**
+     * Get possible values for meta-data fields
+     */
     $scope.requestDomain = function (property){
         var query =   '<csw:GetDomain xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" version="2.0.2" service="CSW">' +
                                 '<csw:PropertyName>dc:' + property + '</csw:PropertyName>' +                            
@@ -234,7 +238,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             // console.log(totalRecords);
 
             console.log("domain request response data: ");
-            console.log(response.data);
+            // console.log(response.data);
+            console.log(jsonData);
 
             //If server returns an exception
             if(jsonData.ExceptionReport){
@@ -255,7 +260,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             else  {
                 //addRecords(jsonData.GetRecordsResponse.SearchResults);
 
-                updateDomain();
+                updateDomain(jsonData.GetDomainResponse.DomainValues.ListOfValues.Value);
             }
 
         },
@@ -271,9 +276,59 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     };
 
-    updateDomain = function(){
-        console.log("you still need to create this part");
+    updateDomain = function(values){
+        values.forEach(function(v){
+            var vArr = v.toString().split(',');
+            vArr.forEach(function(keyword){
+                if ($scope.keywords[keyword]){
+                    console.log("keyword already exists.");
+                    $scope.keywords[keyword].count++;
+                
+                }
+                else{
+                    $scope.keywords[keyword] = {
+                        keyword: keyword,
+                        count: 1
+                    }
+                }
+
+                // if ( !$scope.keywords.includes.keyword(keyword) ){
+                //     $scope.keywords.push({keyword: keyword, count: 0});
+                // }
+                // else{
+                //     $scope.keywords.find(function(k){
+                //         return k.keyword == keyword;
+                //     }).count++;
+                // }
+            });
+
+            //console.log(v.toString());
+        });
+        //remove duplicates from array pls
+        // console.log("you still need to create this part");
+        //console.log($scope.keywords);
+        //showCommonKeywords();
     }
+
+    $scope.getKeywords = function(count){
+        var i = 0;
+        var keyArr = [];
+        for (var key in $scope.keywords) {
+            if ($scope.keywords[key].count > count) {
+                console.log($scope.keywords[key].keyword);
+                keyArr.push($scope.keywords[key].keyword);
+                i++;
+            }
+        }
+
+        console.log("there are " + i + " keywords with that many instances");
+        return keyArr;
+    };
+
+
+    $scope.addKeyword = function (keyword){
+        console.log("add keyword called: " + keyword);
+    };
 
 
 
@@ -536,7 +591,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     });
     $scope.mapStyle = new ol.style.Style({ stroke: mapStroke });
 
-}]);
+
+    // init
+    $scope.requestDomain('subject');
+
+}]); // end main directive
 
 // Angular Directives --
 nrlCatalog.directive('headerTemplate', function() {
