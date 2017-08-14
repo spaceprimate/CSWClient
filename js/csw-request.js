@@ -14,21 +14,29 @@ csw.components = {};
  * Filters can be either text base or bbox based
  * Only 1 bbox filter is expected
  */
-csw.filter = function(){
+csw.filter = function(filter){
     this.type = this.types[0];
     this.constraint = this.constraints[0];
     this.term = "";
     this.extent = [-180, -90, 180, 90];
     this.extentConstraint = this.extentConstraints[0];
+    if(filter){
+        this.type = this.types.find(function(t){return filter.id == t.id});
+        this.term = filter.term;
+        if(filter.constraint){
+            this.constraint = this.constraints.find(function(c){return filter.constraint == c.id});
+        }
+    }
 };
-//types of text that can be filtered for
+// types of text that can be filtered for
 // Dublin Core ID and corresponding term
 csw.filter.prototype.types = [
         {id: "title", label: "Title", prefix: "dc:"},
         {id: "AnyText", label: "Any", prefix: "csw:"},
         {id: "abstract", label: "Abstract", prefix: "dct:"},
         {id: "subject", label: "Keyword", prefix: "dc:"},
-        {id: "extent", label: "Bounding Box"}
+        {id: "extent", label: "Bounding Box"},
+        {id: "type", label: "type", prefix: "dc:"}
     ];
 //types of constraints to apply to search terms
 csw.filter.prototype.constraints = [
@@ -100,14 +108,53 @@ csw.search = function(){
     };
 
     //pushes new filter object into filters array
-    this.addFilter = function(){
-        this.filters.push(new csw.filter());
+    this.addFilter = function(f){
+        if(f){
+            this.filters.push( new csw.filter(f) );
+        }
+        else{
+            this.filters.push( new csw.filter() );
+        }
     };
 
     //removes filter at index
     this.removeFilter = function(index){
         this.filters.splice(index, 1);
         this.setHasExtent();
+    };
+
+    //removes filters of a given type
+    this.removeFilterType = function(type){
+        var thisFilter = this;
+        var i = 0;
+        this.filters.forEach(function(f){
+            if (f.type.id == type){                
+                thisFilter.removeFilter(i);
+                i--;
+            }
+            i++;
+        });
+    };
+
+    //removes filters of a given type
+    this.hasFilterType = function(type){
+        var thisFilter = this;
+        var hasFilter = false;
+        this.filters.forEach(function(f){
+            if (f.type.id == type){                
+                hasFilter = true;
+            }
+        });
+        return hasFilter;
+    };
+
+    // gets the current filters for this search
+    this.getFilters = function(){
+        return this.filters;
+    };
+
+    this.setFilters = function(filters){
+        this.filters = filters;
     };
 
     //resets search to initial value (1 filter with default values)
@@ -132,15 +179,13 @@ csw.search.prototype.createRequest = function(pages){
         var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + pages.recordsPerPage + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
                           '<csw:Query typeNames="csw:Record">' +
                             '<csw:ElementSetName>full</csw:ElementSetName>';
-
-            if (this.filters == 0){
+            if (this.filters.length < 2){
                 request +=  '<csw:Constraint version="1.1.0">' +
-                                '<ogc:Filter>' + 
-                                    '<ogc:PropertyIsNotEqualTo>' +
-                                        '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
-                                        '<ogc:Literal>service</ogc:Literal>' +
-                                    '</ogc:PropertyIsNotEqualTo>' + 
-                                '</ogc:Filter>' +
+                                '<ogc:Filter>'; 
+                                    for (var i = 0; i < this.filters.length; i++) {
+                                        request += csw.getFilterXml(this.filters[i]);
+                                    }
+                request +=      '</ogc:Filter>' +
                             '</csw:Constraint>';
             }
             else {
@@ -149,18 +194,15 @@ csw.search.prototype.createRequest = function(pages){
                                     '<ogc:And>' +
                                         '<ogc:PropertyIsNotEqualTo>' +
                                             '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
-                                            '<ogc:Literal>service</ogc:Literal>' +
+                                            '<ogc:Literal>deleteThis</ogc:Literal>' +
                                         '</ogc:PropertyIsNotEqualTo>';
                     for (var i = 0; i < this.filters.length; i++) {
                         request += csw.getFilterXml(this.filters[i]);
                     }
-                                        
                 request +=          '</ogc:And>' + 
                                 '</ogc:Filter>' +
                             '</csw:Constraint>';
             }
-
-
             request +=   '<ogc:SortBy>' +
                             '<ogc:SortProperty>' +
                             '<ogc:PropertyName>'+ this.sortOption.id + '</ogc:PropertyName>' +
@@ -179,9 +221,9 @@ csw.search.prototype.createRequest = function(pages){
  * @return XML string
  */
 csw.getFilterXml = function(filter){
-    if (filter.type.id == "title" || filter.type.id == "abstract" || filter.type.id == "AnyText" || filter.type.id == "subject" ){ return csw.getTermXml(filter);}
+    if (filter.type.id != "extent"){ return csw.getTermXml(filter);}
     //else if (filter.type.id == "abstract"){ return csw.getAbstractXml(filter);}
-    else if (filter.type.id == "extent"){ return csw.getBboxXml(filter);}
+    else{ return csw.getBboxXml(filter); }
 };
 
 /**
@@ -208,7 +250,7 @@ csw.getBboxXml = function(filter){
 csw.getTermXml = function(filter){
     var constraint, termPrefix, termSuffix, attributes;
     // if 'subject', it's a keyword search and we'll set it's constraint manually to keep the filter object simple
-    if (filter.constraint.id == "PropertyIsLike" || filter.type.id == 'subject'){
+    if (filter.constraint.id == "PropertyIsLike" || (filter.type.id != 'title' && filter.type.id != 'abstract') ){
         constraint = "PropertyIsLike";
         termPrefix = "%";
         termSuffix = "%";

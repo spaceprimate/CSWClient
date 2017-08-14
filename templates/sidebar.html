@@ -1,15 +1,8 @@
-<div id="sidebar" class="col-sm-2">
-    <div class="inner">
-    <h4><span class="glyphicon glyphicon-chevron-down small"></span> Category</h4>
-    <ul class="list-unstyled lined">
-        <li><a class="#">NASA</a><span class="badge">14</span></li>
-        <li><a class="#">Military<span class="badge">15</span></a></li>
-        <li><a class="#">Border Imagery<span class="badge">8</span></a></li>
-        <li><a class="#">USGS<span class="badge">37</span></a></li>
-        <li><a class="#">Digital Nautical Charts<span class="badge">655</span></a></li>
-        <li><a class="#">Historical<span class="badge">49</span></a></li>
+<div class="col-sm-2 sidebar">
+    <div class="link" ng-click="refineSearchToggle()">Refine Search</div>
+    <hr>
+    <h5>Types <span class="refine-clear link" ng-click="clearFilterType('type')" ng-show="hasFilterType('type')">Reset</span></h5>
+    <ul class="list-unstyled sidebar-menu">
+        <li ng-repeat="t in domain.type.values" ng-click="refineSearch('type', t); " class="pointer" ng-class="{ 'active' : domain.type.curVal == t }">{{t}}</li>
     </ul>
-    <h4><span class="glyphicon glyphicon-chevron-right small"></span> Protocol</h4>
-    <h4><span class="glyphicon glyphicon-chevron-right small"></span> Schema</h4>
-    </div>
 </div>

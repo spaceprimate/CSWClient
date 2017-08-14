@@ -20,10 +20,8 @@ nrlCatalog.config(function($httpProvider) {
  */
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
-    //location of the CSW servers
-    var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
-    // var cswUrl = "https://data.noaa.gov/csw?version=2.0.2";
-    // var cswUrl = "http://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2";
+    //CSW Endpoint
+    var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
     var newRequest = true;
@@ -40,12 +38,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         recordsPerPage: 10,
         totalPages: null,
         pageLimits: []
-
     }
 
-    $scope.keywords = {};
-
-
+    //optional- can hold arrays of all existing entries for specific CSW properties (eg. 'subject')
+    $scope.domain = {};
 
     // Welcome screen, displayed until initial request is submitted
     $scope.startScreen = true;
@@ -78,6 +74,19 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         {id: "dc:title", order: "DESC", label: "Title - Descending"}
     ];
     $scope.sortOption = $scope.sortOptions[0];
+
+    $scope.displayAdvancedSearch = function(){
+        $scope.showAdvancedSearch = true;
+        $scope.minimizeAdvanced = false;
+        // this is probably a good as place as any to add code to copy the search term from a basic search into advanced search automatically
+        // pending certain conditions of course. 
+    };
+
+    $scope.loadWelcome = function(){
+        $scope.startScreen = true;
+        $scope.hasError = false;
+        $scope.hasData = false;
+    }
     
     /**
      * Sets $scope.curSearch value and calls method to retrieve the first set of pages
@@ -209,13 +218,14 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
 
     /**
-     * Get possible values for meta-data fields
+     * Get possible values for meta-data fields, Dublin core formatted
+     * makes an ajax POST GetDomain request to CSW server
+     * @param {string} - name of property
      */
-    $scope.requestDomain = function (property){
+    function requestDomain(property){
         var query =   '<csw:GetDomain xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" version="2.0.2" service="CSW">' +
                                 '<csw:PropertyName>dc:' + property + '</csw:PropertyName>' +                            
                             '</csw:GetDomain>';
-
         $http({
             url: cswUrl,
             method: "POST",
@@ -225,201 +235,111 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             }
         })
         .then(function(response){
-            // Request successful!
-
             $scope.curRecords = [];   
 
             // X2JS converts returned xml data into JSON
             var x2js = new X2JS();
             var jsonData = x2js.xml_str2json(response.data);
-            //var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
-            // var totalRecords = getSafe(function(){return jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched });
-            // console.log("total records: ");
-            // console.log(totalRecords);
 
-            console.log("domain request response data: ");
-            // console.log(response.data);
-            console.log(jsonData);
-
-            //If server returns an exception
-            if(jsonData.ExceptionReport){
-                //$scope.loadingData = false;
+            
+            if(jsonData.ExceptionReport){ // If server returns an exception
                 $scope.hasError = true;
                 $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
                 console.log("Error: ");
                 console.log(jsonData.ExceptionReport);
             }
-
-            // 0 records returned
-            // else if(totalRecords == 0 || totalRecords == undefined ){
-            //    // $scope.loadingData = false;
-            //     console.log("no records found");
-            // }
-
-            // 1 or more records returned
-            else  {
-                //addRecords(jsonData.GetRecordsResponse.SearchResults);
-
-                updateDomain(jsonData.GetDomainResponse.DomainValues.ListOfValues.Value);
+            else  { // success!
+                updateDomain(property, jsonData.GetDomainResponse.DomainValues.ListOfValues.Value);
             }
-
         },
-        function(response){
+        function(response){ // error
             $scope.hasData = false;
             $scope.loadingData = false;
             $scope.hasError = true;
             $scope.errorMessage = "The CSW server returned an error."
-            //error
             console.log("Request Error, response follows: ");
             console.log(response);
         });
 
-    };
-
-    updateDomain = function(values){
-        values.forEach(function(v){
-            var vArr = v.toString().split(',');
-            vArr.forEach(function(keyword){
-                if ($scope.keywords[keyword]){
-                    console.log("keyword already exists.");
-                    $scope.keywords[keyword].count++;
-                
-                }
-                else{
-                    $scope.keywords[keyword] = {
-                        keyword: keyword,
-                        count: 1
-                    }
-                }
-
-                // if ( !$scope.keywords.includes.keyword(keyword) ){
-                //     $scope.keywords.push({keyword: keyword, count: 0});
-                // }
-                // else{
-                //     $scope.keywords.find(function(k){
-                //         return k.keyword == keyword;
-                //     }).count++;
-                // }
-            });
-
-            //console.log(v.toString());
-        });
-        //remove duplicates from array pls
-        // console.log("you still need to create this part");
-        //console.log($scope.keywords);
-        //showCommonKeywords();
     }
 
-    $scope.getKeywords = function(count){
-        var i = 0;
-        var keyArr = [];
-        for (var key in $scope.keywords) {
-            if ($scope.keywords[key].count > count) {
-                console.log($scope.keywords[key].keyword);
-                keyArr.push($scope.keywords[key].keyword);
-                i++;
+    /**
+     * Adds a new type to the $scope.domain, and populates it with all possible values in the catalog
+     * called once a AJAX GetDomain request has completed.
+     * @param {string} - property id
+     * @param {[]} - array of values
+     */
+    updateDomain = function(property, values){
+        $scope.domain[property] = {};
+        $scope.domain[property].values = [];
+        values.forEach(function(v){
+            if ( !$scope.domain[property].values.includes( v.toString() ) ){
+                $scope.domain[property].values.push( v.toString() );
+                $scope.domain[property].curVal = '';
             }
-        }
-
-        console.log("there are " + i + " keywords with that many instances");
-        return keyArr;
-    };
-
-
-    $scope.addKeyword = function (keyword){
-        console.log("add keyword called: " + keyword);
-    };
-
-
+        });
+    }
 
     /**
-     * TEMP O RARY! just testin'
+     * Adds a filter of to $scope.searches.advancedSearch
+     * @param {string} - type to filter for
+     * @param {string}
+     * @param {string} - optional
      */
-    // check here: http://stackoverflow.com/questions/21455045/angularjs-http-cors-and-http-authentication
-    $scope.testRequestRecords = function(recordRequest){
-        $scope.hasError = false;
-        $scope.startScreen = false;
-        $scope.hasData = false;
-        $scope.loadingData = true;
-
-        console.log("record request is: ");
-        console.log(recordRequest);
-
-        $http({
-            url: cswUrl,
-            method: "POST",
-            data: recordRequest,
-            headers: {
-                'Accept': 'application/xml',
-            }
-        })
-        .then(function(response){
-            // Request successful!
-
-            $scope.curRecords = [];   
-
-            // X2JS converts returned xml data into JSON
-            var x2js = new X2JS();
-            var jsonData = x2js.xml_str2json(response.data);
-            //var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
-            var totalRecords = getSafe(function(){return jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched });
-            console.log("total records: ");
-            console.log(totalRecords);
-
-            console.log("response data: ");
-            console.log(response.data);
-
-            //If server returns an exception
-            if(jsonData.ExceptionReport){
-                $scope.loadingData = false;
-                $scope.hasError = true;
-                $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
-                console.log("Error: ");
-                console.log(jsonData.ExceptionReport);
-            }
-
-            // 0 records returned
-            else if(totalRecords == 0 || totalRecords == undefined ){
-                $scope.loadingData = false;
-                console.log("no records found");
-            }
-
-            // 1 or more records returned
-            else  {
-                //addRecords(jsonData.GetRecordsResponse.SearchResults);
-            }
-
-        },
-        function(response){
-            $scope.hasData = false;
-            $scope.loadingData = false;
-            $scope.hasError = true;
-            $scope.errorMessage = "The CSW server returned an error."
-            //error
-            console.log("Request Error, response follows: ");
-            console.log(response);
-        });
+    addFilter = function(id, term, constraint){
+        var filter = {
+            id: id,
+            term: term
+        }
+        if (constraint){
+            filter.constraint = constraint;
+        }
+        $scope.searches[$scope.curSearch].addFilter(filter);
     };
 
+    /**
+     * updates search filter with new constraint 
+     * based on domain meta-data
+     * set's current value for meta-data type via $scope.domain
+     * @param {string} - type to filter for
+     * @param {string}
+     * @param {string} - optional
+     */
+    $scope.refineSearch = function(id, term, constraint){
+        $scope.searches[$scope.curSearch].removeFilterType(id);
+        addFilter(id,term,constraint);
+        $scope.domain[id].curVal = term;
+        $scope.submitSearch($scope.curSearch);
+    }
 
+    /**
+     * removes all filters of a given type from the current search
+     */
+    $scope.clearFilterType = function(type){
+        $scope.searches[$scope.curSearch].removeFilterType(type);
+        $scope.submitSearch($scope.curSearch);
+        $scope.domain[type].curVal = '';
+    };
 
+    /**
+     * checks to see if filter type exists for current search
+     */
 
+     $scope.hasFilterType = function(type){
+         return $scope.searches[$scope.curSearch].hasFilterType(type);
+     }
 
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * opens the advanced search section. If current search is basic, values are copies over
+     */
+    $scope.refineSearchToggle = function(){
+        if ($scope.curSearch == 'basicSearch'){
+            $scope.searches.advancedSearch.setFilters( $scope.searches.basicSearch.getFilters() );
+        }
+        $scope.displayAdvancedSearch();
+    };
 
 
     /**
@@ -435,9 +355,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.hasData = false;
         $scope.loadingData = true;
 
-        console.log("record request is: ");
-        console.log(recordRequest);
-
         $http({
             url: cswUrl,
             method: "POST",
@@ -456,11 +373,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             var jsonData = x2js.xml_str2json(response.data);
             //var totalRecords = getSafe(() => jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched );
             var totalRecords = getSafe(function(){return jsonData.GetRecordsResponse.SearchResults._numberOfRecordsMatched });
-            console.log("total records: ");
-            console.log(totalRecords);
-
-            console.log("response data: ");
-            console.log(response.data);
 
             //If server returns an exception
             if(jsonData.ExceptionReport){
@@ -517,7 +429,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         if ( totalRecords == 1 ){
             var tmp = records.Record;
             records.Record = [tmp];
-            // console.log("not an array, one item loaded);")
         }
 
         records.Record.forEach(function(e, i) {
@@ -548,31 +459,15 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
             item.mapID = "map"+i;
             $scope.curRecords.push(item);
-
-            /*
-                Elements supported by all CSWs seem to be: 
-                    identifier, abstract, title, type
-
-                Selectively supported are: 
-                    source, references (string or array of strings), subject
-                    type, date, language, rights, bbox, format, references
-                
-                eventually, this should section should address this
-            */
             i++;
         });
-
-
-        
-
         $scope.hasData = true;
         $scope.loadingData = false;
     }
 
-
-    /* ===========================================================================================
-     * open layers Elements
-     */
+/* 
+* open layers Elements
+*/
 
     /**
      * Flips the long/lat values in an extent array 
@@ -592,8 +487,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.mapStyle = new ol.style.Style({ stroke: mapStroke });
 
 
-    // init
-    $scope.requestDomain('subject');
+    // init - functions to call once on page load
+    requestDomain('type');
 
 }]); // end main directive
 
@@ -602,18 +497,6 @@ nrlCatalog.directive('headerTemplate', function() {
     return{
         restrict: 'E',
         templateUrl:   'templates/header.html',
-    }
-});
-
-nrlCatalog.directive('sidebarTemplate', function() {
-    return{
-        restrict: 'E',
-        templateUrl:   'templates/sidebar.html',
-        controller: function($scope){
-            // $scope.sidebarHeight = angular.element("#main-container")[0].height;
-            // console.log("offsetheight is: " + $scope.sidebarHeight);
-            // $scope.mystyle = {'top': $scope.sidebarHeight + 'px'};
-        }
     }
 });
 
@@ -641,6 +524,21 @@ nrlCatalog.directive('recordTemplate', function() {
             $scope.viewAll = false;
             $scope.boxStyle = extentMap.getBoxStyle($scope.flipExtent($scope.record.extent));
         }
+    }
+});
+
+nrlCatalog.directive('sidebarTemplate', function() {
+    return{
+        restrict: 'E',
+        templateUrl:   'templates/sidebar.html',
+        replace: true
+    }
+});
+
+nrlCatalog.directive('paginationTemplate', function() {
+    return{
+        restrict: 'E',
+        templateUrl:   'templates/pagination.html',
     }
 });
 
@@ -684,14 +582,10 @@ nrlCatalog.directive('advancedSearch', function() {
                 }
             };
 
-            
-            
-
             var advSearchMap;
 
             // adds openlayers map, allowing users to draw bounding box
             function addMap(){
-                // console.log("map was added");
                 advSearchMap = new ol.Map({
                     layers: [osmLayer, countriesLayer],
                     target: 'adv-search-map',

@@ -36,7 +36,7 @@
                     </div>
 
                     <!--AnyText constraint-->
-                    <div ng-if="f.type.id == 'AnyText' || f.type.id == 'subject'" class="form-group">
+                    <div ng-if="f.type.id != 'extent' && f.type.id != 'abstract' && f.type.id != 'title'" class="form-group">
                         <input placeholder="Search term" ng-model="f.term">
                     </div>
 
