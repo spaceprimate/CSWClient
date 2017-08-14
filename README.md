@@ -12,4 +12,4 @@ The repo is ready to deploy- you only need to add the CSW endpoint of your choic
   - CSW server must have [CORS enabled](https://www.w3.org/wiki/CORS_Enabled) and support AJAX POST requests. Before that's implemented some servers may require a browser-plugin that enables cross-origin resource sharing.
 
 ### Contact
-  -dtmurph1@uno.edu
+  - dtmurph1@uno.edu

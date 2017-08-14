@@ -216,7 +216,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         return lc.concat(uc);
     }
 
-
     /**
      * Get possible values for meta-data fields, Dublin core formatted
      * makes an ajax POST GetDomain request to CSW server
@@ -260,7 +259,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             console.log("Request Error, response follows: ");
             console.log(response);
         });
-
     }
 
     /**
@@ -329,8 +327,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
          return $scope.searches[$scope.curSearch].hasFilterType(type);
      }
 
-    
-
     /**
      * opens the advanced search section. If current search is basic, values are copies over
      */
@@ -340,7 +336,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
         $scope.displayAdvancedSearch();
     };
-
 
     /**
      * Makes angular http POST request to CSW Server
@@ -468,7 +463,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 /* 
 * open layers Elements
 */
-
     /**
      * Flips the long/lat values in an extent array 
      * for use in building an OL polygon
