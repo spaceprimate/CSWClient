@@ -125,20 +125,28 @@ csw.search = function(){
 
     //removes filters of a given type
     this.removeFilterType = function(type){
-        var thisFilter = this;
-        var i = 0;
-        this.filters.forEach(function(f){
-            if (f.type.id == type){                
-                thisFilter.removeFilter(i);
-                i--;
+        var index = this.filters.length - 1;
+        while (index >= 0) {
+            if (this.filters[index].type.id == type) {
+                this.removeFilter(index);
             }
-            i++;
-        });
+            index--;
+        }
+    };
+
+    //removes filters of a given type and term
+    this.removeFilterTypeId = function(type, term){
+        var index = this.filters.length - 1;
+        while (index >= 0) {
+            if (this.filters[index].type.id == type && this.filters[index].term == term) {
+                this.removeFilter(index);
+            }
+            index--;
+        }
     };
 
     //removes filters of a given type
     this.hasFilterType = function(type){
-        var thisFilter = this;
         var hasFilter = false;
         this.filters.forEach(function(f){
             if (f.type.id == type){                

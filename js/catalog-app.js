@@ -272,23 +272,40 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     /**
      * Adds a new type to the $scope.domain, and populates it with all possible values in the catalog
      * called once a AJAX GetDomain request has completed.
-     * @param {string} - property id
+     * @param {string} - type id
      * @param {[]} - array of 
      * @param {method} - optional method to further process values (remove dupes or extraneous data)
      */
-    updateDomain = function(property, values, filter){
-        $scope.domain[property] = {};
-        $scope.domain[property].values = [];
+    updateDomain = function(type, values, filter){
+        $scope.domain[type] = {};
+        $scope.domain[type].values = [];
         values.forEach(function(v){
-            if ( !$scope.domain[property].values.includes( v.toString() ) ){
-                $scope.domain[property].values.push( v.toString() );
-                $scope.domain[property].curVal = '';
+            if ( !domainHasProperty(type, v.toString()) ){
+                $scope.domain[type].values.push( 
+                    {
+                        id: v.toString(),
+                        active: false
+                    }
+                    
+                );
             }
         });
+        
         if (filter){
             filter();
         }
     }
+
+    domainHasProperty = function(type, property){
+        var found = false;
+        for(var i = 0; i < $scope.domain[type].values.length; i++) {
+            if ($scope.domain[type].values[i].id == type) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    };
 
     /**
      * Adds a filter of to $scope.searches.advancedSearch
@@ -307,6 +324,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.searches[$scope.curSearch].addFilter(filter);
     };
 
+
+
+
     /**
      * updates search filter with new constraint 
      * based on domain meta-data
@@ -316,11 +336,16 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @param {string} - optional
      */
     $scope.refineSearch = function(id, term, constraint){
-        //$scope.searches[$scope.curSearch].removeFilterType(id);
-        addFilter(id,term,constraint);
-        //$scope.domain[id].curVal = term;
-        $scope.domain[id].values.find(function(e){return e.id == term}).active = true;
-        $scope.submitSearch($scope.curSearch);
+        if ($scope.domain[id].values.find(function(e){return e.id == term}).active){
+            $scope.domain[id].values.find(function(e){return e.id == term}).active = false;
+            $scope.searches[$scope.curSearch].removeFilterTypeId(id, term);
+            $scope.submitSearch($scope.curSearch); 
+        }
+        else{
+           addFilter(id,term,constraint);
+            $scope.domain[id].values.find(function(e){return e.id == term}).active = true;
+            $scope.submitSearch($scope.curSearch); 
+        }
     }
 
     /**
@@ -329,7 +354,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.clearFilterType = function(type){
         $scope.searches[$scope.curSearch].removeFilterType(type);
         $scope.submitSearch($scope.curSearch);
-        $scope.domain[type].curVal = '';
+        $scope.domain[type].values.forEach(function(e) {
+            e.active = false;
+        });
     };
 
     /**
@@ -353,21 +380,15 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     //$scope.keywords = {}; // delete this eventually
 
     function keywordFilter(){
-        console.log("keyword filter reached!");
         var keywords = {};
-
-
         $scope.domain.subject.values.forEach(function(v){
-            var vArr = v.toString().split(',');
+            var vArr = v.id.toString().split(',');
             vArr.forEach(function(keyword){
                 if (keyword.indexOf("CLASSIFICATION//RELEASABILITY = UNCLASSIFIED") == 0 ){
                     keyword = "UNCLASSIFIED";
                 }
-
                 if (keywords[keyword]){
-                    console.log("keyword already exists.");
                     keywords[keyword].count++;
-                
                 }
                 else{
                     if ( keyword.indexOf("Layer Update Time") != 0 &&  keyword.indexOf("[object Object]") != 0 ){
@@ -377,40 +398,13 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                             active: false
                         }
                     }
-                    
                 }
-
             });
-
-            
-
-            //console.log(v.toString());
         });
 
         $scope.domain.subject.values = Object.values(keywords);
 
-        console.log($scope.domain.subject.values);
-
-        // console.log($scope.keywords);
-        // console.log($scope.domain);
-
-
     } 
-
-    // $scope.getKeywords = function(count){
-    //     var i = 0;
-    //     var keyArr = [];
-    //     for (var key in $scope.keywords) {
-    //         if ($scope.keywords[key].count > count) {
-    //             console.log($scope.keywords[key].keyword);
-    //             keyArr.push($scope.keywords[key].keyword);
-    //             i++;
-    //         }
-    //     }
-
-    //     console.log("there are " + i + " keywords with that many instances");
-    //     return keyArr;
-    // };
 
     /**
      * Makes angular http POST request to CSW Server
