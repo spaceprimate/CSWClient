@@ -41,6 +41,7 @@ tr.break-word td {
     color: #fff;
 }
 
+
 .no-underline,
 .no-underline:hover,
 .no-underline:active,
@@ -124,6 +125,7 @@ h4 a.sm {
 
 .sidebar ul.sidebar-menu li {
     padding: 0 10px;
+    word-break: break-word;
 }
 
 .sidebar ul.sidebar-menu li:hover {

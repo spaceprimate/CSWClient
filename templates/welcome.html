@@ -7,5 +7,11 @@
         </p>
         <p>Current CSW endpoint: <a href="{{curUrl}}"><span style="word-break: break-all;">{{curUrl}}</span></a></p>
         <p>Enter search term above to get started, or <b><a href="#" ng-click="viewAllRecords()">view all records</a></b></p>
+
+        <hr>
+        <b>Keywords</b>
+        <div class="tagcloud">
+            <span class="badge tag" ng-repeat="k in domain.subject.values" ng-click="refineSearch('subject', k.keyword)">{{k.keyword}}</span>
+        </div>
     </div>
 </div>

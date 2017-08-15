@@ -21,7 +21,8 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //CSW Endpoint
-    var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
+    // var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
+    var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
     var newRequest = true;
@@ -220,8 +221,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * Get possible values for meta-data fields, Dublin core formatted
      * makes an ajax POST GetDomain request to CSW server
      * @param {string} - name of property
+     * @param {method} - optional method to further process values (remove dupes or extraneous data)
+     *                      needed to to idiosycrasies bewteen CSWs and metadata format and volume
      */
-    function requestDomain(property){
+    function requestDomain(property, filter){
         var query =   '<csw:GetDomain xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" version="2.0.2" service="CSW">' +
                                 '<csw:PropertyName>dc:' + property + '</csw:PropertyName>' +                            
                             '</csw:GetDomain>';
@@ -248,7 +251,12 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                 console.log(jsonData.ExceptionReport);
             }
             else  { // success!
-                updateDomain(property, jsonData.GetDomainResponse.DomainValues.ListOfValues.Value);
+                if(filter){
+                    updateDomain(property, jsonData.GetDomainResponse.DomainValues.ListOfValues.Value, filter);
+                }
+                else{
+                    updateDomain(property, jsonData.GetDomainResponse.DomainValues.ListOfValues.Value);
+                }
             }
         },
         function(response){ // error
@@ -265,9 +273,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * Adds a new type to the $scope.domain, and populates it with all possible values in the catalog
      * called once a AJAX GetDomain request has completed.
      * @param {string} - property id
-     * @param {[]} - array of values
+     * @param {[]} - array of 
+     * @param {method} - optional method to further process values (remove dupes or extraneous data)
      */
-    updateDomain = function(property, values){
+    updateDomain = function(property, values, filter){
         $scope.domain[property] = {};
         $scope.domain[property].values = [];
         values.forEach(function(v){
@@ -276,6 +285,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                 $scope.domain[property].curVal = '';
             }
         });
+        if (filter){
+            filter();
+        }
     }
 
     /**
@@ -304,9 +316,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @param {string} - optional
      */
     $scope.refineSearch = function(id, term, constraint){
-        $scope.searches[$scope.curSearch].removeFilterType(id);
+        //$scope.searches[$scope.curSearch].removeFilterType(id);
         addFilter(id,term,constraint);
-        $scope.domain[id].curVal = term;
+        //$scope.domain[id].curVal = term;
+        $scope.domain[id].values.find(function(e){return e.id == term}).active = true;
         $scope.submitSearch($scope.curSearch);
     }
 
@@ -336,6 +349,68 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
         $scope.displayAdvancedSearch();
     };
+
+    //$scope.keywords = {}; // delete this eventually
+
+    function keywordFilter(){
+        console.log("keyword filter reached!");
+        var keywords = {};
+
+
+        $scope.domain.subject.values.forEach(function(v){
+            var vArr = v.toString().split(',');
+            vArr.forEach(function(keyword){
+                if (keyword.indexOf("CLASSIFICATION//RELEASABILITY = UNCLASSIFIED") == 0 ){
+                    keyword = "UNCLASSIFIED";
+                }
+
+                if (keywords[keyword]){
+                    console.log("keyword already exists.");
+                    keywords[keyword].count++;
+                
+                }
+                else{
+                    if ( keyword.indexOf("Layer Update Time") != 0 &&  keyword.indexOf("[object Object]") != 0 ){
+                        keywords[keyword] = {
+                            id: keyword,
+                            count: 1,
+                            active: false
+                        }
+                    }
+                    
+                }
+
+            });
+
+            
+
+            //console.log(v.toString());
+        });
+
+        $scope.domain.subject.values = Object.values(keywords);
+
+        console.log($scope.domain.subject.values);
+
+        // console.log($scope.keywords);
+        // console.log($scope.domain);
+
+
+    } 
+
+    // $scope.getKeywords = function(count){
+    //     var i = 0;
+    //     var keyArr = [];
+    //     for (var key in $scope.keywords) {
+    //         if ($scope.keywords[key].count > count) {
+    //             console.log($scope.keywords[key].keyword);
+    //             keyArr.push($scope.keywords[key].keyword);
+    //             i++;
+    //         }
+    //     }
+
+    //     console.log("there are " + i + " keywords with that many instances");
+    //     return keyArr;
+    // };
 
     /**
      * Makes angular http POST request to CSW Server
@@ -483,6 +558,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     // init - functions to call once on page load
     requestDomain('type');
+    requestDomain('subject', keywordFilter);
 
 }]); // end main directive
 
