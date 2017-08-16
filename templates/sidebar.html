@@ -7,17 +7,4 @@
     </ul>
     <hr>
 
-    <h5>Top keywords <span class="refine-clear link" ng-click="clearFilterType('subject')" ng-show="hasFilterType('subject')">Reset</span></h5>
-
-
-
-    <ul class="list-unstyled sidebar-menu">
-        <li ng-repeat="k in domain.subject.values | orderBy : 'count': true | limitTo:16" 
-        ng-click="refineSearch('subject', k.id)" class="pointer" ng-class="{ 'active' : k.active }">{{k.id}}</li>
-    </ul>
-
-    <hr>
-
-
-    
 </div>

@@ -21,8 +21,7 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //CSW Endpoint
-    // var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
-    var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
     var newRequest = true;
@@ -325,8 +324,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     };
 
 
-
-
     /**
      * updates search filter with new constraint 
      * based on domain meta-data
@@ -334,16 +331,20 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @param {string} - type to filter for
      * @param {string}
      * @param {string} - optional
+     * @param {string} - optional
      */
-    $scope.refineSearch = function(id, term, constraint){
-        if ($scope.domain[id].values.find(function(e){return e.id == term}).active){
-            $scope.domain[id].values.find(function(e){return e.id == term}).active = false;
-            $scope.searches[$scope.curSearch].removeFilterTypeId(id, term);
+    $scope.refineSearch = function(type, term, multiSelect, constraint){
+        if (!multiSelect){
+            $scope.clearFilterType(type);
+        }
+        if ($scope.domain[type].values.find(function(e){return e.id == term}).active){
+            $scope.domain[type].values.find(function(e){return e.id == term}).active = false;
+            $scope.searches[$scope.curSearch].removeFilterTypeId(type, term);
             $scope.submitSearch($scope.curSearch); 
         }
         else{
-           addFilter(id,term,constraint);
-            $scope.domain[id].values.find(function(e){return e.id == term}).active = true;
+           addFilter(type,term,constraint);
+            $scope.domain[type].values.find(function(e){return e.id == term}).active = true;
             $scope.submitSearch($scope.curSearch); 
         }
     }
@@ -377,34 +378,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.displayAdvancedSearch();
     };
 
-    //$scope.keywords = {}; // delete this eventually
 
-    function keywordFilter(){
-        var keywords = {};
-        $scope.domain.subject.values.forEach(function(v){
-            var vArr = v.id.toString().split(',');
-            vArr.forEach(function(keyword){
-                if (keyword.indexOf("CLASSIFICATION//RELEASABILITY = UNCLASSIFIED") == 0 ){
-                    keyword = "UNCLASSIFIED";
-                }
-                if (keywords[keyword]){
-                    keywords[keyword].count++;
-                }
-                else{
-                    if ( keyword.indexOf("Layer Update Time") != 0 &&  keyword.indexOf("[object Object]") != 0 ){
-                        keywords[keyword] = {
-                            id: keyword,
-                            count: 1,
-                            active: false
-                        }
-                    }
-                }
-            });
-        });
-
-        $scope.domain.subject.values = Object.values(keywords);
-
-    } 
 
     /**
      * Makes angular http POST request to CSW Server
@@ -552,7 +526,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     // init - functions to call once on page load
     requestDomain('type');
-    requestDomain('subject', keywordFilter);
+
 
 }]); // end main directive
 

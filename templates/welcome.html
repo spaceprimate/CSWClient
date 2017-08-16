@@ -9,9 +9,9 @@
         <p>Enter search term above to get started, or <b><a href="#" ng-click="viewAllRecords()">view all records</a></b></p>
 
         <hr>
-        <b>Keywords</b>
+        <p><b>Types</b></p>
         <div class="tagcloud">
-            <span class="badge tag" ng-repeat="k in domain.subject.values" ng-click="refineSearch('subject', k.id)">{{k.id}}</span>
+            <span class="badge tag" ng-repeat="t in domain.type.values" ng-click="refineSearch('type', t.id)">{{t.id}}</span>
         </div>
     </div>
 </div>
