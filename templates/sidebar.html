@@ -1,19 +1,20 @@
 <div class="col-sm-2 sidebar">
     <div class="link" ng-click="refineSearchToggle()">Refine Search</div>
+    <div class="link" ng-click="toggleExtentFilter()">Filter by location</div>
     <hr>
-    <h5>Types <span class="refine-clear link" ng-click="clearFilterType('type')" ng-show="hasFilterType('type')">Reset</span></h5>
+    <h5>Types <span class="refine-clear link" ng-click="clearFilterType('type')" ng-show="hasFilterType('type')">Clear</span></h5>
     <ul class="list-unstyled sidebar-menu">
         <li ng-repeat="t in domain.type.values" ng-click="refineSearch('type', t.id); " class="pointer" ng-class="{ 'active' : t.active }">{{t.id}}</li>
     </ul>
     <hr>
 
-    <h5>Top keywords <span class="refine-clear link" ng-click="clearFilterType('subject')" ng-show="hasFilterType('subject')">Reset</span></h5>
+    <h5>Top keywords <span class="refine-clear link" ng-click="clearFilterType('subject')" ng-show="hasFilterType('subject')">Clear</span></h5>
 
 
 
     <ul class="list-unstyled sidebar-menu">
         <li ng-repeat="k in domain.subject.values | orderBy : 'count': true | limitTo:16" 
-        ng-click="refineSearch('subject', k.id)" class="pointer" ng-class="{ 'active' : k.active }">{{k.id}}</li>
+        ng-click="refineSearch('subject', k.id, true)" class="pointer" ng-class="{ 'active' : k.active }">{{k.id}}</li>
     </ul>
 
     <hr>

@@ -331,20 +331,36 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * updates search filter with new constraint 
      * based on domain meta-data
      * set's current value for meta-data type via $scope.domain
-     * @param {string} - type to filter for
-     * @param {string}
-     * @param {string} - optional
+     * @param {string} - type: type to filter for
+     * @param {string} - term: term 
+     * @param {string} - multiSelect: optional, if true, other filters of this type will not be cleared
+     *                 - this allows for the selection of multiple keywords of the same type ('subject')
+     * @param {string} - constraint: optional. This isn't used, not sure why it's included. 
      */
-    $scope.refineSearch = function(id, term, constraint){
-        if ($scope.domain[id].values.find(function(e){return e.id == term}).active){
-            $scope.domain[id].values.find(function(e){return e.id == term}).active = false;
-            $scope.searches[$scope.curSearch].removeFilterTypeId(id, term);
+    $scope.refineSearch = function(type, term, multiSelect, constraint){
+        if (!multiSelect){
+            $scope.clearFilterType(type);
+        }
+        if ($scope.domain[type].values.find(function(e){return e.id == term}).active){
+            $scope.domain[type].values.find(function(e){return e.id == term}).active = false;
+            $scope.searches[$scope.curSearch].removeFilterTypeId(type, term);
             $scope.submitSearch($scope.curSearch); 
         }
         else{
-           addFilter(id,term,constraint);
-            $scope.domain[id].values.find(function(e){return e.id == term}).active = true;
+            addFilter(type,term,constraint);
+            $scope.domain[type].values.find(function(e){return e.id == term}).active = true;
             $scope.submitSearch($scope.curSearch); 
+        }
+    }
+
+    $scope.toggleExtentFilter = function(){
+        console.log($scope.searches[$scope.curSearch].hasExtent);
+        if($scope.searches[$scope.curSearch].hasExtent){
+            $scope.displayAdvancedSearch();
+        }
+        else{
+            $scope.displayAdvancedSearch();
+            addFilter('extent','');
         }
     }
 
@@ -376,6 +392,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
         $scope.displayAdvancedSearch();
     };
+
+
 
     //$scope.keywords = {}; // delete this eventually
 

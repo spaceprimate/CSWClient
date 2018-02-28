@@ -1,15 +1,17 @@
 <div class="row" ng-show="startScreen">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-5">
         <h1 class="page-title">CSW Client</h1>
         <hr>
-        <p class="lead">
-            Search and browse CSW records.
-        </p>
-        <p>Current CSW endpoint: <a href="{{curUrl}}"><span style="word-break: break-all;">{{curUrl}}</span></a></p>
+        
         <p>Enter search term above to get started, or <b><a href="#" ng-click="viewAllRecords()">view all records</a></b></p>
 
+        <p>Current CSW endpoint:<br><b><a href="{{curUrl}}"><span style="word-break: break-all;">{{curUrl}}</span></a></b></p>
+
         <hr>
-        <b>Keywords</b>
+        
+    </div>
+    <div class="col-md-7">
+        <p><b>Subjects:</b><p>
         <div class="tagcloud">
             <span class="badge tag" ng-repeat="k in domain.subject.values" ng-click="refineSearch('subject', k.id)">{{k.id}}</span>
         </div>
