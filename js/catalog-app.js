@@ -353,6 +353,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
     }
 
+
+    //this def is broken times
     $scope.toggleExtentFilter = function(){
         console.log($scope.searches[$scope.curSearch].hasExtent);
         if($scope.searches[$scope.curSearch].hasExtent){
@@ -361,6 +363,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         else{
             $scope.displayAdvancedSearch();
             addFilter('extent','');
+            //$scope.extentStatus();
         }
     }
 
