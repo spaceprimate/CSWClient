@@ -372,7 +372,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.clearFilterType = function(type){
         $scope.searches[$scope.curSearch].removeFilterType(type);
-        $scope.submitSearch($scope.curSearch);
+        //$scope.submitSearch($scope.curSearch);
         $scope.domain[type].values.forEach(function(e) {
             e.active = false;
         });
@@ -510,8 +510,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
         // If there's only 1 record, it won't be in an array, so
         //replace Record object with an array so the following forEach will work
-        //if ( !Array.isArray(records.Record) ){
-        if ( totalRecords == 1 ){
+        if ( !Array.isArray(records.Record) ){
+        // if ( totalRecords == 1 ){
             var tmp = records.Record;
             records.Record = [tmp];
         }
