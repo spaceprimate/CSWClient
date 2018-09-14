@@ -41,6 +41,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         pageLimits: []
     }
 
+    $scope.showAdvancedSearch = false;
+    
+
     //optional- can hold arrays of all existing entries for specific CSW properties (eg. 'subject')
     $scope.domain = {};
 
@@ -82,6 +85,16 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         // this is probably a good as place as any to add code to copy the search term from a basic search into advanced search automatically
         // pending certain conditions of course. 
     };
+
+    $scope.searchBarToggle = function(){
+        if($scope.showAdvancedSearch && $scope.minimizeAdvanced){
+            console.log("do something");
+            $scope.displayAdvancedSearch();
+        }
+        else{
+            console.log("do nothing");
+        }
+    }
 
     $scope.loadWelcome = function(){
         $scope.startScreen = true;

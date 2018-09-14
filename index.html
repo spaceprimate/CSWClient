@@ -44,21 +44,21 @@
 
     <div id="nrl-catalog">
 
-        <div  id="search-container"><div class="container">
-            <div class="row">
-                <div id="search-bar" class="col-sm-12">
-                    <a href="#" ng-click="minimizeAdvanced = !minimizeAdvanced" class="bottom-toggle" ng-show="showAdvancedSearch">
-                        <span class="glyphicon glyphicon-chevron-up" ng-hide="minimizeAdvanced"></span>
-                        <span class="glyphicon glyphicon-chevron-down" ng-show="minimizeAdvanced"></span>
-                    </a>
+        <div  class="search-container" ng-click="searchBarToggle()">
+            <div class="container">
+                
+                        <a href="#" ng-click="minimizeAdvanced = !minimizeAdvanced; $event.stopPropagation();" class="bottom-toggle" ng-show="showAdvancedSearch">
+                            <span class="glyphicon glyphicon-chevron-up" ng-hide="minimizeAdvanced"></span>
+                            <span class="glyphicon glyphicon-chevron-down" ng-show="minimizeAdvanced"></span>
+                        </a>
 
-                    <basic-search></basic-search>
+                        <basic-search></basic-search>
 
-                    <advanced-search></advanced-search>
+                        <advanced-search></advanced-search>
 
-                </div>
+                    
             </div>
-        </div></div>
+        </div>
         <div class="container content" id="main-container">
 
             <!-- Welcome Message -->

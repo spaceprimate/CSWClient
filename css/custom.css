@@ -153,7 +153,7 @@ h4 a.sm {
     z-index: 3100;
 }
 
-#search-container {
+.search-container {
     overflow: auto;
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.26);
     z-index: 3000;
@@ -162,6 +162,7 @@ h4 a.sm {
     background: #f8f8f8;
     padding: 7px 15px 8px 30px;
     border-bottom: 1px solid #cacaca;
+    position: relative;
 }
 
 .form-inline.advanced-filter {
