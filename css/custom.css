@@ -282,16 +282,32 @@ a.bottom-toggle {
     left: 50%;
     margin-left: -25px;
     bottom: 0px;
-    border: #dcdcdc 1px solid;
+    border: #e2e2e2 1px solid;
     border-bottom: 0px;
-    background: #e4e4e4;
+    background: none;
     line-height: 22px;
 }
 
 a.left-toggle:hover,
 a.bottom-toggle:hover {
-    color: #777;
-    background: #e0e0e0;
+    color: #2f79b9;
+    background: #efefef;
+}
+
+.collapsed a.bottom-toggle{
+    top: 0px;
+    border-top: 0px;
+    background: none;
+    border-color: #eaeaea;
+    line-height: 58px;
+}
+
+.search-container.collapsed:hover{background: #f2f2f2; cursor: pointer;}
+.search-container.collapsed:hover a.bottom-toggle{
+    
+    color: #2f79b9;
+    /* background: #eaeaea; */
+    border-color:#e2e2e2;
 }
 
 

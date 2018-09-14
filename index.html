@@ -44,17 +44,33 @@
 
     <div id="nrl-catalog">
 
-        <div  class="search-container" ng-click="searchBarToggle()">
+        <!-- searchbar: basic view -->
+        <div class="search-container" ng-show="!showAdvancedSearch">
+            <basic-search></basic-search>
+        </div>
+
+        <!-- searchbar: collapsed advanced view -->
+        <div class="search-container collapsed" ng-show="showAdvancedSearch && minimizeAdvanced" ng-click="minimizeAdvanced = !minimizeAdvanced;">
+            <div ng-show="minimizeAdvanced">
+                    <h4>Advanced Search <a href="#" class="sm" ng-click="showAdvancedSearch = !showAdvancedSearch; $event.stopPropagation();">Basic Search</a></h4>
+                </div>
+            <a href="#"  class="bottom-toggle" ng-show="showAdvancedSearch">
+                <span class="glyphicon glyphicon-chevron-down"></span>
+            </a>
+        </div>
+
+        <!-- searchbar: advanced view -->
+        <div  class="search-container" ng-click="searchBarToggle()" ng-show="showAdvancedSearch && !minimizeAdvanced">
             <div class="container">
                 
-                        <a href="#" ng-click="minimizeAdvanced = !minimizeAdvanced; $event.stopPropagation();" class="bottom-toggle" ng-show="showAdvancedSearch">
-                            <span class="glyphicon glyphicon-chevron-up" ng-hide="minimizeAdvanced"></span>
-                            <span class="glyphicon glyphicon-chevron-down" ng-show="minimizeAdvanced"></span>
-                        </a>
+                <a href="#" ng-click="minimizeAdvanced = !minimizeAdvanced; $event.stopPropagation();" class="bottom-toggle" ng-show="showAdvancedSearch">
+                    <span class="glyphicon glyphicon-chevron-up" ></span>
+                    
+                </a>
 
-                        <basic-search></basic-search>
+                
 
-                        <advanced-search></advanced-search>
+                <advanced-search></advanced-search>
 
                     
             </div>
