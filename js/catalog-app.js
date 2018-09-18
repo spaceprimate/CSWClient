@@ -7,7 +7,7 @@
 var nrlCatalog = angular.module('nrlCatalog', [ ]);
 
 // init extenty- handles extent thumbnails
-var extentMap = new extenty();
+var extentThumbnail = new extenty();
 
 nrlCatalog.config(function($httpProvider) {
     //Enable cross domain calls
@@ -86,13 +86,13 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         // pending certain conditions of course. 
     };
 
+    /**
+     * Toggles the advanced search view
+     * Does nothing if it's already showing or, if it's displaying basic search mode. 
+     */
     $scope.searchBarToggle = function(){
         if($scope.showAdvancedSearch && $scope.minimizeAdvanced){
-            console.log("do something");
             $scope.displayAdvancedSearch();
-        }
-        else{
-            console.log("do nothing");
         }
     }
 
@@ -620,7 +620,8 @@ nrlCatalog.directive('recordTemplate', function() {
         templateUrl:   'templates/record.html',
         controller: function($scope){
             $scope.viewAll = false;
-            $scope.boxStyle = extentMap.getBoxStyle($scope.flipExtent($scope.record.extent));
+            $scope.boxStyle = extentThumbnail.getBoxStyle($scope.flipExtent($scope.record.extent));
+            console.log($scope.record.extent);
         }
     }
 });
@@ -647,8 +648,7 @@ nrlCatalog.directive('advancedSearch', function() {
         controller: function($scope){
 
             $scope.defaultExtent = [-180, -90, 180, 90];
-
-            //$scope.advancedSearch = new csw.search();
+            $scope.extentyStyle = extentThumbnail.getBoxStyle($scope.defaultExtent);
 
             var vectorSource = new ol.source.Vector({
                 url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
@@ -753,14 +753,13 @@ nrlCatalog.directive('advancedSearch', function() {
              */
             $scope.updateExtent = function(){
                 advSearchExtent.setExtent($scope.searches.advancedSearch.getExtent());
+                $scope.extentyStyle = extentThumbnail.getBoxStyle($scope.searches.advancedSearch.getExtent());
             };
 
             /**
              * resets extent to default (in OL map and search object)
              */
             $scope.clearExtent = function(){
-                //extent.setExtent(null);
-                //$scope.searches.advancedSearch.extent.extent = [-180, -90, 180, 90];
                 advSearchExtent.setExtent(null);
                 $scope.searches.advancedSearch.setExtent( $scope.defaultExtent );
             };

@@ -38,6 +38,7 @@ function extenty(){
         };
         if (coords[0] == 9999){style.display = 'none';}
         if (height * width < 20){style.borderWidth = '2px';}
+        
         return style;
     }
 
@@ -46,26 +47,28 @@ function extenty(){
      * @param {*} coords 
      */
     function convertCoords(coords){
-        coords[0] = convertLong(coords[0]);
-        coords[1] = convertLat(coords[1]);
-        coords[2] = convertLong(coords[2]);
-        coords[3] = convertLat(coords[3]);
-        var temp; //flip coords if they're not in ascending order
-        if (coords[0] > coords [2]){
-            temp = coords[0];
-            coords[0] = coords[2];
-            coords[2] = temp;
+        var pixelCoords = [];
+        pixelCoords[0] = convertLong(coords[0]);
+        pixelCoords[1] = convertLat(coords[1]);
+        pixelCoords[2] = convertLong(coords[2]);
+        pixelCoords[3] = convertLat(coords[3]);
+        var temp; //flip pixelCoords if they're not in ascending order
+        if (pixelCoords[0] > pixelCoords [2]){
+            temp = pixelCoords[0];
+            pixelCoords[0] = pixelCoords[2];
+            pixelCoords[2] = temp;
         }
-        if (coords[1] > coords [3]){
-            temp = coords[1];
-            coords[1] = coords[3];
-            coords[3] = temp;
+        if (pixelCoords[1] > pixelCoords [3]){
+            temp = pixelCoords[1];
+            pixelCoords[1] = pixelCoords[3];
+            pixelCoords[3] = temp;
         }
-        if( isNaN(coords[0]) ||  isNaN(coords[1]) ||  isNaN(coords[2]) ||  isNaN(coords[3]) ){
+        if( isNaN(pixelCoords[0]) ||  isNaN(pixelCoords[1]) ||  isNaN(pixelCoords[2]) ||  isNaN(pixelCoords[3]) ){
             console.log("NaN value retured");
             return [9999,0,0,0];
         }
-        return coords;
+        
+        return pixelCoords;
     }
 
     /**
@@ -73,12 +76,13 @@ function extenty(){
      * @param {*} lat 
      */
     function convertLat(lat){
-        lat = parseInt(lat);
-        lat = baseHeight / (2 * Math.PI) * Math.log(Math.tan(Math.PI / 4 + (lat / 2) * Math.PI / 180)); //whew        
-        lat = ( baseHeight / 2 ) - lat;
-        if (lat < 0){lat = 0;}
-        if (lat > baseHeight){lat = baseHeight;}
-        return lat;
+        var pixelLat = 0;
+        pixelLat = parseInt(lat);
+        pixelLat = baseHeight / (2 * Math.PI) * Math.log(Math.tan(Math.PI / 4 + (pixelLat / 2) * Math.PI / 180)); //whew        
+        pixelLat = ( baseHeight / 2 ) - pixelLat;
+        if (pixelLat < 0){pixelLat = 0;}
+        if (pixelLat > baseHeight){pixelLat = baseHeight;}
+        return pixelLat;
     }
 
     /**
@@ -86,10 +90,11 @@ function extenty(){
      * @param {*} long 
      */
     function convertLong(long){
-        long = parseInt(long);
-        long =  (long + 180) * baseWidth / 360;
-        if (long < 0){long = 0;}
-        if (long > baseWidth){long = baseWidth;}
-        return long;
+        var pixelLong = 0;
+        pixelLong = parseInt(long);
+        pixelLong =  (pixelLong + 180) * baseWidth / 360;
+        if (pixelLong < 0){pixelLong = 0;}
+        if (pixelLong > baseWidth){pixelLong = baseWidth;}
+        return pixelLong;
     }
 };

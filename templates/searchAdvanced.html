@@ -53,6 +53,12 @@
                                 ng-change="updateExtent()" id="max-long"></div>
                         <div class="coord-input"><label class="small">max Lat</label><input type="number" ng-model="searches.advancedSearch.filters[$index].extent[3]"
                                 ng-change="updateExtent()" id="max-lat"></div>
+
+                        <div class="extenty pull-right record-thumbnail">
+                            <!-- <div class="extenty-box" style="top: 18px; left: 44px; width: 38px; height: 13px;"></div> -->
+                            <div class="extenty-box" ng-style="extentyStyle"></div>
+                        </div>
+                        
                         <a href="#" class="" style="margin:23px 0 0 2px; display: inline-block;" ng-click="clearExtent()" ng-hide="searches.advancedSearch.extent.extent == defaultExtent">clear</a>
                         <div class="clear-left"></div>
                     </div>
