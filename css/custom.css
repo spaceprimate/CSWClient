@@ -57,6 +57,14 @@ tr.break-word td {
 .clearleft {
     clear: left;
 }
+.clear-right,
+.clearright{
+    clear:right;
+}
+.clear-both,
+.clearboth{
+    clear:both;
+}
 
 #loading-indicator {
     width: 250px;
@@ -167,18 +175,20 @@ h4 a.sm {
 
 .form-inline.advanced-filter {
     position: relative;
-    border-bottom: 1px solid #c5c5c5;
+    border-bottom: 1px solid #e0e0e0;
     padding: 12px 3px;
 }
 
 .advanced-filter.first {
-    border-top: 1px solid #c5c5c5;
+    border-top: 1px solid #e0e0e0;
 }
 
 .coord-input {
     float: left;
     width: 115px;
-    padding-right: 3px;
+    padding-left: 2px;
+    margin-top: 12px;
+    padding-right: 7px;
 }
 
 .coord-input label {
@@ -189,10 +199,27 @@ h4 a.sm {
     max-width: 100%;
 }
 
+body .extenty-box{
+    background: rgba(255, 34, 34, 0.1);
+}
+
+.extent-wrapper{
+    position: relative;
+    min-height: 83px;
+}
+.extent-wrapper .record-thumbnail{
+    position: absolute; 
+    top: -20px;
+    right: 28px;
+}
+
 .map {
     border: 2px solid #a2a2a2;
     margin-bottom: 0px;
-    max-width: 512px;
+    /* max-width: 512px; */
+}
+#adv-search-map{
+    margin-bottom: 6px;
 }
 
 .button-slide-up {
@@ -221,17 +248,51 @@ tr.record-table td {
 .record-thumbnail {
     min-width: 1px;
 }
+.record-thumbnail .edit-icon{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 1px 3px 0px 4px;
+    background: #ffffffa8;
+    box-shadow: #000 0px 0px 3px;
+}
+.record-thumbnail:hover .edit-icon{
+    background: #ffffff;
+}
+.record-thumbnail .edit-icon .glyphicon{
+    color: #292929;
+    font-size: 12px;
+}
 
-.add-remove-buttons {
+.glyphicon.dark{color: #636363;}
+.remove-button-wrapper{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 18px;
+    border: 1px solid #ececec;
+    border-top: 0px;
+    border-bottom: 0px;
+}
+.remove-button {
     display: inline-block;
     position: absolute;
     right: 3px;
     top: 50%;
-    margin-top: -10px;
+    margin-top: -6px;
+    font-size: 9px;
 }
 
-.add-remove-buttons a {
-    color: #333;
+.remove-button a {
+    color: #adadad;
+}
+
+.remove-button-wrapper:hover{
+    background: #efefef;
+}
+.remove-button-wrapper:hover .remove-button a{
+    color: #2f79b9;
 }
 
 label.highlight {
