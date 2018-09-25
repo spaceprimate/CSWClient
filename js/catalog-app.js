@@ -369,26 +369,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     }
 
 
-    //this def is broken times
     $scope.toggleExtentFilter = function(){
-        // console.log($scope.searches[$scope.curSearch].hasExtent);
-        // if($scope.searches[$scope.curSearch].hasExtent){
-        //     $scope.displayAdvancedSearch();
-        //     addFilter('extent','');
-        //     $scope.extentStatus();
-        // }
-        // else{
-        //     $scope.displayAdvancedSearch();
-        //     addFilter('extent','');
-        //     $scope.extentStatus();
-        // }
-
-        // console.log("toggleExtentFilter is temporarily disabled");
-          $scope.displayAdvancedSearch();
-            addFilter('extent','');
-            
-            $scope.extentStatus($scope.searches[$scope.curSearch].filters[$scope.searches[$scope.curSearch].filters.length - 1]);
-
+        $scope.displayAdvancedSearch();
+        addFilter('extent','');
+        $scope.extentStatus($scope.searches[$scope.curSearch].filters[$scope.searches[$scope.curSearch].filters.length - 1]);
     }
 
     /**
@@ -420,9 +404,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.displayAdvancedSearch();
     };
 
-
-
-    //$scope.keywords = {}; // delete this eventually
 
     function keywordFilter(){
         var keywords = {};
@@ -632,7 +613,6 @@ nrlCatalog.directive('recordTemplate', function() {
         controller: function($scope){
             $scope.viewAll = false;
             $scope.boxStyle = extentThumbnail.getBoxStyle($scope.flipExtent($scope.record.extent));
-            console.log($scope.record.extent);
         }
     }
 });
@@ -685,59 +665,27 @@ nrlCatalog.directive('advancedSearch', function() {
         
             var bboxSelected = 0; // needed in the rare case a user changes browser size after map has loaded, then been hidden
 
-            // called from template when user selects Bounding Box from dropdown
-            // $scope.extentStatus = function(){
-            //     $scope.searches.advancedSearch.setHasExtent();
-            //     if ($scope.searches.advancedSearch.hasExtent && mapCreated == false){
-            //         $scope.extentSelectVisibility = true;
-            //         setTimeout(addMap, 50);
-            //         // addMap();
-            //         mapCreated = true;
-            //     }
-            //     else if($scope.searches.advancedSearch.hasExtent && mapCreated == true){
-            //         $scope.clearExtent();
-            //         $scope.extentSelectVisibility = true;
-            //         setTimeout(function(){advSearchMap.updateSize()}, 200);
-            //     }
-            // };
-
+            /**
+             * called from template when user selects Bounding Box from dropdown
+             * 
+             * @param {*} filter csw-filter
+             */
             $scope.extentStatus = function(filter){
                 $scope.searches.advancedSearch.setHasExtent();
 
-                //assign currentFilter to the passed filter
-
+                //set current filter of the extent-selection-map
                 advSearchMap.currentFilter = filter;
 
                 //assign extenty css style to this filter instance
                 filter.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
                 filter.isFirstTime = true; // is this the first time the bounding box has been assigned to this filter?
-
-                // if ($scope.searches.advancedSearch.hasExtent && mapCreated == false){
-                //     $scope.extentSelectVisibility = true;
-                //     setTimeout(addMap, 50);
-                //     // addMap();
-                //     mapCreated = true;
-                // }
-                // else if($scope.searches.advancedSearch.hasExtent && mapCreated == true){
                     $scope.clearExtent(filter);
-
-                    
-                    // $scope.extentSelectVisibility = true;
-                    // setTimeout(function(){advSearchMap.updateSize()}, 200);
                     $scope.loadExtentSelector(filter);
-
-
-                // }
             };
 
             var advSearchMap;
 
             // adds openlayers map, allowing users to draw bounding box
-
-            
-
-            
-
             function addMap(){
                 
                 advSearchMap = new ol.Map({
@@ -757,25 +705,6 @@ nrlCatalog.directive('advancedSearch', function() {
                 });
 
                 advSearchMap.addInteraction(advSearchExtent);
-                // advSearchExtent.setActive(false);
-                // advSearchExtent.setActive(true);
-
-                //Enable interaction by holding shift
-                // document.addEventListener('keydown', function(event) {
-                //     if (event.keyCode == 16) {
-                //         advSearchExtent.setActive(true);
-                //     }
-                // });
-
-                //stop extent interaction when the shift key releases
-                /** this is being called constantly and causes warnings, should only be called when interaction with the map **/
-                // document.addEventListener('keyup', function(event) {
-                //     if (event.keyCode == 16) {
-                //         advSearchExtent.setActive(false);
-                //     }
-                //     $scope.searches.advancedSearch.setExtent( advSearchExtent.getExtent() );
-                //     $scope.$apply();
-                // });
 
                 $scope.$watch('minimizeAdvanced', function(newValue, oldValue) {
                     if (newValue !== oldValue) {
@@ -790,16 +719,6 @@ nrlCatalog.directive('advancedSearch', function() {
 
                 advSearchMap.currentFilter;
 
-                //just testing, pls delete
-                advSearchMap.constraintTarget = 40;
-                console.log("======================================================================================================================");
-                console.log(advSearchMap.constraintTarget);
-                //end testing
-                
-
-                // advSearchMap.on('click', function(event){
-                //     advSearchExtent.setActive(true);
-                // });
             }
 
             var extentStyle = new ol.style.Style({
@@ -823,37 +742,17 @@ nrlCatalog.directive('advancedSearch', function() {
              * updates extent when user manually changes coordinate input in view
              */
             $scope.updateExtent = function(filter){
-                console.log("this is the filter");
-                console.log(filter);
-
                 //this needs to get extent from a specific contraint
-                // advSearchExtent.setExtent($scope.searches.advancedSearch.getExtent());
-                // $scope.extentyStyle = extentThumbnail.getBoxStyle($scope.searches.advancedSearch.getExtent());
                 advSearchExtent.setExtent(filter.extent);
                 filter.extentyStyle = extentThumbnail.getBoxStyle(filter.extent);
             };
 
             $scope.updateExtentFields = function(){
                 advSearchMap.currentFilter.extent = advSearchExtent.getExtent(); // set current extent filter extent to extent outline in OL extent object
-                // $scope.searches.advancedSearch.setExtent( advSearchExtent.getExtent() );
                 advSearchMap.currentFilter.extentyStyle = extentThumbnail.getBoxStyle(advSearchMap.currentFilter.extent);
-                // $scope.extentyStyle = extentThumbnail.getBoxStyle($scope.searches.advancedSearch.getExtent());
-                // $scope.setExtentSelectVisibility(false);
-                $scope.hideExtentSelector();
-                //     $scope.$apply();
+                $scope.hideExtentSelector();                
             }
 
-            //old - probably delete
-            $scope.setExtentSelectVisibility = function(isVisible){
-                $scope.extentSelectVisibility = isVisible;
-                if(advSearchMap == null){
-                    // addMap();
-                    setTimeout(function(){advSearchMap.updateSize();}, 100);
-                }
-                else{
-                    setTimeout(function(){advSearchMap.updateSize();}, 100);
-                }                
-            };
 
             $scope.loadExtentSelector = function(filter){
                 advSearchMap.currentFilter = filter;
@@ -876,16 +775,12 @@ nrlCatalog.directive('advancedSearch', function() {
             }
 
             
-
             /**
              * resets extent to default (in OL map and search object)
              */
             $scope.clearExtent = function(filter){
                 advSearchExtent.setExtent(null); // open layers extent (clears it)
-                // $scope.searches.advancedSearch.setExtent( $scope.getDefaultExtent() );
                 filter.extent = $scope.getDefaultExtent();
-
-
                 filter.extentyStyle = extentThumbnail.getBoxStyle(filter.extent);
             };
 
