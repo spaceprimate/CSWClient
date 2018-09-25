@@ -42,7 +42,7 @@
         </div>
     </header>
 
-    <div id="nrl-catalog">
+    <div id="main">
 
         <!-- searchbar: basic view -->
         <div class="search-container" ng-show="!showAdvancedSearch">
@@ -50,7 +50,7 @@
         </div>
 
         <!-- searchbar: collapsed advanced view -->
-        <div class="search-container collapsed" ng-show="showAdvancedSearch && minimizeAdvanced" ng-click="minimizeAdvanced = !minimizeAdvanced;">
+        <div class="search-container collapsed" ng-show="showAdvancedSearch && minimizeAdvanced" ng-click="displayAdvancedSearch()">
             <div ng-show="minimizeAdvanced">
                     <h4>Advanced Search <a href="#" class="sm" ng-click="showAdvancedSearch = !showAdvancedSearch; $event.stopPropagation();">Basic Search</a></h4>
                 </div>
@@ -63,7 +63,7 @@
         <div  class="search-container" ng-click="searchBarToggle()" ng-show="showAdvancedSearch && !minimizeAdvanced">
             <div class="container">
                 
-                <a href="#" ng-click="minimizeAdvanced = !minimizeAdvanced; $event.stopPropagation();" class="bottom-toggle" ng-show="showAdvancedSearch">
+                <a href="#main" ng-click="minimizeAdvanced = !minimizeAdvanced; $event.stopPropagation();" class="bottom-toggle" ng-show="showAdvancedSearch">
                     <span class="glyphicon glyphicon-chevron-up" ></span>
                     
                 </a>
@@ -127,7 +127,7 @@
 
         </div>
     </div>
-    <!-- /#nrl-catalog -->
+    <!-- /#main -->
 
     <script src="libs/jquery/jquery.min.js"></script>
     <script src="libs/angular/angular.min.js"></script>

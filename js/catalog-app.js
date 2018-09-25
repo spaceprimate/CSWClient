@@ -18,7 +18,7 @@ nrlCatalog.config(function($httpProvider) {
  * main controller
  * injects $scope and $http ( for post requests )
  */
-nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
+nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$anchorScroll', function($scope, $http, $location, $anchorScroll) {
 
     //CSW Endpoint
     // var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
@@ -41,8 +41,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         pageLimits: []
     }
 
+
     $scope.showAdvancedSearch = false;
-    
 
     //optional- can hold arrays of all existing entries for specific CSW properties (eg. 'subject')
     $scope.domain = {};
@@ -82,9 +82,12 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.displayAdvancedSearch = function(){
         $scope.showAdvancedSearch = true;
         $scope.minimizeAdvanced = false;
+        $location.hash('main');
+        $anchorScroll(); //scroll to top
         // this is probably a good as place as any to add code to copy the search term from a basic search into advanced search automatically
         // pending certain conditions. 
     };
+
 
     /**
      * Toggles the advanced search view
@@ -636,7 +639,7 @@ nrlCatalog.directive('advancedSearch', function() {
     return{
         restrict: 'E',
         templateUrl:   'templates/searchAdvanced.html',
-        controller: function($scope){
+        controller: function($scope, $location, $anchorScroll){
 
             $scope.getDefaultExtent = function(){
                 return [-180, -90, 180, 90];
@@ -679,8 +682,10 @@ nrlCatalog.directive('advancedSearch', function() {
                 //assign extenty css style to this filter instance
                 filter.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
                 filter.isFirstTime = true; // is this the first time the bounding box has been assigned to this filter?
-                    $scope.clearExtent(filter);
-                    $scope.loadExtentSelector(filter);
+                $scope.clearExtent(filter);
+                $scope.loadExtentSelector(filter);
+
+
             };
 
             var advSearchMap;
@@ -755,6 +760,9 @@ nrlCatalog.directive('advancedSearch', function() {
 
 
             $scope.loadExtentSelector = function(filter){
+                $location.hash('main');
+                $anchorScroll();
+
                 advSearchMap.currentFilter = filter;
 
                 
