@@ -63,7 +63,7 @@
         <div  class="search-container" ng-click="searchBarToggle()" ng-show="showAdvancedSearch && !minimizeAdvanced">
             <div class="container">
                 
-                <a href="#main" ng-click="minimizeAdvanced = !minimizeAdvanced; $event.stopPropagation();" class="bottom-toggle" ng-show="showAdvancedSearch">
+                <a href="#" ng-click="minimizeAdvanced = !minimizeAdvanced; $event.stopPropagation();" class="bottom-toggle" ng-show="showAdvancedSearch">
                     <span class="glyphicon glyphicon-chevron-up" ></span>
                     
                 </a>
@@ -139,6 +139,7 @@
     <script type="text/javascript" src="libs/openlayers/ol-debug.js"></script>
     <script src="js/catalog-app.js"></script>
     <script src="js/catalog-advanced-search.js"></script>
+    <script src="js/catalog-pagination.js"></script>
     <script src="js/csw-request.js"></script>
 
 </body>

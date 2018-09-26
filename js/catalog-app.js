@@ -25,21 +25,14 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
     var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
-    var newRequest = true;
+    $scope.newRequest = true;
 
     //after post request, records objects are created and pushed here
     $scope.curRecords= [];
 
     $scope.curUrl = cswUrl;
 
-    $scope.pages = {
-        curPage: 1,
-        pages: [],
-        totalRecords: 0,
-        recordsPerPage: 10,
-        totalPages: null,
-        pageLimits: []
-    }
+    
 
 
     $scope.showAdvancedSearch = false;
@@ -131,94 +124,94 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
         $scope.submitSearch();
     }
 
-    /**
-     * based on settings in pages object, this calculates how many pages are required
-     * to accomodate the number of returned records, based on the number of records per page (set by user)
-     */
-    $scope.setPages = function(){
-        $scope.pages.totalPages = Math.ceil($scope.pages.totalRecords / $scope.pages.recordsPerPage);
-        $scope.pages.pages = [];
-        for (var i = 0; i < $scope.pages.totalPages; i++) {
-            $scope.pages.pages.push(i+1);
-        }
-    };
+    // /**
+    //  * based on settings in pages object, this calculates how many pages are required
+    //  * to accomodate the number of returned records, based on the number of records per page (set by user)
+    //  */
+    // $scope.setPages = function(){
+    //     $scope.pages.totalPages = Math.ceil($scope.pages.totalRecords / $scope.pages.recordsPerPage);
+    //     $scope.pages.pages = [];
+    //     for (var i = 0; i < $scope.pages.totalPages; i++) {
+    //         $scope.pages.pages.push(i+1);
+    //     }
+    // };
 
-    /**
-     * Calls methods to recalculate # of pages and, load first page in series
-     * Triggered when user changes $scope.pages.recordsPerPage in view
-     */
-    $scope.updatePages = function(){
-        $scope.setPages();
-        $scope.goToPage(1);
-    };
+    // /**
+    //  * Calls methods to recalculate # of pages and, load first page in series
+    //  * Triggered when user changes $scope.pages.recordsPerPage in view
+    //  */
+    // $scope.updatePages = function(){
+    //     $scope.setPages();
+    //     $scope.goToPage(1);
+    // };
 
-     /**
-      * Sets Current page, and updates what records should be visile on that page
-      * 
-      * @param {*} curPage index of the current page
-      */
-    function setCurPage(curPage){
-        $scope.pages.curPage = curPage;
-        $scope.pages.pageLimits[1] = Math.ceil(curPage / 10) * 10;
-        $scope.pages.pageLimits[0] = $scope.pages.pageLimits[1] - 10;
-    }
+    //  /**
+    //   * Sets Current page, and updates what records should be visile on that page
+    //   * 
+    //   * @param {*} curPage index of the current page
+    //   */
+    // function setCurPage(curPage){
+    //     $scope.pages.curPage = curPage;
+    //     $scope.pages.pageLimits[1] = Math.ceil(curPage / 10) * 10;
+    //     $scope.pages.pageLimits[0] = $scope.pages.pageLimits[1] - 10;
+    // }
 
-    /**
-     * Checks $scope.curSearch and calls createRequest on appropriate search object
-     * There are only 2 possible search objects, "basic" and "advanced"
-     *
-     * @return{String} getRecordRequest - xml string required for csw record request
-     */
-    $scope.getFirstPage = function(){
-        $scope.pages.curPage = 1;
-        $scope.pages.pageLimits = [0, 10];
-        newRequest = true;
-        var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
-        $scope.requestRecords(recordRequest);
+    // /**
+    //  * Checks $scope.curSearch and calls createRequest on appropriate search object
+    //  * There are only 2 possible search objects, "basic" and "advanced"
+    //  *
+    //  * @return{String} getRecordRequest - xml string required for csw record request
+    //  */
+    // $scope.getFirstPage = function(){
+    //     $scope.pages.curPage = 1;
+    //     $scope.pages.pageLimits = [0, 10];
+    //     newRequest = true;
+    //     var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
+    //     $scope.requestRecords(recordRequest);
         
-    };
+    // };
 
-    /**
-     * gets page numbers in sets of 10
-     */
-    $scope.getPageNumbers = function(){
-        var arr = [];
-        for (i = $scope.pages.pageLimits[0] + 1; i <= $scope.pages.pageLimits[1] && i <= $scope.pages.totalPages; i++){
-            arr.push(i);
-        }
-        return arr;
-    };
+    // /**
+    //  * gets page numbers in sets of 10
+    //  */
+    // $scope.getPageNumbers = function(){
+    //     var arr = [];
+    //     for (i = $scope.pages.pageLimits[0] + 1; i <= $scope.pages.pageLimits[1] && i <= $scope.pages.totalPages; i++){
+    //         arr.push(i);
+    //     }
+    //     return arr;
+    // };
 
-    /**
-     * increments $scope.pages.curPage
-     * creates and submits and new records request
-     */
-    $scope.getNextPage = function(){
-        setCurPage($scope.pages.curPage + 1);
-        var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
-        $scope.requestRecords(recordRequest);
-    };
+    // /**
+    //  * increments $scope.pages.curPage
+    //  * creates and submits and new records request
+    //  */
+    // $scope.getNextPage = function(){
+    //     setCurPage($scope.pages.curPage + 1);
+    //     var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
+    //     $scope.requestRecords(recordRequest);
+    // };
 
-    /**
-     * decrements $scope.pages.curPage
-     * creates and submits and new records request
-     */
-    $scope.getPrevPage = function(){
-        setCurPage($scope.pages.curPage - 1);
-        var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
-        $scope.requestRecords(recordRequest);
-    };
+    // /**
+    //  * decrements $scope.pages.curPage
+    //  * creates and submits and new records request
+    //  */
+    // $scope.getPrevPage = function(){
+    //     setCurPage($scope.pages.curPage - 1);
+    //     var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
+    //     $scope.requestRecords(recordRequest);
+    // };
 
-    /**
-     * Loads records for a arbitrary page #
-     * creates and submits and new records request
-     * @param{int} page - page #
-     */
-    $scope.goToPage = function(page){
-        setCurPage(page);
-        var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
-        $scope.requestRecords(recordRequest);
-    };
+    // /**
+    //  * Loads records for a arbitrary page #
+    //  * creates and submits and new records request
+    //  * @param{int} page - page #
+    //  */
+    // $scope.goToPage = function(page){
+    //     setCurPage(page);
+    //     var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
+    //     $scope.requestRecords(recordRequest);
+    // };
 
     /**
      * Converts coordinates from corner formatted strings "20, 30" to extent array
@@ -510,10 +503,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
         var totalRecords = getSafe(function(){ return records._numberOfRecordsMatched } );
 
         //if this is a new requeset, update pagination
-        if (newRequest == true && totalRecords >= 0){
+        if ($scope.newRequest == true && totalRecords >= 0){
             $scope.pages.totalRecords = totalRecords;
             $scope.setPages();
-            newRequest = false;
+            $scope.newRequest = false;
         }
 
         // If there's only 1 record, it won't be in an array, so
@@ -628,175 +621,14 @@ nrlCatalog.directive('sidebarTemplate', function() {
     }
 });
 
-nrlCatalog.directive('paginationTemplate', function() {
-    return{
-        restrict: 'E',
-        templateUrl:   'templates/pagination.html',
-    }
-});
-
-// nrlCatalog.directive('advancedSearch', function() {
+// nrlCatalog.directive('paginationTemplate', function() {
 //     return{
 //         restrict: 'E',
-//         templateUrl:   'templates/searchAdvanced.html',
-//         controller: function($scope, $location, $anchorScroll){
-
-//             $scope.getDefaultExtent = function(){
-//                 return [-180, -90, 180, 90];
-//             }
-
-//             // $scope.defaultExtent = [-180, -90, 180, 90];
-//             $scope.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
-
-//             var vectorSource = new ol.source.Vector({
-//                 url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
-//                 format: new ol.format.GeoJSON()
-//             });
-            
-//             // Open Street Maps layer
-//             var osmLayer = new ol.layer.Tile({
-//                 source: new ol.source.OSM()
-//             });
-//             //Country Outlines layer
-//             var countriesLayer = new ol.layer.Vector({
-//                 source: vectorSource
-//             });
-
-//             $scope.extentSelectVisibility = false;
-
-//             var mapCreated = false;
-        
-//             var bboxSelected = 0; // needed in the rare case a user changes browser size after map has loaded, then been hidden
-
-//             /**
-//              * called from template when user selects Bounding Box from dropdown
-//              * 
-//              * @param {*} filter csw-filter
-//              */
-//             $scope.extentStatus = function(filter){
-//                 $scope.searches.advancedSearch.setHasExtent();
-
-//                 //set current filter of the extent-selection-map
-//                 advSearchMap.currentFilter = filter;
-
-//                 //assign extenty css style to this filter instance
-//                 filter.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
-//                 filter.isFirstTime = true; // is this the first time the bounding box has been assigned to this filter?
-//                 $scope.clearExtent(filter);
-//                 $scope.loadExtentSelector(filter);
-
-
-//             };
-
-//             var advSearchMap;
-
-//             // adds openlayers map, allowing users to draw bounding box
-//             function addMap(){
-                
-//                 advSearchMap = new ol.Map({
-//                     layers: [osmLayer, countriesLayer],
-//                     target: 'adv-search-map',
-//                     controls: ol.control.defaults({
-//                     zoom: true,
-//                     attribution: false,
-//                     rotate: false
-//                     }),
-//                     view: new ol.View({
-//                         center: [0, 0],
-//                         projection: 'EPSG:4326',
-//                         zoom: 2,
-//                         minZoom: 2,
-//                     })
-//                 });
-
-//                 advSearchMap.addInteraction(advSearchExtent);
-
-//                 $scope.$watch('minimizeAdvanced', function(newValue, oldValue) {
-//                     if (newValue !== oldValue) {
-//                         advSearchMap.updateSize();
-//                     }
-//                 });
-//                 $scope.$watch('showAdvancedSearch', function(newValue, oldValue) {
-//                     if (newValue !== oldValue) {
-//                         advSearchMap.updateSize();
-//                     }
-//                 });
-
-//                 advSearchMap.currentFilter;
-
-//             }
-
-//             var extentStyle = new ol.style.Style({
-//                 stroke: new ol.style.Stroke({
-//                     color: 'rgb(255, 34, 34)',
-//                     width: 1,
-//                 }),
-//                 fill: new ol.style.Fill({
-//                     color: 'rgba(255, 34, 34, 0.2)'
-//                 })
-//             });
-
-//             //OpenLayers Extent object, for advanced search
-//             var advSearchExtent = new ol.interaction.Extent({
-//                 // condition: ol.events.condition.click,
-//                 boxStyle: [extentStyle],
-//                 active: true
-//             });
-
-//              /**
-//              * updates extent when user manually changes coordinate input in view
-//              */
-//             $scope.updateExtent = function(filter){
-//                 //this needs to get extent from a specific contraint
-//                 advSearchExtent.setExtent(filter.extent);
-//                 filter.extentyStyle = extentThumbnail.getBoxStyle(filter.extent);
-//             };
-
-//             $scope.updateExtentFields = function(){
-//                 advSearchMap.currentFilter.extent = advSearchExtent.getExtent(); // set current extent filter extent to extent outline in OL extent object
-//                 advSearchMap.currentFilter.extentyStyle = extentThumbnail.getBoxStyle(advSearchMap.currentFilter.extent);
-//                 $scope.hideExtentSelector();                
-//             }
-
-
-//             $scope.loadExtentSelector = function(filter){
-//                 $location.hash('main');
-//                 $anchorScroll();
-
-//                 advSearchMap.currentFilter = filter;
-
-                
-//                 if( !filter.isFirstTime ){
-//                     advSearchExtent.setExtent(filter.extent);
-//                 }
-//                 else{
-//                     filter.isFirstTime = false;
-//                 }
-                
-//                 $scope.extentSelectVisibility = true;
-//                 setTimeout(function(){advSearchMap.updateSize();}, 100);
-
-//             }
-
-//             $scope.hideExtentSelector = function(){
-//                 $scope.extentSelectVisibility = false;
-//             }
-
-            
-//             /**
-//              * resets extent to default (in OL map and search object)
-//              */
-//             $scope.clearExtent = function(filter){
-//                 advSearchExtent.setExtent(null); // open layers extent (clears it)
-//                 filter.extent = $scope.getDefaultExtent();
-//                 filter.extentyStyle = extentThumbnail.getBoxStyle(filter.extent);
-//             };
-
-//             setTimeout(addMap, 50);
-// 		},
-//         controllerAs: 'advSearch'
+//         templateUrl:   'templates/pagination.html',
 //     }
 // });
+
+
 
 // safely check if object exists or not
 function getSafe(fn) {
