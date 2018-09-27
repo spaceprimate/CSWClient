@@ -79,6 +79,19 @@ angular.module('nrlCatalog')
                     mapPanButtonContainer.className = 'map-pan-button ol-unselectable ol-control';
                     mapPanButtonContainer.appendChild(mapPanButton);
                     var panControl = new ol.control.Control({element: mapPanButtonContainer});
+                    // mouse position
+
+                    
+                    var mousePositionControl = new ol.control.MousePosition({
+                        coordinateFormat: ol.coordinate.createStringXY(4),
+                        projection: 'EPSG:4326',
+                        // comment the following two lines to have the mouse position
+                        // be placed within the map.
+                        // className: 'custom-mouse-position',
+                        // target: document.getElementById('mouse-position'),
+                        // undefinedHTML: '&nbsp;'
+                        undefinedHTML: '103.4839, 28.3930'
+                      });
 
 
 
@@ -89,7 +102,7 @@ angular.module('nrlCatalog')
                             zoom: true,
                             attribution: false,
                             rotate: false
-                        }).extend([editControl, panControl]),
+                        }).extend([editControl, panControl, mousePositionControl]),
                         view: new ol.View({
                             center: [0, 0],
                             projection: 'EPSG:4326',
@@ -97,6 +110,18 @@ angular.module('nrlCatalog')
                             minZoom: 2,
                         })
                     });
+
+
+                    // var projectionSelect = document.getElementById('projection');
+                    // projectionSelect.addEventListener('change', function(event) {
+                    //     mousePositionControl.setProjection(event.target.value);
+                    // });
+
+                    // var precisionInput = document.getElementById('precision');
+                    // precisionInput.addEventListener('change', function(event) {
+                    //     var format = createStringXY(event.target.valueAsNumber);
+                    //     mousePositionControl.setCoordinateFormat(format);
+                    // });
 
                     
 

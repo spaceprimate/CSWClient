@@ -234,10 +234,22 @@ body .extenty-box{
     left: 7px;
 }
 
+
+
 .map.cross-hair .map-edit-button button,
 .map.grab .map-pan-button button
     {background-color: rgba(0,60,136,.7);}
 
+body .ol-mouse-position{
+    top: unset;
+    right: 0px;
+    position: absolute;
+    bottom: 0px;
+    background: #3c6ea88c;
+    color: #fff;
+    padding: 2px 8px;
+    font-size: 12px;
+}
 
 .button-slide-up {
     display: block;
