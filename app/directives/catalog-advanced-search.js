@@ -2,7 +2,7 @@ angular.module('nrlCatalog')
     .directive('advancedSearch', function() {
         return{
             restrict: 'E',
-            templateUrl:   'templates/searchAdvanced.html',
+            templateUrl:   'app/views/searchAdvanced.html',
             controller: function($scope, $location, $anchorScroll){
 
                 $scope.getDefaultExtent = function(){
