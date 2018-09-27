@@ -1,3 +1,6 @@
+//delete this and all references before going live pls
+var root = {};
+
 angular.module('nrlCatalog')
     .directive('advancedSearch', function() {
         return{
@@ -11,6 +14,8 @@ angular.module('nrlCatalog')
 
                 // $scope.defaultExtent = [-180, -90, 180, 90];
                 $scope.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
+
+                $scope.mapClass = "cross-hair";
 
                 var vectorSource = new ol.source.Vector({
                     url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
@@ -57,14 +62,34 @@ angular.module('nrlCatalog')
                 // adds openlayers map, allowing users to draw bounding box
                 function addMap(){
                     
+                    // create Openlayers buttons to control panning and extent selection
+                    // edit button
+                    var mapEditButton = document.createElement('button');
+                    mapEditButton.innerHTML = "<span class='glyphicon glyphicon-pencil'></span>";
+                    mapEditButton.addEventListener('click', function(){$scope.enableMapEdit(); $scope.$apply();}, false);
+                    var mapEditButtonContainer = document.createElement('div');
+                    mapEditButtonContainer.className = 'map-edit-button ol-unselectable ol-control';
+                    mapEditButtonContainer.appendChild(mapEditButton);
+                    var editControl = new ol.control.Control({element: mapEditButtonContainer});
+                    // pan button
+                    var mapPanButton = document.createElement('button');
+                    mapPanButton.innerHTML = "<img src='assets/img/pan-icon.png' style='width: 15px; height: auto;' />";
+                    mapPanButton.addEventListener('click', function(){$scope.enableMapPan(); $scope.$apply();}, false);
+                    var mapPanButtonContainer = document.createElement('div');
+                    mapPanButtonContainer.className = 'map-pan-button ol-unselectable ol-control';
+                    mapPanButtonContainer.appendChild(mapPanButton);
+                    var panControl = new ol.control.Control({element: mapPanButtonContainer});
+
+
+
                     advSearchMap = new ol.Map({
                         layers: [osmLayer, countriesLayer],
                         target: 'adv-search-map',
                         controls: ol.control.defaults({
-                        zoom: true,
-                        attribution: false,
-                        rotate: false
-                        }),
+                            zoom: true,
+                            attribution: false,
+                            rotate: false
+                        }).extend([editControl, panControl]),
                         view: new ol.View({
                             center: [0, 0],
                             projection: 'EPSG:4326',
@@ -73,7 +98,15 @@ angular.module('nrlCatalog')
                         })
                     });
 
+                    
+
+                    
+
                     advSearchMap.addInteraction(advSearchExtent);
+
+                    root.extent = advSearchExtent;
+                    root.map = advSearchMap;
+
 
                     $scope.$watch('minimizeAdvanced', function(newValue, oldValue) {
                         if (newValue !== oldValue) {
@@ -104,8 +137,11 @@ angular.module('nrlCatalog')
                 var advSearchExtent = new ol.interaction.Extent({
                     // condition: ol.events.condition.click,
                     boxStyle: [extentStyle],
+                    pointerStyle: [extentStyle],
                     active: true
                 });
+
+
 
                 /**
                  * updates extent when user manually changes coordinate input in view
@@ -124,12 +160,12 @@ angular.module('nrlCatalog')
 
 
                 $scope.loadExtentSelector = function(filter){
+                    //scroll to top of page
                     $location.hash('main');
                     $anchorScroll();
 
                     advSearchMap.currentFilter = filter;
 
-                    
                     if( !filter.isFirstTime ){
                         advSearchExtent.setExtent(filter.extent);
                     }
@@ -146,7 +182,6 @@ angular.module('nrlCatalog')
                     $scope.extentSelectVisibility = false;
                 }
 
-                
                 /**
                  * resets extent to default (in OL map and search object)
                  */
@@ -155,6 +190,27 @@ angular.module('nrlCatalog')
                     filter.extent = $scope.getDefaultExtent();
                     filter.extentyStyle = extentThumbnail.getBoxStyle(filter.extent);
                 };
+
+                /**
+                 * allows user to click and drag to pan the map
+                 */
+                $scope.enableMapPan = function(){
+                    advSearchExtent.setActive(false);
+                    $scope.mapClass = "grab";
+                };
+
+                /**
+                 * re-enables the extent selection interaction
+                 */
+                $scope.enableMapEdit = function(){
+                    advSearchExtent.setActive(true);
+                    $scope.mapClass = "cross-hair";
+                    console.log("this was called");
+                    
+                };
+
+
+                
 
                 setTimeout(addMap, 50);
             },

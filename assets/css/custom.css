@@ -218,9 +218,26 @@ body .extenty-box{
     margin-bottom: 0px;
     /* max-width: 512px; */
 }
+.map.cross-hair:hover{cursor: crosshair;}
+.map.grab:hover{cursor: -webkit-grab;}
 #adv-search-map{
     margin-bottom: 6px;
 }
+
+.map-edit-button{
+    top:63px;
+    left: 7px;
+}
+
+.map-pan-button{ 
+    top: 96px;
+    left: 7px;
+}
+
+.map.cross-hair .map-edit-button button,
+.map.grab .map-pan-button button
+    {background-color: rgba(0,60,136,.7);}
+
 
 .button-slide-up {
     display: block;

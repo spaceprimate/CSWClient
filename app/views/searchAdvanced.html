@@ -7,14 +7,16 @@
 
         <!-- MAP -->
         <div ng-show="extentSelectVisibility">
-            <div class="pull-right" style="min-height: 43px;">
+            <p style="padding-top:7px;" class="pull-right"><label class="small highlight">Click and drag to select extent on map, or Cancel and enter values manually</label></p>
+                
+            <div class="" style="min-height: 43px;">    
                 <button class="btn btn-primary" ng-click="updateExtentFields()">Apply</button>
                 <button class="btn btn-default" ng-click="hideExtentSelector()">Cancel</button>
             </div>
-            <p style="padding-top:7px;"><label class="small highlight">Click and drag to select extent on map, or Cancel and enter values manually</label></p>
+            
             
             <div class="clearboth"></div>
-            <div id="adv-search-map" class="map" style="height: 480px;"></div>
+            <div id="adv-search-map" class="map" style="height: 480px;" ng-class="mapClass"></div>
         </div>
 
 
