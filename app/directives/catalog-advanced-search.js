@@ -71,6 +71,7 @@ angular.module('nrlCatalog')
                     mapEditButtonContainer.className = 'map-edit-button ol-unselectable ol-control';
                     mapEditButtonContainer.appendChild(mapEditButton);
                     var editControl = new ol.control.Control({element: mapEditButtonContainer});
+
                     // pan button
                     var mapPanButton = document.createElement('button');
                     mapPanButton.innerHTML = "<img src='assets/img/pan-icon.png' style='width: 15px; height: auto;' />";
@@ -79,9 +80,8 @@ angular.module('nrlCatalog')
                     mapPanButtonContainer.className = 'map-pan-button ol-unselectable ol-control';
                     mapPanButtonContainer.appendChild(mapPanButton);
                     var panControl = new ol.control.Control({element: mapPanButtonContainer});
-                    // mouse position
 
-                    
+                    // mouse position
                     var mousePositionControl = new ol.control.MousePosition({
                         coordinateFormat: ol.coordinate.createStringXY(4),
                         projection: 'EPSG:4326',

@@ -1,5 +1,5 @@
 <div class="col-sm-2 sidebar">
-    <div class="link" ng-click="refineSearchToggle()">Refine Search</div>
+    <div class="link" ng-click="refineSearchToggle()" ng-if="">Refine Search</div>
     <div class="link" ng-click="toggleExtentFilter()">Filter by location</div>
     <hr>
     <h5>Types <span class="refine-clear link" ng-click="clearFilterType('type')" ng-show="hasFilterType('type')">Clear</span></h5>
@@ -18,7 +18,4 @@
     </ul>
 
     <hr>
-
-
-    
 </div>
