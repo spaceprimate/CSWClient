@@ -21,7 +21,8 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$anchorScroll', function($scope, $http, $location, $anchorScroll) {
 
     //CSW Endpoint
-    var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
+    // var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
+    var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
     $scope.newRequest = true;
@@ -243,6 +244,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
     };
 
 
+
+
     /**
      * updates search filter with new constraint 
      * based on domain meta-data
@@ -331,6 +334,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
 
         $scope.domain.subject.values = Object.values(keywords);
 
+    } 
 
     /**
      * Makes angular http POST request to CSW Server
@@ -478,7 +482,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
 
     // init - functions to call once on page load
     requestDomain('type');
-
+    requestDomain('subject', keywordFilter);
 
 }]); // end main directive
 

@@ -13,7 +13,7 @@
     <div class="col-md-7">
         <p><b>Subjects:</b><p>
         <div class="tagcloud">
-            <span class="badge tag" ng-repeat="t in domain.type.values" ng-click="refineSearch('type', t.id)">{{t.id}}</span>
+            <span class="badge tag" ng-repeat="k in domain.subject.values" ng-click="refineSearch('subject', k.id)">{{k.id}}</span>
         </div>
     </div>
 </div>
