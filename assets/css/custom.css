@@ -57,6 +57,14 @@ tr.break-word td {
 .clearleft {
     clear: left;
 }
+.clear-right,
+.clearright{
+    clear:right;
+}
+.clear-both,
+.clearboth{
+    clear:both;
+}
 
 #loading-indicator {
     width: 250px;
@@ -99,11 +107,11 @@ tr.break-word td {
     padding-bottom: 9px;
 }
 
-#search-bar {
+/* #search-bar {
     background: #f8f8f8;
     padding: 7px 15px 8px 30px;
     border-bottom: 1px solid #cacaca;
-}
+} */
 
 h4 a.sm {
     padding: 4px 0 0 12px;
@@ -153,26 +161,34 @@ h4 a.sm {
     z-index: 3100;
 }
 
-#search-container {
+.search-container {
     overflow: auto;
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.26);
     z-index: 3000;
+
+
+    background: #f8f8f8;
+    padding: 7px 15px 8px 30px;
+    border-bottom: 1px solid #cacaca;
+    position: relative;
 }
 
 .form-inline.advanced-filter {
     position: relative;
-    border-bottom: 1px solid #c5c5c5;
+    border-bottom: 1px solid #e0e0e0;
     padding: 12px 3px;
 }
 
 .advanced-filter.first {
-    border-top: 1px solid #c5c5c5;
+    border-top: 1px solid #e0e0e0;
 }
 
 .coord-input {
     float: left;
     width: 115px;
-    padding-right: 3px;
+    padding-left: 2px;
+    margin-top: 12px;
+    padding-right: 7px;
 }
 
 .coord-input label {
@@ -183,10 +199,56 @@ h4 a.sm {
     max-width: 100%;
 }
 
+body .extenty-box{
+    background: rgba(255, 34, 34, 0.1);
+}
+
+.extent-wrapper{
+    position: relative;
+    min-height: 83px;
+}
+.extent-wrapper .record-thumbnail{
+    position: absolute; 
+    top: -20px;
+    right: 28px;
+}
+
 .map {
     border: 2px solid #a2a2a2;
     margin-bottom: 0px;
-    max-width: 512px;
+    /* max-width: 512px; */
+}
+.map.cross-hair:hover{cursor: crosshair;}
+.map.grab:hover{cursor: -webkit-grab;}
+#adv-search-map{
+    margin-bottom: 6px;
+}
+
+.map-edit-button{
+    top:63px;
+    left: 7px;
+}
+
+.map-pan-button{ 
+    top: 96px;
+    left: 7px;
+}
+
+
+
+.map.cross-hair .map-edit-button button,
+.map.grab .map-pan-button button
+    {background-color: rgba(0,60,136,.7);}
+
+body .ol-mouse-position{
+    top: unset;
+    right: 0px;
+    position: absolute;
+    bottom: 0px;
+    background: #3c6ea88c;
+    color: #fff;
+    padding: 2px 8px;
+    font-size: 12px;
 }
 
 .button-slide-up {
@@ -215,17 +277,51 @@ tr.record-table td {
 .record-thumbnail {
     min-width: 1px;
 }
+.record-thumbnail .edit-icon{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 1px 3px 0px 4px;
+    background: #ffffffa8;
+    box-shadow: #000 0px 0px 3px;
+}
+.record-thumbnail:hover .edit-icon{
+    background: #ffffff;
+}
+.record-thumbnail .edit-icon .glyphicon{
+    color: #292929;
+    font-size: 12px;
+}
 
-.add-remove-buttons {
+.glyphicon.dark{color: #636363;}
+.remove-button-wrapper{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 18px;
+    border: 1px solid #ececec;
+    border-top: 0px;
+    border-bottom: 0px;
+}
+.remove-button {
     display: inline-block;
     position: absolute;
     right: 3px;
     top: 50%;
-    margin-top: -10px;
+    margin-top: -6px;
+    font-size: 9px;
 }
 
-.add-remove-buttons a {
-    color: #333;
+.remove-button a {
+    color: #adadad;
+}
+
+.remove-button-wrapper:hover{
+    background: #efefef;
+}
+.remove-button-wrapper:hover .remove-button a{
+    color: #2f79b9;
 }
 
 label.highlight {
@@ -276,16 +372,32 @@ a.bottom-toggle {
     left: 50%;
     margin-left: -25px;
     bottom: 0px;
-    border: #dcdcdc 1px solid;
+    border: #e2e2e2 1px solid;
     border-bottom: 0px;
-    background: #e4e4e4;
+    background: none;
     line-height: 22px;
 }
 
 a.left-toggle:hover,
 a.bottom-toggle:hover {
-    color: #777;
-    background: #e0e0e0;
+    color: #2f79b9;
+    background: #efefef;
+}
+
+.collapsed a.bottom-toggle{
+    top: 0px;
+    border-top: 0px;
+    background: none;
+    border-color: #eaeaea;
+    line-height: 58px;
+}
+
+.search-container.collapsed:hover{background: #f2f2f2; cursor: pointer;}
+.search-container.collapsed:hover a.bottom-toggle{
+    
+    color: #2f79b9;
+    /* background: #eaeaea; */
+    border-color:#e2e2e2;
 }
 
 

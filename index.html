@@ -10,19 +10,19 @@
     <title>CSW Client</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="libs/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="assets/libs/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/custom.css" rel="stylesheet">
-    <link href="libs/extent/css/extenty.css" rel="stylesheet">
+    <link href="assets/css/custom.css" rel="stylesheet">
+    <link href="assets/libs/extent/css/extenty.css" rel="stylesheet">
 
     <!-- font -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i" rel="stylesheet">
 
     <!-- open layers -->
-    <link rel="stylesheet" type="text/css" href="libs/openlayers/ol.css">
+    <link rel="stylesheet" type="text/css" href="assets/libs/openlayers/ol.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -42,21 +42,37 @@
         </div>
     </header>
 
-    <div id="nrl-catalog">
+    <div id="main">
 
-        <div class="container-fluid" id="search-container">
-            <div class="row">
-                <div id="search-bar" class="col-sm-12">
-                    <a href="#" ng-click="minimizeAdvanced = !minimizeAdvanced" class="bottom-toggle" ng-show="showAdvancedSearch">
-                        <span class="glyphicon glyphicon-chevron-up" ng-hide="minimizeAdvanced"></span>
-                        <span class="glyphicon glyphicon-chevron-down" ng-show="minimizeAdvanced"></span>
-                    </a>
+        <!-- searchbar: basic view -->
+        <div class="search-container" ng-show="!showAdvancedSearch">
+            <basic-search></basic-search>
+        </div>
 
-                    <basic-search></basic-search>
-
-                    <advanced-search></advanced-search>
-
+        <!-- searchbar: collapsed advanced view -->
+        <div class="search-container collapsed" ng-show="showAdvancedSearch && minimizeAdvanced" ng-click="displayAdvancedSearch()">
+            <div ng-show="minimizeAdvanced">
+                    <h4>Advanced Search <a href="#" class="sm" ng-click="showAdvancedSearch = !showAdvancedSearch; $event.stopPropagation();">Basic Search</a></h4>
                 </div>
+            <a href="#"  class="bottom-toggle" ng-show="showAdvancedSearch">
+                <span class="glyphicon glyphicon-chevron-down"></span>
+            </a>
+        </div>
+
+        <!-- searchbar: advanced view -->
+        <div  class="search-container" ng-click="searchBarToggle()" ng-show="showAdvancedSearch && !minimizeAdvanced">
+            <div class="container">
+                
+                <a href="#" ng-click="minimizeAdvanced = !minimizeAdvanced; $event.stopPropagation();" class="bottom-toggle" ng-show="showAdvancedSearch">
+                    <span class="glyphicon glyphicon-chevron-up" ></span>
+                    
+                </a>
+
+                
+
+                <advanced-search></advanced-search>
+
+                    
             </div>
         </div>
         <div class="container content" id="main-container">
@@ -111,18 +127,20 @@
 
         </div>
     </div>
-    <!-- /#nrl-catalog -->
+    <!-- /#main -->
 
-    <script src="libs/jquery/jquery.min.js"></script>
-    <script src="libs/angular/angular.min.js"></script>
-    <script src="libs/x2js/xml2json.min.js"></script>
-    <script src="libs/extent/js/extenty.js"></script>
-    <!-- <script src="libs/bootstrap/js/bootstrap.min.js"></script> -->
+    <script src="assets/libs/jquery/jquery.min.js"></script>
+    <script src="assets/libs/angular/angular.min.js"></script>
+    <script src="assets/libs/x2js/xml2json.min.js"></script>
+    <script src="assets/libs/extent/js/extenty.js"></script>
+    <!-- <script src="assets/libs/bootstrap/js/bootstrap.min.js"></script> -->
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="libs/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
-    <script type="text/javascript" src="libs/openlayers/ol-debug.js"></script>
-    <script src="js/catalog-app.js"></script>
-    <script src="js/csw-request.js"></script>
+    <script src="assets/libs/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    <script type="text/javascript" src="assets/libs/openlayers/ol-debug.js"></script>
+    <script src="app/catalog-app.js"></script>
+    <script src="app/directives/catalog-advanced-search.js"></script>
+    <script src="app/directives/catalog-pagination.js"></script>
+    <script src="app/util/csw-request.js"></script>
 
 </body>
 </html>
