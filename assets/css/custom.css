@@ -78,7 +78,7 @@ tr.break-word td {
 
 .navbar {
     min-height: 22px;
-    height: 22px;
+    height: 41px;
     margin-bottom: 0px;
     background: #4CAF50;
     border-bottom: 0px;
@@ -92,7 +92,8 @@ tr.break-word td {
 
 .navbar-inverse .navbar-brand {
     color: #fff;
-    font-size: 14px;
+    font-size: 18px;
+    line-height: 35px;
 }
 
 .navbar-nav>li>a {
@@ -101,10 +102,44 @@ tr.break-word td {
 }
 
 
+.navbar a.search-toggle {
+    display: block;
+    color: #adadad;
+    position: absolute;
+    font-size: 12px;
+    padding: 10px 17px 0px 17px;
+    left: 50%;
+    margin-left: -25px;
+    bottom: 0px;
+    border: #5ebf61 1px solid;
+    border-bottom: 0px;
+    border-top: 0px;
+    background: none;
+    line-height: 41px;
+    color: white;
+}
+
+.search-container .triangle-graphic{
+    position: absolute;
+    top: -13px; 
+    z-index: 9000;
+    left: 50%;
+    margin-left: -9px;
+    font-size: 18px;
+    color: #f8f8f8;
+
+}
+
+
 /* search */
 
 .advanced-search-content {
     padding-bottom: 9px;
+}
+
+.advanced-search-content-filters{
+    width: 682px; 
+    margin: auto;
 }
 
 /* #search-bar {
@@ -162,7 +197,7 @@ h4 a.sm {
 }
 
 .search-container {
-    overflow: auto;
+    overflow: visible;
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.26);
     z-index: 3000;
 

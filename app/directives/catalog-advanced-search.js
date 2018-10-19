@@ -133,11 +133,11 @@ angular.module('nrlCatalog')
                     root.map = advSearchMap;
 
 
-                    $scope.$watch('minimizeAdvanced', function(newValue, oldValue) {
-                        if (newValue !== oldValue) {
-                            advSearchMap.updateSize();
-                        }
-                    });
+                    // $scope.$watch('minimizeAdvanced', function(newValue, oldValue) {
+                    //     if (newValue !== oldValue) {
+                    //         advSearchMap.updateSize();
+                    //     }
+                    // });
                     $scope.$watch('showSearch', function(newValue, oldValue) {
                         if (newValue !== oldValue) {
                             advSearchMap.updateSize();

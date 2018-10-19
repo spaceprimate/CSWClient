@@ -1,9 +1,7 @@
 <section ng-show="showSearch" id="advanced-search">
-    <div ng-show="minimizeAdvanced">
-        <h4>Advanced Search <a href="#" class="sm" ng-click="showSearch = !showSearch">Basic Search</a></h4>
-    </div>
+    
 
-    <div class="advanced-search-content" ng-hide="minimizeAdvanced">
+    <div class="advanced-search-content">
 
         <!-- MAP -->
         <div ng-show="extentSelectVisibility">
@@ -20,10 +18,10 @@
         </div>
 
 
-        <div ng-hide="extentSelectVisibility" style="width: 680px;">
+        <div ng-hide="extentSelectVisibility" style="width: 680px;" class="advanced-search-content-filters">
         <!-- <div style="width: 100%; padding-right: 531px;" > -->
             <form id="advanced-search" name="advanced-search" novalidate>
-                <h4>Advanced Search <a href="#" class="sm" ng-click="showSearch = !showSearch">Basic Search</a></h4>
+                <h4>CSW Search Constraints</h4>
                 <div ng-repeat="f in search.filters" class="form-inline advanced-filter" ng-class="{first:$first}">
 
                     <select ng-model="f.type" ng-options="o.label for o in f.types" ng-change="extentStatus(f)">

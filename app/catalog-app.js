@@ -73,11 +73,15 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
 
     $scope.displaySearch = function(){
         $scope.showSearch = true;
-        $scope.minimizeAdvanced = false;
+        // $scope.minimizeAdvanced = false;
         $location.hash('main');
         $anchorScroll(); //scroll to top
-        // this is probably a good as place as any to add code to copy the search term from a basic search into advanced search automatically
-        // pending certain conditions. 
+        
+    };
+
+    $scope.hideSearch = function(){
+        $scope.showSearch = false;
+
     };
 
 
@@ -86,8 +90,12 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      * Does nothing if it's already showing or, if it's displaying basic search mode. 
      */
     $scope.searchBarToggle = function(){
-        if($scope.showSearch && $scope.minimizeAdvanced){
+        if(!$scope.showSearch){
             $scope.displaySearch();
+        }
+        else{
+            // $scope.showSearch = true;
+            $scope.hideSearch();
         }
     }
 

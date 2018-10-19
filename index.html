@@ -32,12 +32,15 @@
 </head>
 
 <body ng-app="nrlCatalog" ng-controller="mainController">
-    <header class="navbar navbar-static-top navbar-inverse navbar-compact" style="background: #f8f8f8; height: 2000px;" ng-style="{'height':'22px', 'background':'#4CAF50'}">
+    <header class="navbar navbar-static-top navbar-inverse navbar-compact" style="background: #f8f8f8; height: 2000px;" ng-style="{'height':'41px', 'background':'#4CAF50'}">
         <div class="container-fluid">
             <div class="navbar-header">
-                <div class="navbar-brand pointer" ng-click="loadWelcome()">
+                <div class="navbar-brand pointer" ng-click="loadWelcome(); $event.stopPropagation();">
                     CSW Client
                 </div>
+                <a href="#"  class="search-toggle" ng-click="searchBarToggle()">
+                    <span class="glyphicon glyphicon-search"></span>
+                </a>
             </div>
         </div>
     </header>
@@ -61,20 +64,24 @@
         </div> -->
 
         <!-- searchbar: collapsed advanced view -->
-        <div class="search-container collapsed" ng-hide="showSearch" ng-click="displaySearch()">
+        <!-- <div class="search-container collapsed" ng-hide="showSearch" ng-click="displaySearch()">
+            
             <div>
                     <h4>Advanced Search <a href="#" class="sm" ng-click="showSearch = !showSearch; $event.stopPropagation();">Basic Search</a></h4>
             </div>
             <a href="#"  class="bottom-toggle">
                 <span class="glyphicon glyphicon-search"></span>
             </a>
-        </div>
+        </div> -->
 
         <!-- searchbar: advanced view -->
-        <div  class="search-container" ng-click="searchBarToggle()" ng-show="showSearch">
+        <div  class="search-container" ng-show="showSearch">
+            <div class="triangle-graphic">
+                <span class="glyphicon glyphicon-triangle-top"></span>
+            </div>
             <div class="container">
                 
-                <a href="#" ng-click="showSearch = !showSearch; $event.stopPropagation();" class="bottom-toggle" ng-show="showSearch">
+                <a href="#" ng-click="searchBarToggle(); $event.stopPropagation();" class="bottom-toggle" ng-show="showSearch">
                     <span class="glyphicon glyphicon-chevron-up" ></span>
                     
                 </a>
