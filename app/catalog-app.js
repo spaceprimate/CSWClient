@@ -32,7 +32,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
 
     $scope.curUrl = cswUrl;
 
-    $scope.showAdvancedSearch = false;
+    $scope.showSearch = false;
 
     //optional- can hold arrays of all existing entries for specific CSW properties (eg. 'subject')
     $scope.domain = {};
@@ -53,14 +53,16 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
     //phasing out
     $scope.noRecordsFound = false;
 
-    $scope.searches = {
-        //Create our search objects
-        basicSearch:  new csw.search(),
-        advancedSearch:  new csw.search()
-    };
+    $scope.search = new csw.search();
+
+    // $scope.searches = {
+    //     //Create our search objects
+    //     basicSearch:  new csw.search(),
+    //     advancedSearch:  new csw.search()
+    // };
 
     //set to either "basicSearch" or "advancedSearch"
-    $scope.curSearch = "basicSearch";
+    // $scope.curSearch = "basicSearch";
 
     //create options for sort dropdown
     $scope.sortOptions = [
@@ -69,8 +71,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
     ];
     $scope.sortOption = $scope.sortOptions[0];
 
-    $scope.displayAdvancedSearch = function(){
-        $scope.showAdvancedSearch = true;
+    $scope.displaySearch = function(){
+        $scope.showSearch = true;
         $scope.minimizeAdvanced = false;
         $location.hash('main');
         $anchorScroll(); //scroll to top
@@ -84,8 +86,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      * Does nothing if it's already showing or, if it's displaying basic search mode. 
      */
     $scope.searchBarToggle = function(){
-        if($scope.showAdvancedSearch && $scope.minimizeAdvanced){
-            $scope.displayAdvancedSearch();
+        if($scope.showSearch && $scope.minimizeAdvanced){
+            $scope.displaySearch();
         }
     }
 
@@ -100,16 +102,16 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      * 
      * @param {string}  either"basicSearch" or "advancedSearch". if param is ommited, "basicSearch" is used
      */
-    $scope.submitSearch = function(search){
-        if (search ==  undefined){
-            $scope.curSearch = "basicSearch";
-        }
-        else{
-            $scope.curSearch = search;
-        }
-        if(search == "advancedSearch"){
-            $scope.minimizeAdvanced = true;
-        }
+    $scope.submitSearch = function(){
+        // if (search ==  undefined){
+        //     $scope.curSearch = "basicSearch";
+        // }
+        // else{
+        //     $scope.curSearch = search;
+        // }
+        // if(search == "advancedSearch"){
+        //     $scope.minimizeAdvanced = true;
+        // }
         $scope.getFirstPage();
     };
 
@@ -117,7 +119,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      * Calls an empty search in order to display all available records
      */
     $scope.viewAllRecords = function(){
-        $scope.searches.basicSearch.filters[0].term = "";
+        $scope.search.filters[0].term = "";
         $scope.submitSearch();
     }
 
@@ -240,7 +242,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
         if (constraint){
             filter.constraint = constraint;
         }
-        $scope.searches[$scope.curSearch].addFilter(filter);
+        $scope.search.addFilter(filter);
     };
 
 
@@ -262,28 +264,30 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
         }
         if ($scope.domain[type].values.find(function(e){return e.id == term}).active){
             $scope.domain[type].values.find(function(e){return e.id == term}).active = false;
-            $scope.searches[$scope.curSearch].removeFilterTypeId(type, term);
-            $scope.submitSearch($scope.curSearch); 
+            $scope.search.removeFilterTypeId(type, term);
+            // $scope.submitSearch($scope.search); 
+            $scope.submitSearch(); 
         }
         else{
             addFilter(type,term,constraint);
             $scope.domain[type].values.find(function(e){return e.id == term}).active = true;
-            $scope.submitSearch($scope.curSearch); 
+            // $scope.submitSearch($scope.search); 
+            $scope.submitSearch(); 
         }
     }
 
 
     $scope.toggleExtentFilter = function(){
-        $scope.displayAdvancedSearch();
+        $scope.displaySearch();
         addFilter('extent','');
-        $scope.extentStatus($scope.searches[$scope.curSearch].filters[$scope.searches[$scope.curSearch].filters.length - 1]);
+        $scope.extentStatus($scope.search.filters[$scope.search.filters.length - 1]);
     }
 
     /**
      * removes all filters of a given type from the current search
      */
     $scope.clearFilterType = function(type){
-        $scope.searches[$scope.curSearch].removeFilterType(type);
+        $scope.search.removeFilterType(type);
         //$scope.submitSearch($scope.curSearch);
         $scope.domain[type].values.forEach(function(e) {
             e.active = false;
@@ -295,17 +299,17 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      */
 
      $scope.hasFilterType = function(type){
-         return $scope.searches[$scope.curSearch].hasFilterType(type);
+         return $scope.search.hasFilterType(type);
      }
 
     /**
      * opens the advanced search section. If current search is basic, values are copies over
      */
     $scope.refineSearchToggle = function(){
-        if ($scope.curSearch == 'basicSearch'){
-            $scope.searches.advancedSearch.setFilters( $scope.searches.basicSearch.getFilters() );
-        }
-        $scope.displayAdvancedSearch();
+        // if ($scope.curSearch == 'basicSearch'){
+            // $scope.search.setFilters( $scope.searches.basicSearch.getFilters() );
+        // }
+        $scope.displaySearch();
     };
 
 
@@ -494,13 +498,13 @@ nrlCatalog.directive('headerTemplate', function() {
     }
 });
 
-nrlCatalog.directive('basicSearch', function() {
-    //    basicSearch:  new csw.search();
-    return{
-        restrict: 'E',
-        templateUrl:   'app/views/searchBasic.html',
-    }
-});
+// nrlCatalog.directive('basicSearch', function() {
+//     //    basicSearch:  new csw.search();
+//     return{
+//         restrict: 'E',
+//         templateUrl:   'app/views/searchBasic.html',
+//     }
+// });
 
 //displays welcome message
 nrlCatalog.directive('welcome', function() {

@@ -48,7 +48,7 @@ angular.module('nrlCatalog')
                 }
 
                 /**
-                 * Checks $scope.curSearch and calls createRequest on appropriate search object
+                 * Checks $scope.search and calls createRequest on appropriate search object
                  * There are only 2 possible search objects, "basic" and "advanced"
                  *
                  * @return{String} getRecordRequest - xml string required for csw record request
@@ -57,7 +57,7 @@ angular.module('nrlCatalog')
                     $scope.pages.curPage = 1;
                     $scope.pages.pageLimits = [0, 10];
                     $scope.newRequest = true;
-                    var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
+                    var recordRequest = $scope.search.createRequest($scope.pages);
                     $scope.requestRecords(recordRequest);
                     
                 };
@@ -79,7 +79,7 @@ angular.module('nrlCatalog')
                  */
                 $scope.getNextPage = function(){
                     setCurPage($scope.pages.curPage + 1);
-                    var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
+                    var recordRequest = $scope.search.createRequest($scope.pages);
                     $scope.requestRecords(recordRequest);
                 };
 
@@ -89,7 +89,7 @@ angular.module('nrlCatalog')
                  */
                 $scope.getPrevPage = function(){
                     setCurPage($scope.pages.curPage - 1);
-                    var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
+                    var recordRequest = $scope.search.createRequest($scope.pages);
                     $scope.requestRecords(recordRequest);
                 };
 
@@ -100,7 +100,7 @@ angular.module('nrlCatalog')
                  */
                 $scope.goToPage = function(page){
                     setCurPage(page);
-                    var recordRequest = $scope.searches[$scope.curSearch].createRequest($scope.pages);
+                    var recordRequest = $scope.search.createRequest($scope.pages);
                     $scope.requestRecords(recordRequest);
                 };
                 

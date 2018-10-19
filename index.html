@@ -45,25 +45,36 @@
     <div id="main">
 
         <!-- searchbar: basic view -->
-        <div class="search-container" ng-show="!showAdvancedSearch">
+        <!-- <div class="search-container" ng-show="!showSearch">
             <basic-search></basic-search>
-        </div>
+        </div> -->
+        <!-- <div class="search-container" ng-hide="showSearch">
+            <section>
+                <form class="form-inline text-center">
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Search" ng-model="searches.basicSearch.filters[0].term">
+                        <button type="submit" class="btn btn-primary" ng-click="submitSearch(); $event.stopPropagation();">Search</button>
+                    </div>
+                    <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="showSearch = !showSearch; $event.stopPropagation();">Advanced Search</a>
+                </form>
+            </section>
+        </div> -->
 
         <!-- searchbar: collapsed advanced view -->
-        <div class="search-container collapsed" ng-show="showAdvancedSearch && minimizeAdvanced" ng-click="displayAdvancedSearch()">
-            <div ng-show="minimizeAdvanced">
-                    <h4>Advanced Search <a href="#" class="sm" ng-click="showAdvancedSearch = !showAdvancedSearch; $event.stopPropagation();">Basic Search</a></h4>
-                </div>
-            <a href="#"  class="bottom-toggle" ng-show="showAdvancedSearch">
-                <span class="glyphicon glyphicon-chevron-down"></span>
+        <div class="search-container collapsed" ng-hide="showSearch" ng-click="displaySearch()">
+            <div>
+                    <h4>Advanced Search <a href="#" class="sm" ng-click="showSearch = !showSearch; $event.stopPropagation();">Basic Search</a></h4>
+            </div>
+            <a href="#"  class="bottom-toggle">
+                <span class="glyphicon glyphicon-search"></span>
             </a>
         </div>
 
         <!-- searchbar: advanced view -->
-        <div  class="search-container" ng-click="searchBarToggle()" ng-show="showAdvancedSearch && !minimizeAdvanced">
+        <div  class="search-container" ng-click="searchBarToggle()" ng-show="showSearch">
             <div class="container">
                 
-                <a href="#" ng-click="minimizeAdvanced = !minimizeAdvanced; $event.stopPropagation();" class="bottom-toggle" ng-show="showAdvancedSearch">
+                <a href="#" ng-click="showSearch = !showSearch; $event.stopPropagation();" class="bottom-toggle" ng-show="showSearch">
                     <span class="glyphicon glyphicon-chevron-up" ></span>
                     
                 </a>
@@ -97,7 +108,7 @@
             <!-- Sort Options -->
             <div ng-show="hasData">
                 <p>
-                    <select ng-options="item as item.label for item in searches[curSearch].sortOptions" ng-model="searches[curSearch].sortOption"
+                    <select ng-options="item as item.label for item in search.sortOptions" ng-model="search.sortOption"
                         ng-change="getFirstPage()"></select>
                     <span style="display: inline-block; margin-left: 18px;"><b>{{pages.totalRecords | number}}</b> records found</span>
                 </p>

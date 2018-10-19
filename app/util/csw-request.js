@@ -109,6 +109,7 @@ csw.search = function(){
 
     //pushes new filter object into filters array
     this.addFilter = function(f){
+        
         if(f){
             this.filters.push( new csw.filter(f) );
         }

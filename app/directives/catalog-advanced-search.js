@@ -43,7 +43,7 @@ angular.module('nrlCatalog')
                  * @param {*} filter csw-filter
                  */
                 $scope.extentStatus = function(filter){
-                    $scope.searches.advancedSearch.setHasExtent();
+                    $scope.search.setHasExtent();
 
                     //set current filter of the extent-selection-map
                     advSearchMap.currentFilter = filter;
@@ -138,7 +138,7 @@ angular.module('nrlCatalog')
                             advSearchMap.updateSize();
                         }
                     });
-                    $scope.$watch('showAdvancedSearch', function(newValue, oldValue) {
+                    $scope.$watch('showSearch', function(newValue, oldValue) {
                         if (newValue !== oldValue) {
                             advSearchMap.updateSize();
                         }
