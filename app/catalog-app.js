@@ -50,19 +50,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
     $scope.hasError = false;
     $scope.errorMessage = '';
 
-    //phasing out
-    $scope.noRecordsFound = false;
-
     $scope.search = new csw.search();
 
-    // $scope.searches = {
-    //     //Create our search objects
-    //     basicSearch:  new csw.search(),
-    //     advancedSearch:  new csw.search()
-    // };
-
-    //set to either "basicSearch" or "advancedSearch"
-    // $scope.curSearch = "basicSearch";
 
     //create options for sort dropdown
     $scope.sortOptions = [
@@ -73,17 +62,14 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
 
     $scope.displaySearch = function(){
         $scope.showSearch = true;
-        // $scope.minimizeAdvanced = false;
         $location.hash('body');
         $anchorScroll(); //scroll to top
-        
     };
 
     $scope.hideSearch = function(){
         $scope.showSearch = false;
 
     };
-
 
     /**
      * Toggles the advanced search view
@@ -94,7 +80,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
             $scope.displaySearch();
         }
         else{
-            // $scope.showSearch = true;
             $scope.hideSearch();
         }
     }
@@ -111,15 +96,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      * @param {string}  either"basicSearch" or "advancedSearch". if param is ommited, "basicSearch" is used
      */
     $scope.submitSearch = function(){
-        // if (search ==  undefined){
-        //     $scope.curSearch = "basicSearch";
-        // }
-        // else{
-        //     $scope.curSearch = search;
-        // }
-        // if(search == "advancedSearch"){
-        //     $scope.minimizeAdvanced = true;
-        // }
         $scope.showSearch = false;
         $scope.getFirstPage();
     };
@@ -274,13 +250,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
         if ($scope.domain[type].values.find(function(e){return e.id == term}).active){
             $scope.domain[type].values.find(function(e){return e.id == term}).active = false;
             $scope.search.removeFilterTypeId(type, term);
-            // $scope.submitSearch($scope.search); 
             $scope.submitSearch(); 
         }
         else{
             addFilter(type,term,constraint);
             $scope.domain[type].values.find(function(e){return e.id == term}).active = true;
-            // $scope.submitSearch($scope.search); 
             $scope.submitSearch(); 
         }
     }
@@ -315,9 +289,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      * opens the advanced search section. If current search is basic, values are copies over
      */
     $scope.refineSearchToggle = function(){
-        // if ($scope.curSearch == 'basicSearch'){
-            // $scope.search.setFilters( $scope.searches.basicSearch.getFilters() );
-        // }
         $scope.displaySearch();
     };
 
@@ -507,14 +478,6 @@ nrlCatalog.directive('headerTemplate', function() {
     }
 });
 
-// nrlCatalog.directive('basicSearch', function() {
-//     //    basicSearch:  new csw.search();
-//     return{
-//         restrict: 'E',
-//         templateUrl:   'app/views/searchBasic.html',
-//     }
-// });
-
 //displays welcome message
 nrlCatalog.directive('welcome', function() {
     return{
@@ -542,20 +505,4 @@ nrlCatalog.directive('sidebarTemplate', function() {
     }
 });
 
-// nrlCatalog.directive('paginationTemplate', function() {
-//     return{
-//         restrict: 'E',
-//         templateUrl:   'app/views/pagination.html',
-//     }
-// });
 
-
-
-// safely check if object exists or not
-function getSafe(fn) {
-    try {
-        return fn();
-    } catch (e) {
-        return undefined;
-    }
-}
