@@ -6,10 +6,12 @@ body .no-outline {
     background: none;
 }
 
-#main-container {
-    margin-top: 0px;
-    padding-top: 30px;
+#main{
+    margin-top:41px;
+    margin-left: 168px;
+    padding: 24px;
 }
+
 
 
 /* general */
@@ -76,6 +78,13 @@ tr.break-word td {
 
 /* navbar */
 
+#main-navbar{
+    position: fixed;
+    top:0px; 
+    right: 0px;
+    left: 0px;
+}
+
 .navbar {
     min-height: 22px;
     height: 41px;
@@ -107,7 +116,7 @@ tr.break-word td {
     color: #adadad;
     position: absolute;
     font-size: 12px;
-    padding: 10px 17px 0px 17px;
+    padding: 0px 17px 0px 17px;
     left: 50%;
     margin-left: -25px;
     bottom: 0px;
@@ -158,8 +167,14 @@ h4 a.sm {
     background: #f3f3f3;
     border: 1px solid #eaeaea;
     padding: 10px;
-    border-radius: 8px;
-    margin-top: 20px;
+    border-radius: 0px;
+    position: fixed;
+    top:41px;
+    left: 0px;
+    bottom: 0px;
+    margin: 0px;
+    width: 170px;
+    
 }
 
 .sidebar ul.sidebar-menu {
@@ -205,7 +220,10 @@ h4 a.sm {
     background: #f8f8f8;
     padding: 7px 15px 8px 30px;
     border-bottom: 1px solid #cacaca;
-    position: relative;
+    position: fixed;
+    top:41px;
+    right: 0px;
+    left: 0px;
 }
 
 .form-inline.advanced-filter {
@@ -462,3 +480,10 @@ body .refine-clear {
     font-weight: 400;
     margin-left: 7px;
 }
+
+
+.full-width-content{margin-top: 41px; padding-top: 24px;}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+  }

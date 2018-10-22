@@ -74,7 +74,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
     $scope.displaySearch = function(){
         $scope.showSearch = true;
         // $scope.minimizeAdvanced = false;
-        $location.hash('main');
+        $location.hash('body');
         $anchorScroll(); //scroll to top
         
     };
@@ -120,6 +120,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
         // if(search == "advancedSearch"){
         //     $scope.minimizeAdvanced = true;
         // }
+        $scope.showSearch = false;
         $scope.getFirstPage();
     };
 
