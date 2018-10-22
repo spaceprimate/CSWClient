@@ -128,6 +128,10 @@ tr.break-word td {
     color: white;
 }
 
+.navbar a.search-toggle:hover{
+    background: #2a922e;
+}
+
 .search-container .triangle-graphic{
     position: absolute;
     top: -13px; 

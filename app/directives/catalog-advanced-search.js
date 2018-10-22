@@ -43,18 +43,18 @@ angular.module('nrlCatalog')
                  * @param {*} filter csw-filter
                  */
                 $scope.extentStatus = function(filter){
-                    $scope.search.setHasExtent();
+                    if(filter.type.id == "extent"){
+                        $scope.search.setHasExtent();
 
-                    //set current filter of the extent-selection-map
-                    advSearchMap.currentFilter = filter;
+                        //set current filter of the extent-selection-map
+                        advSearchMap.currentFilter = filter;
 
-                    //assign extenty css style to this filter instance
-                    filter.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
-                    filter.isFirstTime = true; // is this the first time the bounding box has been assigned to this filter?
-                    $scope.clearExtent(filter);
-                    $scope.loadExtentSelector(filter);
-
-
+                        //assign extenty css style to this filter instance
+                        filter.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
+                        filter.isFirstTime = true; // is this the first time the bounding box has been assigned to this filter?
+                        $scope.clearExtent(filter);
+                        $scope.loadExtentSelector(filter);
+                    }
                 };
 
                 var advSearchMap;
