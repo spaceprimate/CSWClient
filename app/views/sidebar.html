@@ -1,7 +1,9 @@
 <div class="sidebar">
-    <div class="link" ng-click="refineSearchToggle()">Refine Search</div>
-    <div class="link" ng-click="toggleExtentFilter()">Filter by location</div>
-    <hr>
+    <button class="default" ng-click="refineSearchToggle()"><span class="glyphicon glyphicon-search"></span>Refine Search</button>
+
+    <button class="default" ng-click="toggleExtentFilter()"><span class="glyphicon glyphicon-map-marker"></span>Filter by Location</button>
+    
+
     <h5>Types <span class="refine-clear link" ng-click="clearFilterType('type')" ng-show="hasFilterType('type')">Clear</span></h5>
     <ul class="list-unstyled sidebar-menu">
         <li ng-repeat="t in domain.type.values" ng-click="refineSearch('type', t.id); " class="pointer" ng-class="{ 'active' : t.active }">{{t.id}}</li>

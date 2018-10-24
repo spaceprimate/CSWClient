@@ -4,7 +4,7 @@
  */
 
 // Site Module
-var nrlCatalog = angular.module('nrlCatalog', [ ]);
+var nrlCatalog = angular.module('nrlCatalog', [ 'ngAnimate' ]);
 
 // init extenty- handles extent thumbnails
 var extentThumbnail = new extenty();
@@ -97,6 +97,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      */
     $scope.submitSearch = function(){
         $scope.showSearch = false;
+        
         $scope.getFirstPage();
     };
 

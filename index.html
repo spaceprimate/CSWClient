@@ -7,7 +7,7 @@
     <meta name="description" content="Naval Research Laboratory Geospatial Computing Section">
     <meta name="author" content="Naval Research Laboratory Geospatial Computing Section">
     <link rel="icon" href="favicon.ico">
-    <title>CSW Client</title>
+    <title>CSW Search</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -70,18 +70,20 @@
     <!-- Search Results Sidebar -->
     <sidebar-template ng-show="hasData"></sidebar-template>
 
+    <!-- Loading notification -->
+    <div ng-show="loadingData" class="text-center ng-cloak" id="loading-indicator">
+        <p>Loading..</p>
+        <div class="progress progress-striped active">
+            <div class="progress-bar progress-bar-success" style="width:100%"></div>
+        </div>
+    </div>
+
     <!-- ==== MAIN CONTENT ==== -->
-    <div id="main">
+    <div id="main" ng-hide="startScreen || loadingData">
 
         
         
-        <!-- Loading notification -->
-        <div ng-show="loadingData" class="text-center ng-cloak" id="loading-indicator">
-            <p>Loading..</p>
-            <div class="progress progress-striped active">
-                <div class="progress-bar progress-bar-success" style="width:100%"></div>
-            </div>
-        </div>
+        
 
         <!-- Error Message -->
         <div ng-if="hasError" class="ng-cloak">
@@ -93,14 +95,19 @@
         <!--Main Data-->
         
                 <!-- Sort Options -->
-                <div ng-show="hasData" ng-cloak>
-                    <p>
-                        <select ng-options="item as item.label for item in search.sortOptions" ng-model="search.sortOption"
-                            ng-change="getFirstPage()"></select>
-                        <span style="display: inline-block; margin-left: 18px;"><b>{{pages.totalRecords | number}}</b> records found</span>
-                    </p>
-                </div>
-                <article ng-repeat="record in curRecords" record-template index="{{$index}}" class="record"></article>
+        <div ng-show="hasData" ng-cloak>
+            <p>
+                <select ng-options="item as item.label for item in search.sortOptions" ng-model="search.sortOption"
+                    ng-change="getFirstPage()"></select>
+                <span style="display: inline-block; margin-left: 18px;"><b>{{pages.totalRecords | number}}</b> records found</span>
+            </p>
+        </div>
+
+        <!-- Records -->
+        <div ng-show="hasData">
+            <article ng-repeat="record in curRecords" record-template index="{{$index}}" class="record"></article>
+        </div>
+        
             
 
         <!-- No records found message -->
@@ -123,6 +130,7 @@
     <script src="app/util/util.js"></script>
     <script src="assets/libs/jquery/jquery.min.js"></script>
     <script src="assets/libs/angular/angular.min.js"></script>
+    <script src="assets/libs/angular/angular-animate.min.js"></script>
     <script src="assets/libs/x2js/xml2json.min.js"></script>
     <script src="assets/libs/extent/js/extenty.js"></script>
     <!-- <script src="assets/libs/bootstrap/js/bootstrap.min.js"></script> -->

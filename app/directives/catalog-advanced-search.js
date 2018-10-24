@@ -112,18 +112,7 @@ angular.module('nrlCatalog')
                     });
 
 
-                    // var projectionSelect = document.getElementById('projection');
-                    // projectionSelect.addEventListener('change', function(event) {
-                    //     mousePositionControl.setProjection(event.target.value);
-                    // });
 
-                    // var precisionInput = document.getElementById('precision');
-                    // precisionInput.addEventListener('change', function(event) {
-                    //     var format = createStringXY(event.target.valueAsNumber);
-                    //     mousePositionControl.setCoordinateFormat(format);
-                    // });
-
-                    
 
                     
 
@@ -166,7 +155,7 @@ angular.module('nrlCatalog')
                     active: true
                 });
 
-
+                
 
                 /**
                  * updates extent when user manually changes coordinate input in view
@@ -177,6 +166,9 @@ angular.module('nrlCatalog')
                     filter.extentyStyle = extentThumbnail.getBoxStyle(filter.extent);
                 };
 
+                /**
+                 * updates a filter's extent values after user selects constraint on map
+                 */
                 $scope.updateExtentFields = function(){
                     advSearchMap.currentFilter.extent = advSearchExtent.getExtent(); // set current extent filter extent to extent outline in OL extent object
                     advSearchMap.currentFilter.extentyStyle = extentThumbnail.getBoxStyle(advSearchMap.currentFilter.extent);

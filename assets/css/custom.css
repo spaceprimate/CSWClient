@@ -1,15 +1,24 @@
 /* main elements */
 
+body{
+    background: rgb(248,248,248);
+}
+
 body .no-outline {
     border: 0px;
     outline: 0px;
-    background: none;
+    
 }
 
 #main{
-    margin-top:41px;
-    margin-left: 168px;
+    margin-top:59px;
+    margin-left: 218px;
+    margin-right: 18px;
+    margin-bottom: 18px;
     padding: 24px;
+    background: white;
+    border: 1px solid #eaeaea;
+    border-radius: 2px;
 }
 
 
@@ -69,10 +78,11 @@ tr.break-word td {
 }
 
 #loading-indicator {
-    width: 250px;
+    width: 450px;
     margin: auto;
     font-weight: 300;
     font-size: 18px;
+    margin-top: 120px;
 }
 
 
@@ -146,6 +156,8 @@ tr.break-word td {
 
 /* search */
 
+
+
 .advanced-search-content {
     padding-bottom: 9px;
 }
@@ -168,25 +180,26 @@ h4 a.sm {
 }
 
 .sidebar {
-    background: #f3f3f3;
+    background: #ffffff;
     border: 1px solid #eaeaea;
-    padding: 10px;
+    border-width: 0 1px 0 0;
+    padding: 0px;
     border-radius: 0px;
     position: fixed;
     top:41px;
     left: 0px;
     bottom: 0px;
     margin: 0px;
-    width: 170px;
+    width: 200px;
     
 }
 
 .sidebar ul.sidebar-menu {
-    margin: 0 -10px 10px -10px;
+    margin: 0;
 }
 
 .sidebar ul.sidebar-menu li {
-    padding: 0 10px;
+    padding: 0 0 0 18px;
     word-break: break-word;
 }
 
@@ -200,7 +213,7 @@ h4 a.sm {
 }
 
 .sidebar hr {
-    margin: 7px -10px;
+    margin: 7px 0;
     border-top-color: #e6e6e6;
 }
 
@@ -215,19 +228,52 @@ h4 a.sm {
     z-index: 3100;
 }
 
+.sidebar button.default{background: #ffffff; border: 0px; border-bottom: 1px solid #e6e6e6; 
+    color: black; display: block; margin: 0px; 
+    padding: 16px 9px; width: 199px; text-align: left;
+}
+
+.sidebar h5{padding: 0px 12px;}
+.sidebar .extenty-wrap{
+    padding: 3px; 
+    background: deeppink;
+    margin: auto;
+    width: 106px; 
+}
+.sidebar button.default:hover{
+    background: #d8d8d8;
+    border-color: #d8d8d8;
+}
+.sidebar button .glyphicon{margin-right: 8px;}
+
 .search-container {
     overflow: visible;
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.26);
     z-index: 3000;
 
 
-    background: #f8f8f8;
+    background: #ffffff;
     padding: 7px 15px 8px 30px;
     border-bottom: 1px solid #cacaca;
     position: fixed;
     top:41px;
     right: 0px;
     left: 0px;
+    transition: transform 0.2s ease-in-out;
+    transform: scaleY(1);
+    transform-origin: top;
+    /* max-height: 1000px; */
+
+    
+}
+
+
+
+.search-container.ng-hide{
+    /* top: -1000px; */
+    transform: scaleY(0);
+    /* height: 0; */
+    /* max-height: 0; */
 }
 
 .form-inline.advanced-filter {
@@ -478,6 +524,8 @@ body .link {
 body .link:hover {
     text-decoration: underline;
 }
+
+a.details .glyphicon{font-size: 11px; color: #6b6b6b;}
 
 body .refine-clear {
     font-size: 12px;
