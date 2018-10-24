@@ -6,21 +6,30 @@ angular.module('nrlCatalog')
             controller: function($scope, $location, $anchorScroll){
                 console.log("working so far");
 
+                $scope.recordsPerPageOptions = [
+                    {value: 10, label: '10 per page'},
+                    {value: 25, label: '25 per page'},
+                    {value: 50, label: '50 per page'},
+                    {value: 100, label: '100 per page'}
+                ]
+
                 $scope.pages = {
                     curPage: 1,
                     pages: [],
                     totalRecords: 0,
-                    recordsPerPage: 10,
+                    recordsPerPage: $scope.recordsPerPageOptions[0],
                     totalPages: null,
                     pageLimits: []
                 }
+
+                
 
                 /**
                  * based on settings in pages object, this calculates how many pages are required
                  * to accomodate the number of returned records, based on the number of records per page (set by user)
                  */
                 $scope.setPages = function(){
-                    $scope.pages.totalPages = Math.ceil($scope.pages.totalRecords / $scope.pages.recordsPerPage);
+                    $scope.pages.totalPages = Math.ceil($scope.pages.totalRecords / $scope.pages.recordsPerPage.value);
                     $scope.pages.pages = [];
                     for (var i = 0; i < $scope.pages.totalPages; i++) {
                         $scope.pages.pages.push(i+1);
