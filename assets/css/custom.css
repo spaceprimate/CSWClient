@@ -36,20 +36,35 @@ tr.break-word td {
 
 .badge.tag {
     border-radius: 4px;
-    margin-right: 8px;
-    margin-bottom: 8px;
+    /* margin-right: 8px;
+    margin-bottom: 8px; */
     font-weight: 400;
     color: #5d5d5d;
-    background: #ececec;
+    background: #e0e0e0;
+    transition: background-color 0.2s ease-out;
 }
+.record-info .badge.tag{background-color: #f1f1f1;}
 
-.tagcloud>.badge.tag {
+.tagcloud>.tag-wrap{
+    
     cursor: pointer;
 }
 
-.tagcloud>.badge.tag:hover {
-    background: #337ab7;
+.tag-wrap{
+    padding: 3px;
+    display: inline-block;
+    
+}
+
+.tag-wrap>.badge.tag {
+    
+    padding: 5px 7px;
+}
+
+.tagcloud>.tag-wrap:hover>.badge.tag {
+    background: #48b04b;
     color: #fff;
+    transition: border-radius 1.5s ease-out;
 }
 
 
@@ -302,6 +317,17 @@ h4 a.sm {
     max-width: 100%;
 }
 
+/* Buttons */
+.btn-primary{
+    color: #fff;
+    background-color: #48b04b;
+    border-color: #358838;
+}
+.btn-primary:hover, .btn-primary:active {
+    color: #fff;
+    background-color: #59ca5c;
+    border-color: #48b04b;
+}
 .btn.left-icon .glyphicon{
     padding-right: 13px;
     font-size: 13px;
@@ -321,6 +347,8 @@ h4 a.sm {
 .btn.left-icon:active .vr, .btn.left-icon:focus .vr, .btn.left-icon:hover .vr{
     background: #a5a5a5;
 }
+
+a.black{color: #606060;}
 
 body .extenty-box{
     background: rgba(255, 34, 34, 0.1);

@@ -5,7 +5,7 @@
 <div class="record-info">
     <h3>{{record.title}}</h3>
     <p>{{record.abstract}}</p>
-    <p><span ng-repeat="tag in record.keywords track by $index" class="small badge tag">{{tag}}</span></p>
+    <p><div class="tag-wrap" ng-repeat="tag in record.keywords track by $index"><span class="small badge tag">{{tag}}</span></div></p>
     <p><a ng-click="viewAll = !viewAll" class="pointer no-underline details"><span class="glyphicon" ng-class=" viewAll ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right' "></span> Details</a>
     <div ng-if="viewAll">
         <table class="table table-striped table-auto">

@@ -24,7 +24,7 @@
                 <h4>CSW Search Constraints</h4>
                 <div ng-repeat="f in search.filters" class="form-inline advanced-filter" ng-class="{first:$first}">
 
-                    <select ng-model="f.type" ng-options="o.label for o in f.types" ng-change="extentStatus(f)">
+                    <select ng-model="f.type" ng-options="o.label for o in f.types" ng-change="extentStatus(f)" class="form-control">
                     </select>
 
                     <!-- Filter Type Select ============================================================================================ -->
@@ -42,17 +42,17 @@
 
                     <!--Title and Abstract constraint-->
                     <div ng-if="f.type.id == 'title' || f.type.id == 'abstract'" class="form-group">
-                        <select ng-model="f.constraint" ng-options="o.label for o in f.constraints track by o.id"></select>
-                        <input placeholder="Search term" ng-model="f.term">
+                        <select ng-model="f.constraint" ng-options="o.label for o in f.constraints track by o.id"  class="form-control"></select>
+                        <input placeholder="Search term" ng-model="f.term" class="form-control">
                     </div>
 
                     <!--AnyText constraint-->
                     <div ng-if="f.type.id != 'extent' && f.type.id != 'abstract' && f.type.id != 'title'" class="form-group">
-                        <input placeholder="Search term" ng-model="f.term">
+                        <input placeholder="Search term" ng-model="f.term" class="form-control">
                     </div>
 
                     <!--Extent constraints-->
-                    <select ng-if="f.type.id == 'extent'" ng-model="f.extentConstraint" ng-options="o.label for o in f.extentConstraints"></select>
+                    <select ng-if="f.type.id == 'extent'" ng-model="f.extentConstraint" ng-options="o.label for o in f.extentConstraints" class="form-control"></select>
                     <div ng-if="f.type.id == 'extent'" class="extent-wrapper">
                         <!-- <label class="small highlight" ng-if="f.type.id == 'extent'">Hold "Shift" to select extent on map, or enter values below</label> -->
                         <div class="clear-left"></div>
@@ -109,7 +109,7 @@
 
                 <div style="margin-top:12px;">
                     <button class="btn btn-primary" ng-click="submitSearch()">Search</button>
-                    <a href="#" class="sm" style="padding: 4px 0 0 12px;" ng-click="search.clear()">Reset</a>
+                    <a href="#" class="sm black" style="padding: 4px 0 0 12px;" ng-click="search.clear()">Reset</a>
                 </div>
             </form>
         </div>
