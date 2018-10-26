@@ -231,6 +231,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
         $scope.search.addFilter(filter);
     };
 
+    $scope.addFilter = addFilter;
+
 
 
 

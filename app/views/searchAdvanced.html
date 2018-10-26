@@ -84,7 +84,27 @@
                 </div>
                 <!-- Button to add filters -->
                 <div class="form-inline advanced-filter">
-                    <a href="#" ng-click="search.addFilter()"><span class="glyphicon glyphicon-plus dark"></span> Add constraint</a>
+                    <!-- <a href="#" ng-click="search.addFilter()"><span class="glyphicon glyphicon-plus dark"></span> Add constraint</a> -->
+                    <!-- <hr> -->
+                    <div class="btn-group" ng-class="constraintSelect ? 'open' : 'closed' ">
+                            <!-- <div ng-class=" $variableToEvaluate ? 'class-if-true' : 'class-if-false' "> -->
+                        <button type="button" class="btn btn-default dropdown-toggle left-icon" ng-click="constraintSelect = !constraintSelect">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            <span class="vr"></span> 
+                            Add Constraint 
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            
+                            <li ng-click="addFilter('title',''); constraintSelect = false;"><a class="pointer">Title</a></li>
+                            <li ng-click="addFilter('AnyText',''); constraintSelect = false;"><a class="pointer">Any</a></li>
+                            <li ng-click="addFilter('abstract',''); constraintSelect = false"><a class="pointer">Abstract</a></li>
+                            <li ng-click="addFilter('subject',''); constraintSelect = false;"><a class="pointer">Keyword</a></li>
+                            <li ng-click="toggleExtentFilter(); constraintSelect = false;"><a class="pointer">Bounding Box</a></li>
+                            <li ng-click="addFilter('type',''); constraintSelect = false;"><a class="pointer">Type</a></li>
+
+                        </ul>
+                    </div>
                 </div>
 
                 <div style="margin-top:12px;">

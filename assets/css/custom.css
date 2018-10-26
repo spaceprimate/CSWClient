@@ -302,6 +302,26 @@ h4 a.sm {
     max-width: 100%;
 }
 
+.btn.left-icon .glyphicon{
+    padding-right: 13px;
+    font-size: 13px;
+    color: #636363;
+}
+
+.btn.left-icon .vr{
+    width: 1px;
+    height: 32px;
+    background: #dfdfdf;
+    display: inline-block;
+    position: absolute;
+    left: 32px;
+    top: 0px;
+}
+
+.btn.left-icon:active .vr, .btn.left-icon:focus .vr, .btn.left-icon:hover .vr{
+    background: #a5a5a5;
+}
+
 body .extenty-box{
     background: rgba(255, 34, 34, 0.1);
 }

@@ -107,6 +107,10 @@ csw.search = function(){
         return this.filters[this.findExtentIndex()].extent;
     };
 
+    // this.setType = function(filter, type){
+        
+    // }
+
     //pushes new filter object into filters array
     this.addFilter = function(f){
         
@@ -117,6 +121,30 @@ csw.search = function(){
             this.filters.push( new csw.filter() );
         }
     };
+
+    // //pushes new filter object into filters array
+    // this.addFilterByType = function(type){
+    //     // var newType = csw.filter.prototype.types.find(function(t){return filter.id == type});
+    //     var filter = new csw.filter();
+
+    //     filter.type = filter.types.find(function(t){return t.id == type});
+
+
+    //     // this.type = this.types.find(function(t){return filter.id == t.id});
+
+    //     this.filters.push( filter );
+        
+
+
+    //     // options are: title, AnyText, abstract, subject, extent, type
+    //     // {id: "title", label: "Title", prefix: "dc:"},
+    //     // {id: "AnyText", label: "Any", prefix: "csw:"},
+    //     // {id: "abstract", label: "Abstract", prefix: "dct:"},
+    //     // {id: "subject", label: "Keyword", prefix: "dc:"},
+    //     // {id: "extent", label: "Bounding Box"},
+    //     // {id: "type", label: "type", prefix: "dc:"}
+        
+    // };
 
     //removes filter at index
     this.removeFilter = function(index){
