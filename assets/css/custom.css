@@ -130,6 +130,10 @@ tr.break-word td {
     line-height: 35px;
 }
 
+.navbar-inverse .navbar-brand:hover{
+    color: #7bff7f;
+}
+
 .navbar-nav>li>a {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -164,7 +168,7 @@ tr.break-word td {
     left: 50%;
     margin-left: -9px;
     font-size: 18px;
-    color: #f8f8f8;
+    color: #ffffff;
 
 }
 
