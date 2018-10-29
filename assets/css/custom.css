@@ -131,7 +131,8 @@ tr.break-word td {
 }
 
 .navbar-inverse .navbar-brand:hover{
-    color: #7bff7f;
+    /* color: #7bff7f; */
+    text-shadow: #00170178 0px 0px 16px;
 }
 
 .navbar-nav>li>a {
