@@ -1,4 +1,13 @@
-<ul class="pagination pull-left pagination-default" ng-show="pages.totalPages > 1 && hasData">
+
+<div class="pull-right" style="margin-left: 12px;">
+    Go To 
+    <select ng-options="p for p in getAllPageNumbers()" ng-model="selected" ng-change="goToPage(selected)">
+        <!-- <option ng-repeat="p in getAllPageNumbers()" ng-click="goToPage(p)">{{p}}</option> -->
+    </select>
+</div>
+
+
+<ul class="pagination pull-right pagination-default" ng-show="pages.totalPages > 1 && hasData">
     <li><a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1">Previous</a></li>
 
     <li ng-if="pages.pageLimits[1] > 10"><a href="#" ng-click="goToPage(1)">1</a></li>
@@ -15,7 +24,7 @@
 </ul>
 <!-- /.pagination -->
 
-<div class="pull-right form-inline" style="margin-top:20px;" ng-show="pages.totalPages > 1">
+<div class="pull-right form-inline" style="margin-right:12px;" ng-show="pages.totalPages > 1">
     <div class="form-group">
         <!-- <select ng-model="pages.recordsPerPage" class="form-control" ng-change="updatePages()">
             <option value="10" selected>10 per page</option>
@@ -23,7 +32,7 @@
             <option value="50">50 per page</option>
             <option value="100">100 per page</option>
         </select> -->
-        <select ng-model="pages.recordsPerPage" class="form-control" ng-change="updatePages()" ng-options="item.label for item in recordsPerPageOptions">
+        Show records <select ng-model="pages.recordsPerPage" class="" ng-change="updatePages()" ng-options="item.value for item in recordsPerPageOptions">
             
         </select>
     </div>

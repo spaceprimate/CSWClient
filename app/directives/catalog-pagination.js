@@ -82,6 +82,19 @@ angular.module('nrlCatalog')
                     return arr;
                 };
 
+
+                $scope.selected = 1;
+                /**
+                 * gets all the page numbers
+                 */
+                $scope.getAllPageNumbers = function(){
+                    var arr = [];
+                    for (i = 1; i <= $scope.pages.totalPages; i++){
+                        arr.push(i);
+                    }
+                    return arr;
+                }
+
                 /**
                  * increments $scope.pages.curPage
                  * creates and submits and new records request

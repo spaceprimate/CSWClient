@@ -11,7 +11,7 @@ body .no-outline {
 }
 
 #main{
-    margin-top:59px;
+    margin-top:94px;
     margin-left: 218px;
     margin-right: 18px;
     margin-bottom: 18px;
@@ -592,3 +592,32 @@ body .refine-clear {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
   }
+
+
+#main-toolbar{
+    position:fixed;
+    top: 41px;
+    left: 200px;
+    right: 0px;
+    background: #f8f8f8;
+    border-bottom: 1px solid #d8d8d8;
+    font-size: 13px;
+    padding: 3px 27px;
+    
+}
+
+#main-toolbar .pagination{margin: 0px;}
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
+    color: #fff;
+    cursor: default;
+    background-color: #a5a5a5;
+    border-color: #a5a5a5;
+}
+
+.pagination>li>a, .pagination>li>span{
+    font-size: 12px;
+    padding: 1px 6px;
+    color: #5c5c5c;
+    background-color: #f8f8f8;
+}
