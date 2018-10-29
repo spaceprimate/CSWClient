@@ -201,6 +201,12 @@ csw.search = function(){
         this.setHasExtent();
     }
 
+    //completely clears search (zero filters)
+    this.clearAll = function(){
+        this.filters = [];
+        this.setHasExtent();
+    }
+
     //initialize with 1 filter
     this.filters[0] = new csw.filter();
 }

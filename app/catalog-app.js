@@ -97,8 +97,15 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      */
     $scope.submitSearch = function(){
         $scope.showSearch = false;
+        if ($scope.search.filters.length >= 1){
+            $scope.getFirstPage();
+        }
+        else{
+            console.log("please add a filter");
+            $scope.addFilter('title', '');
+            $scope.getFirstPage();
+        }
         
-        $scope.getFirstPage();
     };
 
     /**
