@@ -105,6 +105,12 @@
 
         <!-- Records -->
         <div ng-show="hasData">
+                <div style="
+                margin: -24px -24px 0 -24px;
+                background: #ffffff;
+                padding: 5px 22px;
+                border-bottom: solid 1px #eaeaea;
+            "><b>{{pages.totalRecords | number}}</b> records found</div>
             <article ng-repeat="record in curRecords" record-template index="{{$index}}" class="record"></article>
         </div>
         
@@ -120,7 +126,7 @@
 
 
         <div id="main-toolbar">
-            <span style="display: inline-block; margin-right: 18px;"><b>{{pages.totalRecords | number}}</b> records found</span>
+            
             Sort by <select ng-options="item as item.label for item in search.sortOptions" ng-model="search.sortOption"
                             ng-change="getFirstPage()"></select>
                         
