@@ -83,7 +83,8 @@ angular.module('nrlCatalog')
                 };
 
 
-                $scope.selected = 1;
+                
+
                 /**
                  * gets all the page numbers
                  */
@@ -115,6 +116,9 @@ angular.module('nrlCatalog')
                     $scope.requestRecords(recordRequest);
                 };
 
+                // separate model maintained for GoTo dropdown
+                $scope.goToPageModel = 1;
+
                 /**
                  * Loads records for a arbitrary page #
                  * creates and submits and new records request
@@ -122,6 +126,7 @@ angular.module('nrlCatalog')
                  */
                 $scope.goToPage = function(page){
                     setCurPage(page);
+                    $scope.goToPageModel = 1;
                     var recordRequest = $scope.search.createRequest($scope.pages);
                     $scope.requestRecords(recordRequest);
                 };

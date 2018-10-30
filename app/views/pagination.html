@@ -1,7 +1,9 @@
 
 <div class="pull-right" style="margin-left: 12px;">
     Go To 
-    <select ng-options="p for p in getAllPageNumbers()" ng-model="selected" ng-change="goToPage(selected)">
+    <select ng-options="p for p in getAllPageNumbers()" ng-model="goToPageModel" ng-change="goToPage(goToPageModel)">
+    <!-- <select>
+        <option ng-repeat="p in getAllPageNumbers()" ng-click="consol.log('test test test test')">{{p}}</option> -->
         <!-- <option ng-repeat="p in getAllPageNumbers()" ng-click="goToPage(p)">{{p}}</option> -->
     </select>
 </div>
@@ -14,7 +16,7 @@
     <li ng-if="pages.pageLimits[1] > 10"><a href="" class="ellipsis">...</a></li>
 
     <li ng-repeat="p in getPageNumbers()" ng-click="goToPage(p)" ng-class="{'active' : p == pages.curPage}">
-        <a href="#" ng-click="goToPage(p)">{{p}}</a>
+        <a href="#" >{{p}}</a>
     </li>
 
     <li ng-if="pages.pageLimits[1] < pages.totalPages"><a href="" class="ellipsis">...</a></li>
