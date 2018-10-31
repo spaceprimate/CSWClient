@@ -40,7 +40,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <div class="navbar-brand pointer" ng-click="loadWelcome(); $event.stopPropagation();">
-                    CSW Client
+                    CSW Search
                 </div>
                 <a href="#"  class="search-toggle" ng-click="searchBarToggle()" alt="Search CSW Records" title="Search CSW Records">
                     <span class="glyphicon glyphicon-search"></span>
@@ -125,13 +125,15 @@
         </div>
 
 
-        <div id="main-toolbar">
-            
-            Sort by <select ng-options="item as item.label for item in search.sortOptions" ng-model="search.sortOption"
-                            ng-change="getFirstPage()"></select>
-                        
+        <div id="main-toolbar" class="toolbar" ng-show="hasData" ng-cloak>
+            <div class="toolbar-item pull-left">
+                <label>Sort by: </label>
+                <div class="select-wrap">
+                    <select ng-options="item as item.label for item in search.sortOptions" ng-model="search.sortOption"
+                                ng-change="getFirstPage()"></select>
+                </div>    
+            </div>            
                     
-            
             <!-- Pagination -->
             <pagination-template></pagination-template>
         </div>

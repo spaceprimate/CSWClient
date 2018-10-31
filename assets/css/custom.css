@@ -11,7 +11,7 @@ body .no-outline {
 }
 
 #main{
-    margin-top:94px;
+    margin-top:81px;
     margin-left: 218px;
     margin-right: 18px;
     margin-bottom: 18px;
@@ -556,11 +556,36 @@ body .refine-clear {
     background: #f8f8f8;
     border-bottom: 1px solid #d8d8d8;
     font-size: 13px;
-    padding: 3px 27px;
+    padding: 0px 27px;
     
 }
 
 #main-toolbar .pagination{margin: 0px;}
+.toolbar .glyphicon{font-size: 10px; top: 0px; color: #9c9c9c;}
+
+.toolbar-item{ }
+.toolbar-item label{padding: 0px; margin: 0px; font-weight: 400; color: #616161;}
+.toolbar-item.pull-right{margin-left: 18px;}
+.toolbar-item.pull-left{margin-right: 18px;}
+
+.toolbar .select-wrap{
+    border-left: 1px solid #d8d8d8; 
+    border-right: 1px solid #d8d8d8; 
+    display: inline-block;
+    padding: 1px 0;
+}
+.toolbar .select-wrap select{border: none;}
+
+.toolbar-buttons{}
+.toolbar-buttons .toolbar-button{border-left: #d8d8d8 1px solid; border-right: none;}
+.toolbar-buttons .toolbar-button:last-child{border-right: #d8d8d8 1px solid;}
+.toolbar-button{
+    display: inline-block;
+    padding: 1px 4px;
+    border-right: #d8d8d8 1px solid;
+    border-left: #d8d8d8 1px solid;
+    color: #333333;
+}
 
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
     color: #fff;

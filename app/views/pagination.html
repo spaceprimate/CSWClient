@@ -1,14 +1,20 @@
 
-<div class="pull-right" style="margin-left: 12px;">
-    Go to page
-    <select ng-options="p for p in getAllPageNumbers()" ng-model="goToPageModel" ng-change="goToPage(goToPageModel)">
-    <!-- <select>
-        <option ng-repeat="p in getAllPageNumbers()" ng-click="consol.log('test test test test')">{{p}}</option> -->
-        <!-- <option ng-repeat="p in getAllPageNumbers()" ng-click="goToPage(p)">{{p}}</option> -->
-    </select>
+<div class="pull-right toolbar-item toolbar-buttons" style="margin-left: 18px;" ng-show="pages.totalPages > 1 && hasData">
+    <a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1" class="toolbar-button"><span class="glyphicon glyphicon-chevron-left"></span>Previous</a><a href="#" ng-click="getNextPage()" ng-if="pages.curPage < pages.totalPages" class="toolbar-button">Next <span class="glyphicon glyphicon-chevron-right"></span></a>
 </div>
 
+<div class="pull-right toolbar-item" style="margin-left: 18px;" ng-show="pages.totalPages > 1 && hasData">
+    <label>Page <b>{{pages.curPage}}</b> of <b>{{pages.totalPages}}</b></label>
+</div>
 
+<div class="pull-right toolbar-item" ng-show="pages.totalPages > 1 && hasData">
+    <label>Go to page: </label>
+    <div class="select-wrap">
+        <select ng-options="p for p in getAllPageNumbers()" ng-model="goToPageModel" ng-change="goToPage(goToPageModel)"></select>
+    </div>
+</div>
+
+<!-- 
 <ul class="pagination pull-right pagination-default" ng-show="pages.totalPages > 1 && hasData">
     <li><a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1">Previous</a></li>
 
@@ -23,19 +29,14 @@
     <li ng-if="pages.pageLimits[1] < pages.totalPages"><a href="#" ng-click="goToPage(pages.totalPages)">{{pages.totalPages}}</a></li>
 
     <li><a href="#" ng-click="getNextPage()" ng-if="pages.curPage < pages.totalPages">Next</a></li>
-</ul>
+</ul> -->
 <!-- /.pagination -->
 
-<div class="pull-right form-inline" style="margin-right:12px;" ng-show="pages.totalPages > 1">
-    <div class="form-group">
-        <!-- <select ng-model="pages.recordsPerPage" class="form-control" ng-change="updatePages()">
-            <option value="10" selected>10 per page</option>
-            <option value="25">25 per page</option>
-            <option value="50">50 per page</option>
-            <option value="100">100 per page</option>
-        </select> -->
-        Show records <select ng-model="pages.recordsPerPage" class="" ng-change="updatePages()" ng-options="item.value for item in recordsPerPageOptions">
-            
-        </select>
-    </div>
+<div class="pull-right toolbar-item">
+    
+        <label>Show records: </label>
+        <div class="select-wrap">
+            <select ng-model="pages.recordsPerPage" class="" ng-change="updatePages()" ng-options="item.value for item in recordsPerPageOptions"></select>
+        </div>
+
 </div>
