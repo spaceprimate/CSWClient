@@ -3,7 +3,7 @@ angular.module('nrlCatalog')
         return{
             restrict: 'E',
             templateUrl:   'app/views/pagination.html',
-            controller: function($scope, $location, $anchorScroll){
+            controller: function($scope){
                 console.log("working so far");
 
                 $scope.recordsPerPageOptions = [

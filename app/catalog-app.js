@@ -18,10 +18,12 @@ nrlCatalog.config(function($httpProvider) {
  * main controller
  * injects $scope and $http ( for post requests )
  */
-nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$anchorScroll', function($scope, $http, $location, $anchorScroll) {
+nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
 
     //CSW Endpoint
     // var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
+    // var cswUrl = "https://www.sciencebase.gov/catalog/item/4f554236e4b018de15819c85/csw?service=CSW&version=2.0.2";
+    
     var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
@@ -62,8 +64,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
 
     $scope.displaySearch = function(){
         $scope.showSearch = true;
-        $location.hash('body');
-        $anchorScroll(); //scroll to top
+        // $location.hash('body');
+        // $anchorScroll(); //scroll to top
     };
 
     $scope.hideSearch = function(){
@@ -144,7 +146,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
      * makes an ajax POST GetDomain request to CSW server
      * @param {string} - name of property
      * @param {method} - optional method to further process values (remove dupes or extraneous data)
-     *                      needed to to idiosycrasies bewteen CSWs and metadata format and volume
+     *                      needed to handle idiosycrasies bewteen CSWs and metadata format and volume
      */
     function requestDomain(property, filter){
         var query =   '<csw:GetDomain xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" version="2.0.2" service="CSW">' +

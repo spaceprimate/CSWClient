@@ -178,8 +178,8 @@ angular.module('nrlCatalog')
 
                 $scope.loadExtentSelector = function(filter){
                     //scroll to top of page
-                    $location.hash('main');
-                    $anchorScroll();
+                    // $location.hash('main');
+                    // $anchorScroll();
 
                     advSearchMap.currentFilter = filter;
 
