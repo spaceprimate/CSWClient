@@ -89,6 +89,14 @@ nrlCatalog.controller('mainController', ['$scope', '$http', '$location', '$ancho
         $scope.hasError = false;
         $scope.hasData = false;
     }
+
+    $scope.welcomeScreenInput = "";
+
+    $scope.welcomeScreenSearchSubmit = function(){
+        $scope.search.clearAll();
+        $scope.addFilter('AnyText', $scope.welcomeScreenInput);
+        $scope.submitSearch();
+    }
     
     /**
      * Sets $scope.curSearch value and calls method to retrieve the first set of pages

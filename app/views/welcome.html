@@ -1,8 +1,14 @@
 <div class="container full-width-content">
     <div class="row">
         <div class="col-md-5">
-            <h1 class="page-title">CSW Client</h1>
-            <hr>
+            <!-- <h1 class="page-title">CSW Client</h1> -->
+            <div class="xl-input-container">
+                <form ng-submit="welcomeScreenSearchSubmit()">
+                    <input placeholder="search term" type="text" class="xl" ng-model="welcomeScreenInput"/>
+                    <button class="xl-input-submit"><span class="glyphicon glyphicon-search"></span></button>
+                </form>
+            </div>
+            <!-- <hr> -->
             
             <p>Enter search term above to get started, or <b><a href="#" ng-click="viewAllRecords()">view all records</a></b></p>
 

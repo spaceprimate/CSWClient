@@ -544,6 +544,61 @@ body .refine-clear {
 
 .full-width-content{margin-top: 41px; padding-top: 24px;}
 
+.xl-input-container{
+    position: relative;
+    display: block;
+    width: 100%;
+}
+.xl-input-submit{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    background: none;
+    border: 0px;
+    height: 40px;
+    color: #9a9a9d;
+    width: 35px;
+    font-size: 20px;
+    padding-top: 21px;
+}
+.xl-input-submit:focus{
+
+}
+input.xl{
+    background: none;
+    border: 0px;
+    border-bottom: 1px solid #9b9b9b;
+    width: 100%;
+    display: block;
+    font-size: 27px;
+    margin: 51px 0 36px 0;
+    padding: 12px 8px 0 8px;
+}
+input.xl:focus{
+    outline: 0px;
+    border-bottom: 3px solid #9b9b9b;
+    margin-bottom: 34px;
+    background: #efefef;
+}
+/* input.xl::placeholder, input.xl:-ms-input-placeholder, input.xl::-ms-input-placeholder,  */
+
+input.xl::-ms-input-placeholder {
+    font-style: italic; 
+    color: rgb(168, 168, 168);
+}
+input.xl::-moz-placeholder{
+    font-style: italic; 
+    color: rgb(168, 168, 168);
+}
+
+input.xl::-webkit-input-placeholder {
+    font-style: italic; 
+    color: rgb(168, 168, 168);
+}
+/* ::-webkit-input-placeholder {
+    color: orange;
+  } */
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
   }
