@@ -1,3 +1,5 @@
+var debug;
+
 /*
  * App for interfacing with CSW services to browse and seach records
  * - note: This app uses POST XML to request CSW records, requiring the CSW to allow CORS for the client domain
@@ -38,6 +40,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     //optional- can hold arrays of all existing entries for specific CSW properties (eg. 'subject')
     $scope.domain = {};
+
+    // temp! delete! temp delete
+    debug = $scope.domain;
 
     // Welcome screen, displayed until initial request is submitted
     $scope.startScreen = true;
@@ -210,7 +215,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                         id: v.toString(),
                         active: false
                     }
-                    
                 );
             }
         });
@@ -230,6 +234,47 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
         return found;
     };
+
+    /**
+     * Gets all the values of a given domain type and returns them as an array
+     * @return  - an array of values
+     */
+    $scope.getDomainValues = function(type){
+        var values = [];
+        if($scope.domain[type] != undefined){
+            $scope.domain[type].values.forEach(function(v){
+                values.push(v.id);
+            });
+        }
+        return values;
+    }
+
+    /**
+     * 
+     */
+    $scope.autoComplete = function(f){
+        if(f.term == ""){
+            f.autoTerms = null;
+        }
+        else{
+            var keywords = $scope.getDomainValues(f.type.id);
+            var output=[];
+            
+            angular.forEach(keywords,function(val){
+                if(val.toLowerCase().indexOf(f.term.toLowerCase())>=0){
+                    output.push(val);
+                }
+            });
+            f.autoTerms=output;
+        }
+    }
+
+    $scope.fillAutoComplete = function(f, term){
+        f.term = term;
+        f.autoTerms = null;
+    }
+
+
 
     /**
      * Adds a filter of to $scope.searches.advancedSearch

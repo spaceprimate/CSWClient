@@ -169,6 +169,37 @@ tr.break-word td {
     margin: auto;
 }
 
+.autocomplete-item{
+    position: relative;
+}
+
+
+ul.autocomplete-list{
+    position: absolute;
+    z-index: 9999;
+    top: 31px;
+    min-width: 172px;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    border: 1px solid #cccccc;
+    border-bottom: 0px;
+    /* display: none; */
+    max-height: 400px; 
+    overflow: auto;
+
+}
+ul.autocomplete-list li{
+    background: #f1f1f1;
+    padding: 2px 6px;
+    border-bottom: 1px solid #cccccc;
+    font-size: 13px;
+    cursor: pointer;
+}
+ul.autocomplete-list li:hover{
+    background: #e0e0e0;
+}
+
 h4 a.sm {
     padding: 4px 0 0 12px;
     font-size: 14px;
