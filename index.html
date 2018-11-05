@@ -36,7 +36,7 @@
     <div style="position: fixed; background: #48b04b; top: 0px; right: 0px; bottom: 0px; left: 0px;" ng-style="{'display':'none'}"></div>
 
     <!-- ==== HEAD NAVBAR ==== -->
-    <header id="main-navbar" class="navbar navbar-static-top navbar-inverse navbar-compact" style="background: #f8f8f8; height: 2000px;" ng-style="{'height':'41px', 'background':'#4CAF50'}" ng-cloak>
+    <header id="main-navbar" class="navbar navbar-static-top navbar-inverse navbar-compact" style="background: #f8f8f8; height: 2000px;" ng-style="{'height':'41px', 'background':'#4CAF50'}" ng-cloak ng-class="showSearch ? 'active' : 'inactive'">
         <div class="container-fluid">
             <div class="navbar-header">
                 <div class="navbar-brand pointer" ng-click="loadWelcome(); $event.stopPropagation();">
@@ -44,6 +44,7 @@
                 </div>
                 <a href="#"  class="search-toggle" ng-click="searchBarToggle()" alt="Search CSW Records" title="Search CSW Records">
                     <span class="glyphicon glyphicon-search"></span>
+                    <img src="assets/img/search-indicator-arrow.png" class="bottom-arrow" />
                 </a>
             </div>
         </div>
@@ -52,9 +53,9 @@
 
     <!-- SEARCH CONSTRAINTS -->
     <div  class="search-container" ng-show="showSearch" ng-cloak>
-        <div class="triangle-graphic">
+        <!-- <div class="triangle-graphic">
             <span class="glyphicon glyphicon-triangle-top"></span>
-        </div>
+        </div> -->
         <div class="container">
             <a href="#" ng-click="searchBarToggle(); $event.stopPropagation();" class="bottom-toggle" ng-show="showSearch" alt="Minimize Search Menu" title="Minimize Search Menu">
                 <span class="glyphicon glyphicon-chevron-up" ></span>
