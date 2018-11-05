@@ -46,9 +46,9 @@
                         <input placeholder="Search term" ng-model="f.term" class="form-control">
                     </div>
 
-                    <!--AnyText constraint-->
+                    <!--AnyText or type constraints-->
                     <!-- <div ng-if="f.type.id != 'extent' && f.type.id != 'abstract' && f.type.id != 'title'" class="form-group"> -->
-                    <div ng-if="f.type.id =='AnyText'" class="form-group">
+                    <div ng-if="f.type.id =='AnyText' || f.type.id == 'type'" class="form-group">
                         <input placeholder="Search term" ng-model="f.term" class="form-control">
                     </div>
 
@@ -61,11 +61,6 @@
                     </div>
 
 
-
-                    <!-- <div>
-                        blorp
-                        <span ng-repeat="k in getDomainValues('subject')">{{k}}</span>
-                    </div> -->
                     
 
                     <!--Extent constraints-->

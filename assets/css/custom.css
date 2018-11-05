@@ -417,6 +417,13 @@ tr.record-table td {
     min-width: 100px;
 }
 
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ececec;
+}
+
 .record-info {
     padding-right: 120px;
 }

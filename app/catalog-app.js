@@ -38,7 +38,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     $scope.showSearch = false;
 
-    //optional- can hold arrays of all existing entries for specific CSW properties (eg. 'subject')
+    // optional- Holds arrays of all existing entries for specific CSW properties (eg. 'subject')
+    // useful if you need to list all possible 'subject' or 'type' options for a given CSW source
     $scope.domain = {};
 
     // temp! delete! temp delete
@@ -112,6 +113,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.submitSearch = function(){
         $scope.showSearch = false;
+        refreshDomain();
         if ($scope.search.filters.length >= 1){
             $scope.getFirstPage();
         }
@@ -224,6 +226,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
     }
 
+    /**
+     * Checks to see if domain contains a given property
+     * @param - property-type to search
+     * @param - property to search for
+     */
     domainHasProperty = function(type, property){
         var found = false;
         for(var i = 0; i < $scope.domain[type].values.length; i++) {
@@ -250,7 +257,49 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     }
 
     /**
-     * 
+     * resets all properties 'active' state to false
+     * currently implemented for only 'subject' and 'type' types
+     */
+    function resetDomain(){
+        if($scope.domain.subject != undefined){
+            $scope.domain.subject.values.forEach(function(e){
+                e.active = false;
+            });
+        }
+        if($scope.domain.type != undefined){
+            $scope.domain.type.values.forEach(function(e){
+                e.active = false;
+            });
+        }
+    }
+
+    /**
+     * Iterates through search filters. If filter type is 'type' or 'subject', 
+     * set the corresponding element of the domain to 'active'
+     */
+    function refreshDomain(){
+        resetDomain();
+        $scope.search.filters.forEach(function(e){
+            if (e.type.id == "subject" && $scope.domain.subject != undefined){
+                $scope.domain.subject.values.forEach(function(ee){
+                    if(e.term == ee.id){
+                        ee.active = true;
+                    }
+                });
+            }
+            else if (e.type.id == "type" && $scope.domain.type != undefined){
+                $scope.domain.type.values.forEach(function(ee){
+                    if(e.term == ee.id){
+                        ee.active = true;
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * searches domain for possible auto-complete terms
+     * as user enters a term into a input field
      */
     $scope.autoComplete = function(f){
         if(f.term == ""){
@@ -269,11 +318,14 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
     }
 
+    /**
+     * When user selects an auto-complete suggestion, this enters it into the 
+     * filter term field and clears the auto-complete suggestion list (f.autoTerms)
+     */
     $scope.fillAutoComplete = function(f, term){
         f.term = term;
         f.autoTerms = null;
     }
-
 
 
     /**
@@ -282,13 +334,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @param {string}
      * @param {string} - optional
      */
-    addFilter = function(id, term, constraint){
+    addFilter = function(id, term){
         var filter = {
             id: id,
             term: term
-        }
-        if (constraint){
-            filter.constraint = constraint;
         }
         $scope.search.addFilter(filter);
     };
@@ -308,17 +357,18 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      *                 - this allows for the selection of multiple keywords of the same type ('subject')
      * @param {string} - constraint: optional. This isn't used, not sure why it's included. 
      */
-    $scope.refineSearch = function(type, term, multiSelect, constraint){
-        if (!multiSelect){
-            $scope.clearFilterType(type);
-        }
+    $scope.refineSearch = function(type, term, multiSelect){
+        
         if ($scope.domain[type].values.find(function(e){return e.id == term}).active){
             $scope.domain[type].values.find(function(e){return e.id == term}).active = false;
             $scope.search.removeFilterTypeId(type, term);
             $scope.submitSearch(); 
         }
         else{
-            addFilter(type,term,constraint);
+            if (!multiSelect){
+                $scope.clearFilterType(type);
+            }
+            addFilter(type,term);
             $scope.domain[type].values.find(function(e){return e.id == term}).active = true;
             $scope.submitSearch(); 
         }
