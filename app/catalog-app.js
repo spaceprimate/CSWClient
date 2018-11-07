@@ -9,7 +9,7 @@ var debug;
 var nrlCatalog = angular.module('nrlCatalog', [ 'ngAnimate' ]);
 
 // init extenty- handles extent thumbnails
-var extentThumbnail = new extenty();
+var extentThumbnail = new extenty(100,100);
 
 nrlCatalog.config(function($httpProvider) {
     //Enable cross domain calls
@@ -43,7 +43,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.domain = {};
 
     // temp! delete! temp delete
-    debug = $scope.domain;
+    debug = $scope.curRecords;
 
     // Welcome screen, displayed until initial request is submitted
     $scope.startScreen = true;
@@ -484,6 +484,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
             // 1 or more records returned
             else  {
+                console.log("search results: ");
+                console.log(jsonData.GetRecordsResponse.SearchResults);
                 addRecords(jsonData.GetRecordsResponse.SearchResults);
             }
 
@@ -524,7 +526,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             records.Record = [tmp];
         }
 
-        records.Record.forEach(function(e, i) {
+        records.Record.forEach(function(e, i) { // element, index
             var item = {};
             item.title = getSafe(function(){ return  e.title.toString() });
             item.keywords = [];
@@ -539,6 +541,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             item.lowerCorner = getSafe( function(){ return  e.BoundingBox.LowerCorner.toString() });
             item.upperCorner = getSafe( function(){ return e.BoundingBox.UpperCorner.toString() });
             item.extent = getExtentFromCorners(item.lowerCorner, item.upperCorner);
+            item.identifier = getSafe( function(){ return e.identifier.toString() });
 
             item.info = [];
             if ( getSafe( function(){ return e.date.toString()        }) != undefined ){ item.info.push(["Date", e.date.toString()]);}
@@ -556,6 +559,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         });
         $scope.hasData = true;
         $scope.loadingData = false;
+        console.log($scope.curRecords);
     }
 
 /* 
@@ -607,7 +611,9 @@ nrlCatalog.directive('recordTemplate', function() {
         templateUrl:   'app/views/record.html',
         controller: function($scope){
             $scope.viewAll = false;
-            $scope.boxStyle = extentThumbnail.getBoxStyle($scope.flipExtent($scope.record.extent));
+            var smExtentThumb = new extenty(69,69);
+            $scope.boxStyle = smExtentThumb.getBoxStyle($scope.flipExtent($scope.record.extent));
+            // $scope.boxStyle = extentThumbnail.getBoxStyle($scope.flipExtent($scope.record.extent));
         }
     }
 });

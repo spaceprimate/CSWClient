@@ -1,37 +1,106 @@
-<div class="extenty pull-right record-thumbnail">
+<div class="extenty sm record-thumbnail">
     <div class="extenty-box" ng-style="boxStyle"></div>
 </div>
 
 <div class="record-info">
     <h3>{{record.title}}</h3>
     <p>{{record.abstract}}</p>
-    <p><div class="tag-wrap" ng-repeat="tag in record.keywords track by $index"><span class="small badge tag">{{tag}}</span></div></p>
-    <p><a ng-click="viewAll = !viewAll" class="pointer no-underline details"><span class="glyphicon" ng-class=" viewAll ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right' "></span> Details</a>
-    <div ng-if="viewAll">
-        <table class="table table-striped table-auto">
-            <tr ng-if="record.extent[0] != null">
-                <td>Extent</td>
-                <td>
-                    <span ng-repeat="e in record.extent track by $index">{{e}}<span ng-if="$index < 3">, </span></span>
-                </td>
-            </tr>
-
-            <tr ng-repeat="i in record.info" ng-switch="i[0]" class="break-word record-table">
-                <td>{{i[0]}}</td>
-                <td ng-switch-when="References">
-                        <ul style="margin: 0px; padding-left: 15px;">
-                            <li ng-repeat="ref in i[1].split(',')"><a href="{{ref}}">{{ref}}</a></li>
-                        </ul>
-                </td>
-                <td ng-switch-when="Source">
-                    <a href="{{i[1]}}">{{i[1]}}</a>
-                </td>
-                <td ng-switch-default>
-                    {{i[1]}}
-                </td>
-            </tr>
-        </table>
+    <div class="record-tags">
+        <div class="tag-wrap" ng-repeat="tag in record.keywords track by $index"><span class="small badge tag">{{tag}}</span></div>
     </div>
+
+    <p>
+        <a ng-click="viewAll = !viewAll" class="pointer no-underline details" ng-hide="viewAll">
+            <span class="glyphicon glyphicon-chevron-down"></span>
+            View full record
+        </a>
+        <a ng-click="viewAll = !viewAll" class="pointer no-underline details" ng-show="viewAll">
+            <span class="glyphicon glyphicon-chevron-up"></span>
+            Hide full record
+        </a>
+    </p>
+
 </div>
 <div class="clearfix"></div>
-<hr>
+
+<div ng-if="viewAll">
+    <table class="table table-striped table-auto">
+        <tr ng-if="record.title != null">
+            <td>Title</td>
+            <td>
+                {{record.title}}
+            </td>
+        </tr>
+
+        <!-- Identifier -->
+
+        <tr ng-if="record.identifier != null">
+            <td>Identifier</td>
+            <td>
+                {{record.identifier}}
+            </td>
+        </tr>
+
+        <tr ng-if="record.abstract != null">
+            <td>Abstract</td>
+            <td>
+                {{record.abstract}}
+            </td>
+        </tr>
+
+
+
+        <!-- <tr ng-if="record.extent[0] != null">
+                    <td>Extent</td>
+                    <td>
+                        <span ng-repeat="e in record.extent track by $index">{{e}}<span ng-if="$index < 3">, </span></span>
+                    </td>
+                </tr> -->
+
+
+
+        <!-- make this Bounding box: Upper corner, Lower corner -->
+        <tr ng-if="record.upperCorner != null && record.lowerCorner != null">
+            <td>Bounding Box</td>
+            <td>
+                <table>
+                    <tr ng-if="record.upperCorner != null">
+                        <td>Upper corner: </td>
+                        <td>
+                            {{record.upperCorner}}
+                        </td>
+                    </tr>
+                    <tr ng-if="record.lowerCorner != null">
+                        <td>Lower corner: </td>
+                        <td>
+                            {{record.lowerCorner}}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+
+
+
+
+
+        <!-- subject -->
+
+
+        <tr ng-repeat="i in record.info" ng-switch="i[0]" class="break-word record-table">
+            <td>{{i[0]}}</td>
+            <td ng-switch-when="References">
+                <ul style="margin: 0px; padding-left: 15px;">
+                    <li ng-repeat="ref in i[1].split(',')"><a href="{{ref}}">{{ref}}</a></li>
+                </ul>
+            </td>
+            <td ng-switch-when="Source">
+                <a href="{{i[1]}}">{{i[1]}}</a>
+            </td>
+            <td ng-switch-default>
+                {{i[1]}}
+            </td>
+        </tr>
+    </table>
+</div>

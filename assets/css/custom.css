@@ -40,6 +40,10 @@ tr.break-word td {
 }
 .record-info .badge.tag{background-color: #f1f1f1;}
 
+.record-tags{
+
+}
+
 .tagcloud>.tag-wrap{
     cursor: pointer;
 }
@@ -68,6 +72,11 @@ tr.break-word td {
 .table-auto {
     width: auto;
 }
+.table-striped{
+    border: 1px solid #ececec;
+}
+
+.table-striped td{min-width: 112px;}
 
 .clear-left,
 .clearleft {
@@ -371,13 +380,29 @@ body .extenty-box{
     background: rgba(255, 34, 34, 0.1);
 }
 
+.extenty{
+    background: url("../libs/extent/img/map-blue-white.png"); 
+    background-size: 100px 100px;
+    width: 106px;
+    height: 106px; 
+    border: 3px solid #e0e0e0;
+}
+
+.extenty.sm{
+    background: url("../libs/extent/img/map-blue-white.png"); 
+    background-size: 69px 69px;
+    width: 75px;
+    height: 75px; 
+    border: 3px solid #e0e0e0;
+}
+
 .extent-wrapper{
     position: relative;
     min-height: 83px;
 }
 .extent-wrapper .record-thumbnail{
     position: absolute; 
-    top: -20px;
+    top: -32px;
     right: 28px;
 }
 
@@ -439,9 +464,29 @@ tr.record-table td {
     vertical-align: top;
     border-top: 1px solid #ececec;
 }
-
+.record{
+    margin-top: 15px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #eeeeee;
+    overflow: hidden;
+    position: relative;
+}
+.record p{margin-bottom: 9px;}
+.record .tag-wrap{padding-top: 0px; padding-bottom: 9px;}
+.record .record-thumbnail{
+    position: absolute;
+    top: 0px; 
+    left: 0px;
+}
 .record-info {
-    padding-right: 120px;
+    float: left; 
+    padding-left: 18px;
+    margin-left: 74px;
+    min-height: 88px;
+}
+.record-info h3{
+    margin: 0 0 9px 0;
+    font-size: 20px;
 }
 
 .record-thumbnail {

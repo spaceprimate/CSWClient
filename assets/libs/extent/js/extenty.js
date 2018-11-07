@@ -1,6 +1,12 @@
-function extenty(){
+function extenty(w, h){
+
     var baseWidth = 100; // in pixels
     var baseHeight = 100;
+    
+    if(w != undefined && h != undefined){
+        baseWidth = w;
+        baseHeight = h;
+    }
     
 
     /**

@@ -12,25 +12,15 @@ angular.module('nrlCatalog')
                     return [-180, -90, 180, 90];
                 }
 
-                // $scope.defaultExtent = [-180, -90, 180, 90];
                 $scope.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
 
                 $scope.mapClass = "cross-hair";
-
-                var vectorSource = new ol.source.Vector({
-                    url: 'https://openlayers.org/en/v4.0.1/examples/data/geojson/countries.geojson',
-                    format: new ol.format.GeoJSON()
-                });
                 
                 // Open Street Maps layer
                 var osmLayer = new ol.layer.Tile({
                     source: new ol.source.OSM()
                 });
-                //Country Outlines layer
-                var countriesLayer = new ol.layer.Vector({
-                    source: vectorSource
-                });
-
+                
                 $scope.extentSelectVisibility = false;
 
                 var mapCreated = false;
@@ -93,10 +83,8 @@ angular.module('nrlCatalog')
                         undefinedHTML: '103.4839, 28.3930'
                       });
 
-
-
                     advSearchMap = new ol.Map({
-                        layers: [osmLayer, countriesLayer],
+                        layers: [osmLayer],
                         target: 'adv-search-map',
                         controls: ol.control.defaults({
                             zoom: true,
@@ -107,7 +95,7 @@ angular.module('nrlCatalog')
                             center: [0, 0],
                             projection: 'EPSG:4326',
                             zoom: 2,
-                            minZoom: 2,
+                            minZoom: 2
                         })
                     });
 
