@@ -8,7 +8,6 @@ function extenty(w, h){
         baseHeight = h;
     }
     
-
     /**
      * Cycle through all the elements with the "extenty-box" class. 
      * Get the coordinates in the dat-coords attribute

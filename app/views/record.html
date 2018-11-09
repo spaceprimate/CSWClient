@@ -10,13 +10,10 @@
     </div>
 
     <p>
-        <a ng-click="viewAll = !viewAll" class="pointer no-underline details" ng-hide="viewAll">
-            <span class="glyphicon glyphicon-chevron-down"></span>
-            View full record
-        </a>
-        <a ng-click="viewAll = !viewAll" class="pointer no-underline details" ng-show="viewAll">
-            <span class="glyphicon glyphicon-chevron-up"></span>
-            Hide full record
+        <a ng-click="viewAll = !viewAll" class="pointer no-underline details" >
+            <span class="glyphicon glyphicon-chevron-down" ng-hide="viewAll"></span>
+            <span class="glyphicon glyphicon-chevron-up" ng-show="viewAll"></span>
+            Full record
         </a>
     </p>
 
@@ -32,8 +29,6 @@
             </td>
         </tr>
 
-        <!-- Identifier -->
-
         <tr ng-if="record.identifier != null">
             <td>Identifier</td>
             <td>
@@ -47,19 +42,7 @@
                 {{record.abstract}}
             </td>
         </tr>
-
-
-
-        <!-- <tr ng-if="record.extent[0] != null">
-                    <td>Extent</td>
-                    <td>
-                        <span ng-repeat="e in record.extent track by $index">{{e}}<span ng-if="$index < 3">, </span></span>
-                    </td>
-                </tr> -->
-
-
-
-        <!-- make this Bounding box: Upper corner, Lower corner -->
+        
         <tr ng-if="record.upperCorner != null && record.lowerCorner != null">
             <td>Bounding Box</td>
             <td>
@@ -79,14 +62,6 @@
                 </table>
             </td>
         </tr>
-
-
-
-
-
-
-        <!-- subject -->
-
 
         <tr ng-repeat="i in record.info" ng-switch="i[0]" class="break-word record-table">
             <td>{{i[0]}}</td>

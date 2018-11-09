@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,7 +18,7 @@
     <!-- Custom styles for this template -->
     <link href="assets/libs/extent/css/extenty.css" rel="stylesheet">
     <link href="assets/css/custom.css" rel="stylesheet">
-    
+
 
     <!-- font -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i" rel="stylesheet">
@@ -34,16 +35,24 @@
 
 <body ng-app="nrlCatalog" ng-controller="mainController" id="body">
 
-    <div style="position: fixed; background: #48b04b; top: 0px; right: 0px; bottom: 0px; left: 0px;" ng-style="{'display':'none'}"></div>
+    <div style="position: fixed; background: #48b04b; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 999999;"
+        ng-style="{'display':'none'}">
+
+
+        <div class="progress progress-striped active" style="margin-top: 0px; border-radius: 0px; height: 10px; display: none;">
+            <div class="progress-bar progress-bar-success" style="width:100%"></div>
+        </div>
+    </div>
 
     <!-- ==== HEAD NAVBAR ==== -->
-    <header id="main-navbar" class="navbar navbar-static-top navbar-inverse navbar-compact" style="background: #f8f8f8; height: 2000px;" ng-style="{'height':'41px', 'background':'#4CAF50'}" ng-cloak ng-class="showSearch ? 'active' : 'inactive'">
+    <header id="main-navbar" class="navbar navbar-static-top navbar-inverse navbar-compact" style="background: #f8f8f8; height: 2000px;"
+        ng-style="{'height':'41px', 'background':'#4CAF50'}" ng-cloak ng-class="showSearch ? 'active' : 'inactive'">
         <div class="container-fluid">
             <div class="navbar-header">
                 <div class="navbar-brand pointer" ng-click="loadWelcome(); $event.stopPropagation();">
                     CSW Search
                 </div>
-                <a href="#"  class="search-toggle" ng-click="searchBarToggle()" alt="Search CSW Records" title="Search CSW Records">
+                <a href="#" class="search-toggle" ng-click="searchBarToggle()" alt="Search CSW Records" title="Search CSW Records">
                     <span class="glyphicon glyphicon-search"></span>
                     <img src="assets/img/search-indicator-arrow.png" class="bottom-arrow" />
                 </a>
@@ -53,13 +62,11 @@
     <!-- / ==== HEAD NAVBAR ====  -->
 
     <!-- SEARCH CONSTRAINTS -->
-    <div  class="search-container" ng-show="showSearch" ng-cloak>
-        <!-- <div class="triangle-graphic">
-            <span class="glyphicon glyphicon-triangle-top"></span>
-        </div> -->
+    <div class="search-container" ng-show="showSearch" ng-cloak>
         <div class="container">
-            <a href="#" ng-click="searchBarToggle(); $event.stopPropagation();" class="bottom-toggle" ng-show="showSearch" alt="Minimize Search Menu" title="Minimize Search Menu">
-                <span class="glyphicon glyphicon-chevron-up" ></span>
+            <a href="#" ng-click="searchBarToggle(); $event.stopPropagation();" class="bottom-toggle" ng-show="showSearch"
+                alt="Minimize Search Menu" title="Minimize Search Menu">
+                <span class="glyphicon glyphicon-chevron-up"></span>
             </a>
             <advanced-search></advanced-search>
         </div>
@@ -67,56 +74,32 @@
     <!-- / SEARCH CONSTRAINTS -->
 
     <!-- Welcome Message -->
-    <welcome  ng-show="startScreen"></welcome>
+    <welcome ng-show="startScreen"></welcome>
 
     <!-- Search Results Sidebar -->
-    <sidebar-template ng-show="hasData"></sidebar-template>
-
-    <!-- Loading notification -->
-    <div ng-show="loadingData" class="text-center ng-cloak" id="loading-indicator">
-        <p>Loading..</p>
-        <div class="progress progress-striped active">
-            <div class="progress-bar progress-bar-success" style="width:100%"></div>
-        </div>
-    </div>
+    <sidebar-template ng-hide="startScreen"></sidebar-template>
 
     <!-- ==== MAIN CONTENT ==== -->
-    <div id="main" ng-hide="startScreen || loadingData">
-
-        
-        
-        
-
-        <!-- Error Message -->
-        <div ng-if="hasError" class="ng-cloak">
-            <h2>There was an error with your request</h2>
-            <div class="alert alert-danger ng-cloak">{{errorMessage}}</div>
-        </div>
+    <div id="main" ng-hide="startScreen">
 
 
         <!--Main Data-->
-        
-                <!-- Sort Options -->
-        <div ng-show="hasData" ng-cloak>
-            <!-- <p>
-                <select ng-options="item as item.label for item in search.sortOptions" ng-model="search.sortOption"
-                    ng-change="getFirstPage()"></select>
-                <span style="display: inline-block; margin-left: 18px;"><b>{{pages.totalRecords | number}}</b> records found</span>
-            </p> -->
-        </div>
+        <div ng-hide="startScreen">
+            <div ng-show="hasData" class="records-header"><b>{{pages.totalRecords | number}}</b> records found</div>
 
-        <!-- Records -->
-        <div ng-show="hasData">
-                <div style="
-                margin: -24px -24px 0 -24px;
-                background: #ffffff;
-                padding: 5px 22px;
-                border-bottom: solid 1px #eaeaea;
-            "><b>{{pages.totalRecords | number}}</b> records found</div>
-            <article ng-repeat="record in curRecords" record-template index="{{$index}}" class="record"></article>
+            <!-- Records -->
+            <div ng-show="hasData">
+                <article ng-repeat="record in curRecords" record-template index="{{$index}}" class="record"></article>
+            </div>
+
+            <!-- Loading bar -->
+            <div class="records-progress-container" ng-show="loadingData">
+                <div class="records-header">Working...</div>
+                <div class="progress progress-striped active records-progress">
+                    <div class="progress-bar progress-bar-success" style="width:100%"></div>
+                </div>
+            </div>
         </div>
-        
-            
 
         <!-- No records found message -->
         <div ng-if="!hasData && !hasError && !startScreen && !loadingData" class="ng-cloak row">
@@ -126,25 +109,27 @@
             </div>
         </div>
 
+        <!-- Error Message -->
+        <div ng-if="hasError" class="ng-cloak">
+                <h2>There was an error with your request</h2>
+                <div class="alert alert-danger ng-cloak">{{errorMessage}}</div>
+            </div>
 
-        <div id="main-toolbar" class="toolbar" ng-show="hasData" ng-cloak>
+        <div id="main-toolbar" class="toolbar" ng-hide="startScreen" ng-cloak>
             <div class="toolbar-item pull-left">
                 <label>Sort by: </label>
                 <div class="select-wrap">
                     <select ng-options="item as item.label for item in search.sortOptions" ng-model="search.sortOption"
-                                ng-change="getFirstPage()"></select>
-                </div>    
-            </div>            
-                    
+                        ng-change="getFirstPage()"></select>
+                </div>
+            </div>
+
             <!-- Pagination -->
             <pagination-template></pagination-template>
         </div>
-        
 
         <div class="clearfix"></div>
-        
 
-        
     </div>
     <!-- / ==== MAIN CONTENT ==== -->
     <script src="app/util/util.js"></script>
@@ -163,4 +148,5 @@
     <script src="app/util/csw-request.js"></script>
 
 </body>
+
 </html>

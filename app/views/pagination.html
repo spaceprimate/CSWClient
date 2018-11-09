@@ -1,12 +1,12 @@
-<div class="pull-right toolbar-item toolbar-buttons" style="margin-left: 18px;" ng-show="pages.totalPages > 1 && hasData">
+<div class="pull-right toolbar-item toolbar-buttons" style="margin-left: 18px;" ng-show="pages.totalPages > 1">
     <a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1" class="toolbar-button"><span class="glyphicon glyphicon-chevron-left"></span>Previous</a><a href="#" ng-click="getNextPage()" ng-if="pages.curPage < pages.totalPages" class="toolbar-button">Next <span class="glyphicon glyphicon-chevron-right"></span></a>
 </div>
 
-<div class="pull-right toolbar-item" style="margin-left: 18px;" ng-show="pages.totalPages > 1 && hasData">
+<div class="pull-right toolbar-item" style="margin-left: 18px;" ng-show="pages.totalPages > 1">
     <label>Page <b>{{pages.curPage}}</b> of <b>{{pages.totalPages}}</b></label>
 </div>
 
-<div class="pull-right toolbar-item" ng-show="pages.totalPages > 1 && hasData">
+<div class="pull-right toolbar-item" ng-show="pages.totalPages > 1">
     <label>Go to page: </label>
     <div class="select-wrap">
         <select ng-options="p for p in getAllPageNumbers()" ng-model="goToPageModel" ng-change="goToPage(goToPageModel)"></select>
