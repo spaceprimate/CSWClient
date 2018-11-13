@@ -412,6 +412,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         var keywords = {};
         $scope.domain.subject.values.forEach(function(v){
             var vArr = v.id.toString().split(',');
+
+
+            // nrl specific filter, consolidates verbose keywords
             vArr.forEach(function(keyword){
                 if (keyword.indexOf("CLASSIFICATION//RELEASABILITY = UNCLASSIFIED") == 0 ){
                     keyword = "UNCLASSIFIED";
@@ -431,7 +434,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             });
         });
 
-        $scope.domain.subject.values = Object.values(keywords);
+        $scope.domain.subject.values = [];
+
+        for (var kw in keywords){
+            $scope.domain.subject.values.push({id: keywords[kw].id, count: keywords[kw].count, active: keywords[kw].active});
+        }
 
     } 
 
@@ -484,8 +491,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
             // 1 or more records returned
             else  {
-                console.log("search results: ");
-                console.log(jsonData.GetRecordsResponse.SearchResults);
+                // console.log("search results: ");
+                // console.log(jsonData.GetRecordsResponse.SearchResults);
                 addRecords(jsonData.GetRecordsResponse.SearchResults);
             }
 
@@ -559,7 +566,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         });
         $scope.hasData = true;
         $scope.loadingData = false;
-        console.log($scope.curRecords);
+        // console.log($scope.curRecords);
     }
 
 /* 
