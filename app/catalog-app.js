@@ -33,6 +33,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     //after post request, records objects are created and pushed here
     $scope.curRecords= [];
+    
 
     $scope.curUrl = cswUrl;
 
@@ -42,8 +43,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     // useful if you need to list all possible 'subject' or 'type' options for a given CSW source
     $scope.domain = {};
 
-    // temp! delete! temp delete
-    debug = $scope.curRecords;
+    
 
     // Welcome screen, displayed until initial request is submitted
     $scope.startScreen = true;
@@ -59,6 +59,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.errorMessage = '';
 
     $scope.search = new csw.search();
+
+    // debug = $scope.search;
 
 
     //create options for sort dropdown
@@ -523,6 +525,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             $scope.pages.totalRecords = totalRecords;
             $scope.setPages();
             $scope.newRequest = false;
+            
+            // temp! delete! temp delete
+            // debug = $scope.pages;
         }
 
         // If there's only 1 record, it won't be in an array, so
@@ -567,6 +572,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.hasData = true;
         $scope.loadingData = false;
         // console.log($scope.curRecords);
+        debug = $scope.curRecords;
     }
 
 /* 

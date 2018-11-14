@@ -50,7 +50,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <div class="navbar-brand pointer" ng-click="loadWelcome(); $event.stopPropagation();">
-                    CSW Search:
+                    CSW Search
                 </div>
                 <a href="#" class="search-toggle" ng-click="searchBarToggle()" alt="Search CSW Records" title="Search CSW Records">
                     <span class="glyphicon glyphicon-search"></span>
@@ -85,7 +85,7 @@
 
         <!--Main Data-->
         <div ng-hide="startScreen">
-            <div ng-show="hasData" class="records-header"><b>{{pages.totalRecords | number}}</b> records found</div>
+            <div ng-show="hasData" class="records-header"><b>{{pages.getDisplayedRecords()[0]}}</b>-<b>{{pages.getDisplayedRecords()[1]}}</b> of <b>{{pages.totalRecords | number}}</b> records found</div>
 
             <!-- Records -->
             <div ng-show="hasData">

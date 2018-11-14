@@ -116,6 +116,19 @@ angular.module('nrlCatalog')
                     $scope.requestRecords(recordRequest);
                 };
 
+                /**
+                 * Calculates the number and order of records currently being displayed
+                 */
+                $scope.pages.getDisplayedRecords = function(){
+                    var p = $scope.pages;
+                    var firstRecord = (p.curPage - 1) * p.recordsPerPage.value + 1;
+                    var lastRecord = p.curPage * p.recordsPerPage.value;
+                    if (lastRecord > p.totalRecords){
+                        lastRecord = p.totalRecords;
+                    }
+                    return [firstRecord, lastRecord];
+                }
+
                 // separate model maintained for GoTo dropdown
                 $scope.goToPageModel = 1;
 

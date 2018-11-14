@@ -412,6 +412,15 @@ h4 a.sm {
     background: #a5a5a5;
 }
 
+.btn.btn-blank{
+    padding: 6px 0;
+    border: 0px; 
+    outline: 0px;
+}
+.btn.btn-blank:hover{background: none; color: #2196f3;}
+.btn.btn-blank:focus, .btn.btn-blank:active{background: none; border: 0px; outline: 0px; box-shadow: none;}
+.btn.btn-blank .glyphicon{ font-size: 12px; top: 0; padding-right: 3px;}
+
 a.black {
     color: #606060;
 }
@@ -509,6 +518,7 @@ body .ol-mouse-position {
     padding: 5px 22px;
     border-bottom: solid 1px #eaeaea;
     min-height: 28px;
+    color: #656565;
 }
 
 .records-progress-container {
@@ -865,6 +875,51 @@ input.xl::-webkit-input-placeholder {
 .toolbar .select-wrap select {
     border: none;
 }
+
+.toolbar .select-wrap select {
+    border: none;
+    border-radius: 0px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearrance: none;
+    appearance: none;
+    padding-right: 12px;
+    background-color: #f8f8f8;
+    background-image: url(../img/drop-down-arrow.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 8px;
+    margin: 0 8px;
+    
+}
+select.form-control{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearrance: none;
+    appearance: none;
+    background-image: url(../img/drop-down-arrow.png);
+    background-repeat: no-repeat;
+    background-position: right 9px center;
+    background-size: 8px;
+    
+
+}
+
+select.form-control:hover{
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+
+
+
+.toolbar .select-wrap select::-ms-expand{
+    display:none;
+
+}
+
+.toolbar .select-wrap select:focus{outline: 0;}
 
 .toolbar-buttons {}
 

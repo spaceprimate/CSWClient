@@ -14,6 +14,10 @@
             <span class="glyphicon glyphicon-chevron-down" ng-hide="viewAll"></span>
             <span class="glyphicon glyphicon-chevron-up" ng-show="viewAll"></span>
             Full record
+        </a> 
+        <a href="https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2&REQUEST=GetRecordById&service=CSW&version=2.0.2&elementSetName=full&id={{record.identifier}}" 
+            target="_blank" style="margin-left: 18px;">
+            <b style="color: rgb(48, 48, 48)">&lt;/&gt;</b> XML
         </a>
     </p>
 
@@ -62,6 +66,15 @@
                 </table>
             </td>
         </tr>
+
+        <tr ng-if="record.keywords != null">
+            <td>Subjects</td>
+            <td>
+                <span ng-repeat="k in record.keywords">{{k}}, </span>
+            </td>
+        </tr>
+
+    
 
         <tr ng-repeat="i in record.info" ng-switch="i[0]" class="break-word record-table">
             <td>{{i[0]}}</td>
