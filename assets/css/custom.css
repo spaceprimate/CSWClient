@@ -32,15 +32,17 @@ tr.break-word td {
 }
 
 .badge.tag {
-    border-radius: 4px;
+    border-radius: 2px;
     font-weight: 400;
     color: #5d5d5d;
-    background: #e0e0e0;
+    background: #ffffff;
     transition: background-color 0.2s ease-out;
+    border: 1px solid #e0e0e0;
+
 }
 
 .record-info .badge.tag {
-    background-color: #f1f1f1;
+    /* background-color: #f1f1f1; */
 }
 
 .record-tags {}
@@ -559,12 +561,12 @@ tr.record-table td {
 }
 
 .record p {
-    margin-bottom: 9px;
+    margin-bottom: 7px;
 }
 
 .record .tag-wrap {
-    padding-top: 0px;
-    padding-bottom: 9px;
+    
+    padding: 0 6px 9px 0;
 }
 
 .record .record-thumbnail {
@@ -581,8 +583,8 @@ tr.record-table td {
 }
 
 .record-info h3 {
-    margin: 0 0 9px 0;
-    font-size: 20px;
+    margin: 0 0 7px 0;
+    font-size: 18px;
 }
 
 .record-thumbnail {
@@ -607,8 +609,24 @@ tr.record-table td {
     font-size: 12px;
 }
 
+.record .toolbar{
+    margin-bottom: 9px;
+}
+
+.record .toolbar a{cursor: pointer; padding: 3px 12px; margin-right: 9px; border-radius: 2px;}
+.record .toolbar a:hover, .record .toolbar a.active{background: #ececec; color: #656565;}
+
 .glyphicon.dark {
     color: #636363;
+}
+
+.code-icon{
+    width: 20px;
+    height: 15px;
+    display: inline-block;
+    background-image: url(../img/code-icon.png);
+    background-size: 20px 20px;
+    background-position-y: 0px;
 }
 
 .remove-button-wrapper {

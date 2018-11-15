@@ -510,6 +510,37 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         });
     };
 
+
+
+    /**
+     * Requests a single record as xml
+     *
+     * @param {String} recordRequest - string containing xml from request
+     */
+    $scope.requestRecord = function(r){
+        if (r.xml == undefined){ // only run once
+            var url = cswUrl + "&REQUEST=GetRecordById&service=CSW&version=2.0.2&elementSetName=full&id=" + r.identifier;
+            $http({
+                url: url,
+                method: "GET",
+                
+                headers: {
+                    'Accept': 'application/xml',
+                }
+            })
+            .then(function(response){
+                // Request successful!
+                r.xml = vkbeautify.xml(response.data.toString(), 4);
+            },
+            function(response){
+                r.xml = "The CSW server returned an error."
+                //error
+                console.log("Request Error, response follows: ");
+                console.log(response);
+            });
+        }
+    };
+
     /**
      * takes JSONified record data returned from CSW server request and 
      * pushes records to $scope.curRecords array
@@ -624,8 +655,30 @@ nrlCatalog.directive('recordTemplate', function() {
         templateUrl:   'app/views/record.html',
         controller: function($scope){
             $scope.viewAll = false;
+            $scope.viewXml = false;
             var smExtentThumb = new extenty(69,69);
             $scope.boxStyle = smExtentThumb.getBoxStyle($scope.flipExtent($scope.record.extent));
+
+            $scope.toggleViewAll = function(){
+                if (!$scope.viewAll){
+                    $scope.viewAll = true;
+                    $scope.viewXml = false;
+                }
+                else{
+                    $scope.viewAll = false;
+                }
+            }
+            $scope.toggleViewXml = function(){
+                if (!$scope.viewXml){
+                    $scope.viewXml = true;
+                    $scope.viewAll = false;
+                }
+                else{
+                    $scope.viewXml = false;
+                }
+            }
+
+
             // $scope.boxStyle = extentThumbnail.getBoxStyle($scope.flipExtent($scope.record.extent));
         }
     }
