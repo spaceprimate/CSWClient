@@ -519,6 +519,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.requestRecord = function(r){
         if (r.xml == undefined){ // only run once
+            r.xml = "working...";
             var url = cswUrl + "&REQUEST=GetRecordById&service=CSW&version=2.0.2&elementSetName=full&id=" + r.identifier;
             $http({
                 url: url,

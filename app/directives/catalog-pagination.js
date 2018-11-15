@@ -63,6 +63,7 @@ angular.module('nrlCatalog')
                  * @return{String} getRecordRequest - xml string required for csw record request
                  */
                 $scope.getFirstPage = function(){
+                    $scope.goToPageModel = 1;
                     $scope.pages.curPage = 1;
                     $scope.pages.pageLimits = [0, 10];
                     $scope.newRequest = true;
@@ -139,7 +140,7 @@ angular.module('nrlCatalog')
                  */
                 $scope.goToPage = function(page){
                     setCurPage(page);
-                    $scope.goToPageModel = 1;
+                    $scope.goToPageModel = page;
                     var recordRequest = $scope.search.createRequest($scope.pages);
                     $scope.requestRecords(recordRequest);
                 };

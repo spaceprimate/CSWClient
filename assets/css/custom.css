@@ -418,6 +418,7 @@ h4 a.sm {
     padding: 6px 0;
     border: 0px; 
     outline: 0px;
+    background: none;
 }
 .btn.btn-blank:hover{background: none; color: #2196f3;}
 .btn.btn-blank:focus, .btn.btn-blank:active{background: none; border: 0px; outline: 0px; box-shadow: none;}
