@@ -309,6 +309,7 @@ h4 a.sm {
     padding: 16px 9px;
     width: 199px;
     text-align: left;
+    outline: 0px;
 }
 
 .sidebar h5 {
@@ -913,7 +914,6 @@ input.xl::-webkit-input-placeholder {
     background-position: right;
     background-size: 8px;
     margin: 0 8px;
-    
 }
 select.form-control{
     -webkit-appearance: none;
@@ -926,8 +926,6 @@ select.form-control{
     background-position: right 9px center;
     background-size: 8px;
     padding-right: 23px;
-    
-
 }
 
 select.form-control:hover{

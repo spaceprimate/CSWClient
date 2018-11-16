@@ -2,6 +2,8 @@
     <button class="default" ng-click="refineSearchToggle()"><span class="glyphicon glyphicon-search"></span>Refine Search</button>
 
     <button class="default" ng-click="toggleExtentFilter()"><span class="glyphicon glyphicon-map-marker"></span>Filter by Location</button>
+
+    <button class="default" ng-click="search.clear(); submitSearch();"><span class="glyphicon glyphicon-repeat"></span>Reset Search</button>
     
 
     <h5>Types <span class="refine-clear link" ng-click="clearFilterType('type'); submitSearch();" ng-show="hasFilterType('type')">Clear</span></h5>
