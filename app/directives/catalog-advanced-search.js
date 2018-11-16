@@ -158,9 +158,15 @@ angular.module('nrlCatalog')
                  * updates a filter's extent values after user selects constraint on map
                  */
                 $scope.updateExtentFields = function(){
-                    advSearchMap.currentFilter.extent = advSearchExtent.getExtent(); // set current extent filter extent to extent outline in OL extent object
+                    if (advSearchExtent.getExtent() != null){
+                        advSearchMap.currentFilter.extent = advSearchExtent.getExtent(); // set current extent filter extent to extent outline in OL extent object
+                    }
+                    else{
+                        advSearchMap.currentFilter.extent = [-180.0, -90.0, 180.0, 90.0];
+                    }
+                    
                     advSearchMap.currentFilter.extentyStyle = extentThumbnail.getBoxStyle(advSearchMap.currentFilter.extent);
-                    $scope.hideExtentSelector();                
+                    $scope.hideExtentSelector();
                 }
 
 
