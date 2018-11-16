@@ -459,6 +459,9 @@ body .extenty-box {
     right: 28px;
 }
 
+.record-preview{padding: 9px 0 24px 0;}
+.record-preview img{    border: 3px solid #e0e0e0; background: #f9f9f9;}
+
 .map {
     border: 2px solid #a2a2a2;
     margin-bottom: 0px;
