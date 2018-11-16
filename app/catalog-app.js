@@ -1,5 +1,3 @@
-var debug;
-
 /*
  * App for interfacing with CSW services to browse and seach records
  * - note: This app uses POST XML to request CSW records, requiring the CSW to allow CORS for the client domain
@@ -25,7 +23,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     //CSW Endpoint
     // var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
     // var cswUrl = "https://www.sciencebase.gov/catalog/item/4f554236e4b018de15819c85/csw?service=CSW&version=2.0.2";
-    
     var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
@@ -34,7 +31,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     //after post request, records objects are created and pushed here
     $scope.curRecords= [];
     
-
     $scope.curUrl = cswUrl;
 
     $scope.showSearch = false;
@@ -42,8 +38,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     // optional- Holds arrays of all existing entries for specific CSW properties (eg. 'subject')
     // useful if you need to list all possible 'subject' or 'type' options for a given CSW source
     $scope.domain = {};
-
-    
 
     // Welcome screen, displayed until initial request is submitted
     $scope.startScreen = true;
@@ -58,10 +52,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.hasError = false;
     $scope.errorMessage = '';
 
-    $scope.search = new csw.search();
-
-    // debug = $scope.search;
-
+    $scope.search = new csw.search(); // main search object
 
     //create options for sort dropdown
     $scope.sortOptions = [
@@ -72,66 +63,12 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     $scope.displaySearch = function(){
         $scope.showSearch = true;
-        // $location.hash('body');
-        // $anchorScroll(); //scroll to top
     };
 
     $scope.hideSearch = function(){
         $scope.showSearch = false;
 
     };
-
-
-
-
-
-
-    /**
-     * TEMPORARY MAP STUFF, MOVE TO IT'S OWN DIRECTIVE SOON
-     */
-
-    
-
-    // // Open Street Maps layer
-    // var exampleLayer = new ol.layer.Tile({
-    //     source: new ol.source.OSM()
-    // });
-    // // var exampleWms = new ol.layer.Tile({
-    // //     source: new TileWMS
-    // // });
-
-    // var exampleWms = new ol.layer.Tile({
-    //     title: 'Global Imagery',
-    //     source: new ol.source.TileWMS({
-    //         url: 'https://geoint.nrlssc.navy.mil/aero/wms/AeroSubset/feature/Aero',
-    //         params: { LAYERS: 'AERIAL_REFUELING_FLN_HIGH', VERSION: '1.1.1', TILED: true },
-    //     }),
-    // });
-
-    
-
-    // var previewMap = new ol.Map({
-    //     layers: [exampleWms],
-    //     target: 'preview-map',
-    //     controls: ol.control.defaults({
-    //         zoom: true,
-    //         attribution: false,
-    //         rotate: false
-    //     }),
-    //     view: new ol.View({
-    //         center: [0, 0],
-    //         projection: 'EPSG:4326',
-    //         zoom: 2,
-    //         minZoom: 2
-    //     })
-    // });
-
-
-
-
-
-
-
 
 
     /**
@@ -610,9 +547,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             $scope.pages.totalRecords = totalRecords;
             $scope.setPages();
             $scope.newRequest = false;
-            
-            // temp! delete! temp delete
-            // debug = $scope.pages;
         }
 
         // If there's only 1 record, it won't be in an array, so
@@ -672,8 +606,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         });
         $scope.hasData = true;
         $scope.loadingData = false;
-        // console.log($scope.curRecords);
-        debug = $scope.curRecords;
     }
 
 /* 
@@ -719,78 +651,6 @@ nrlCatalog.directive('welcome', function() {
     }
 });
 
-nrlCatalog.directive('recordTemplate', function() {
-    return{
-        restrict: 'A',
-        templateUrl:   'app/views/record.html',
-        controller: function($scope){
-            $scope.viewAll = false;
-            $scope.viewXml = false;
-            $scope.viewImage = false;
-            // $scope.isWms = false;
-            // $scope.hasThumbnail = false;
-            var smExtentThumb = new extenty(69,69);
-            $scope.boxStyle = smExtentThumb.getBoxStyle($scope.flipExtent($scope.record.extent));
-
-            $scope.toggleViewAll = function(){
-                if (!$scope.viewAll){
-                    hideAllViews();
-                    $scope.viewAll = true;
-                    // $scope.viewXml = false;
-                }
-                else{
-                    $scope.viewAll = false;
-                }
-            }
-
-            // $scope.record.info.forEach(function(e){
-            //     if (e[0] == "Source" && e[1].indexOf("/wms/") != -1){
-            //         $scope.isWms = true;
-                    
-            //     }
-            // });
-
-            // var getLayers = function(){
-                
-            // }
-
-
-            // console.log($scope.record);
-
-
-
-            $scope.toggleViewXml = function(){
-                if (!$scope.viewXml){
-                    hideAllViews();
-                    $scope.viewXml = true;
-                    // $scope.viewAll = false;
-                }
-                else{
-                    $scope.viewXml = false;
-                }
-            }
-
-            $scope.toggleViewImage = function(){
-                if (!$scope.viewImage){
-                    hideAllViews();
-                    $scope.viewImage = true;
-                }
-                else{
-                    $scope.viewImage = false;
-                }
-            }
-
-            var hideAllViews = function(){
-                $scope.viewXml = false;
-                $scope.viewAll = false;
-                $scope.viewImage = false;
-            };
-
-
-            // $scope.boxStyle = extentThumbnail.getBoxStyle($scope.flipExtent($scope.record.extent));
-        }
-    }
-});
 
 nrlCatalog.directive('sidebarTemplate', function() {
     return{
@@ -799,5 +659,3 @@ nrlCatalog.directive('sidebarTemplate', function() {
         replace: true
     }
 });
-
-
