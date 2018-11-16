@@ -81,6 +81,59 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     };
 
+
+
+
+
+
+    /**
+     * TEMPORARY MAP STUFF, MOVE TO IT'S OWN DIRECTIVE SOON
+     */
+
+    
+
+    // // Open Street Maps layer
+    // var exampleLayer = new ol.layer.Tile({
+    //     source: new ol.source.OSM()
+    // });
+    // // var exampleWms = new ol.layer.Tile({
+    // //     source: new TileWMS
+    // // });
+
+    // var exampleWms = new ol.layer.Tile({
+    //     title: 'Global Imagery',
+    //     source: new ol.source.TileWMS({
+    //         url: 'https://geoint.nrlssc.navy.mil/aero/wms/AeroSubset/feature/Aero',
+    //         params: { LAYERS: 'AERIAL_REFUELING_FLN_HIGH', VERSION: '1.1.1', TILED: true },
+    //     }),
+    // });
+
+    
+
+    // var previewMap = new ol.Map({
+    //     layers: [exampleWms],
+    //     target: 'preview-map',
+    //     controls: ol.control.defaults({
+    //         zoom: true,
+    //         attribution: false,
+    //         rotate: false
+    //     }),
+    //     view: new ol.View({
+    //         center: [0, 0],
+    //         projection: 'EPSG:4326',
+    //         zoom: 2,
+    //         minZoom: 2
+    //     })
+    // });
+
+
+
+
+
+
+
+
+
     /**
      * Toggles the advanced search view
      * Does nothing if it's already showing or, if it's displaying basic search mode. 
@@ -572,6 +625,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
         records.Record.forEach(function(e, i) { // element, index
             var item = {};
+            item.hasThumbnail = false;
             item.title = getSafe(function(){ return  e.title.toString() });
             item.keywords = [];
             if ( Array.isArray(e.subject) ){
@@ -591,11 +645,26 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             if ( getSafe( function(){ return e.date.toString()        }) != undefined ){ item.info.push(["Date", e.date.toString()]);}
             if ( getSafe( function(){ return e.modified.toString()    }) != undefined ){ item.info.push(["Modified", e.modified.toString()]);}
             if ( getSafe( function(){ return e.source.toString()      }) != undefined ){ item.info.push(["Source", e.source.toString()]);}
-            if ( getSafe( function(){ return e.references.toString()  }) != undefined ){ item.info.push(["References", e.references.toString()]);}
+            
             if ( getSafe( function(){ return e.type.toString()        }) != undefined ){ item.info.push(["Type", e.type.toString()]);}
             if ( getSafe( function(){ return e.language.toString()    }) != undefined ){ item.info.push(["Language", e.language.toString()]);}
             if ( getSafe( function(){ return e.rights.toString()      }) != undefined ){ item.info.push(["Rights", e.rights.toString()]);}
             if ( getSafe( function(){ return e.format.toString()      }) != undefined ){ item.info.push(["Format", e.format.toString()]);}
+
+            if ( getSafe( function(){ return e.references.toString()  }) != undefined ){ item.info.push(["References", e.references.toString()]);}
+
+            // prob a cleaner way to do this
+            // try to retrieve thumbnail
+            if ( getSafe( function(){ return e.references.toString()  }) != undefined && Array.isArray(e.references)  ){ 
+                e.references.forEach(function(ref){
+                    if (ref['_scheme'] == "WWW:LINK-1.0-http--image-thumbnail"){
+                        item.hasThumbnail = true;
+                        item.thumbnail = ref.toString();
+                        console.log("THUMBNAIL STRING FOUND: ");
+                        console.log(item.thumbnail);
+                    }
+                })
+            }
 
             item.mapID = "map"+i;
             $scope.curRecords.push(item);
@@ -657,27 +726,65 @@ nrlCatalog.directive('recordTemplate', function() {
         controller: function($scope){
             $scope.viewAll = false;
             $scope.viewXml = false;
+            $scope.viewImage = false;
+            // $scope.isWms = false;
+            // $scope.hasThumbnail = false;
             var smExtentThumb = new extenty(69,69);
             $scope.boxStyle = smExtentThumb.getBoxStyle($scope.flipExtent($scope.record.extent));
 
             $scope.toggleViewAll = function(){
                 if (!$scope.viewAll){
+                    hideAllViews();
                     $scope.viewAll = true;
-                    $scope.viewXml = false;
+                    // $scope.viewXml = false;
                 }
                 else{
                     $scope.viewAll = false;
                 }
             }
+
+            // $scope.record.info.forEach(function(e){
+            //     if (e[0] == "Source" && e[1].indexOf("/wms/") != -1){
+            //         $scope.isWms = true;
+                    
+            //     }
+            // });
+
+            // var getLayers = function(){
+                
+            // }
+
+
+            // console.log($scope.record);
+
+
+
             $scope.toggleViewXml = function(){
                 if (!$scope.viewXml){
+                    hideAllViews();
                     $scope.viewXml = true;
-                    $scope.viewAll = false;
+                    // $scope.viewAll = false;
                 }
                 else{
                     $scope.viewXml = false;
                 }
             }
+
+            $scope.toggleViewImage = function(){
+                if (!$scope.viewImage){
+                    hideAllViews();
+                    $scope.viewImage = true;
+                }
+                else{
+                    $scope.viewImage = false;
+                }
+            }
+
+            var hideAllViews = function(){
+                $scope.viewXml = false;
+                $scope.viewAll = false;
+                $scope.viewImage = false;
+            };
 
 
             // $scope.boxStyle = extentThumbnail.getBoxStyle($scope.flipExtent($scope.record.extent));

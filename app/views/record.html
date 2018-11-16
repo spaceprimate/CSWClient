@@ -20,10 +20,18 @@
         <a class="no-underline details" ng-click="requestRecord(record); toggleViewXml();"  ng-class="viewXml ? 'active' : 'incactive'">
             <span class="img-icon code-icon"></span> XML
         </a>
+
+        <a class="no-underline details" ng-click="toggleViewImage();"  ng-class="viewImage ? 'active' : 'incactive'" ng-if="record.hasThumbnail">
+            <span class="glyphicon glyphicon-picture"></span> Preview
+        </a>
     </div>
 
 </div>
 <div class="clearfix"></div>
+
+<div ng-if="viewImage">
+    <img ng-src="{{record.thumbnail}}" />
+</div>
 
 <div ng-if="viewXml">
     <pre lang="xml">
