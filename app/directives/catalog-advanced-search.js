@@ -160,6 +160,12 @@ angular.module('nrlCatalog')
                 $scope.updateExtentFields = function(){
                     if (advSearchExtent.getExtent() != null){
                         advSearchMap.currentFilter.extent = advSearchExtent.getExtent(); // set current extent filter extent to extent outline in OL extent object
+                        if ( isOutOfBounds( advSearchExtent.getExtent() )){
+                            console.log("this is outta bounds!");
+                        }
+                        else{
+                            console.log("aint even outta bounds a bit!11");
+                        }
                     }
                     else{
                         advSearchMap.currentFilter.extent = [-180.0, -90.0, 180.0, 90.0];
@@ -167,6 +173,18 @@ angular.module('nrlCatalog')
                     
                     advSearchMap.currentFilter.extentyStyle = extentThumbnail.getBoxStyle(advSearchMap.currentFilter.extent);
                     $scope.hideExtentSelector();
+                }
+
+                function isOutOfBounds(extent){
+                    if(
+                        extent[0] > 180 || extent[0] < -180 ||
+                        extent[1] > 90 || extent[1] < -90 ||
+                        extent[2] > 180 || extent[2] < -180 ||
+                        extent[3] > 90 || extent[3] < -90
+                    ){
+                        return true;
+                    }
+                    return false;
                 }
 
 
