@@ -15,7 +15,7 @@ body .no-outline {
     margin-left: 218px;
     margin-right: 18px;
     margin-bottom: 18px;
-    padding: 24px;
+    padding: 24px 0;
     background: white;
     border: 1px solid #eaeaea;
     border-radius: 2px;
@@ -524,10 +524,10 @@ body .ol-mouse-position {
 
 /* records */
 .records-header {
-    margin: -24px -24px 0 -24px;
+    margin: -24px 0 0 0;
     background: #ffffff;
     padding: 5px 22px;
-    border-bottom: solid 1px #eaeaea;
+    /*border-bottom: solid 1px #eaeaea;*/
     min-height: 28px;
     color: #656565;
 }
@@ -562,11 +562,17 @@ tr.record-table td {
 }
 
 .record {
-    margin-top: 15px;
-    padding-bottom: 2px;
-    border-bottom: 1px solid #eeeeee;
+    /*margin-top: 15px;*/
+    padding: 24px 24px 0 24px;
+    border-top: 1px solid #eeeeee;
     overflow: hidden;
     position: relative;
+}
+
+article.record:hover {
+    box-shadow: 0 3px 2px -2px #0000008c;
+    border-top: 1px solid #dedede;
+    background: white;
 }
 
 .record p {
@@ -580,8 +586,8 @@ tr.record-table td {
 
 .record .record-thumbnail {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 24px;
+    left: 24px;
 }
 
 .record-info {
