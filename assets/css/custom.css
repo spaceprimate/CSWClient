@@ -5,8 +5,8 @@ body {
 }
 
 body .no-outline {
-    border: 0px;
-    outline: 0px;
+    border: 0;
+    outline: 0;
 }
 
 #main {
@@ -35,7 +35,7 @@ body .no-outline {
 
 pre{
     background-color: #f9f9f9;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .break-word,
@@ -126,28 +126,28 @@ tr.break-word td {
 }
 
 #loading-indicator .progress {
-    border-radius: 0px;
+    border-radius: 0;
     height: 10px;
 }
 
 /* navbar */
 #main-navbar {
     position: fixed;
-    top: 0px;
-    right: 0px;
-    left: 0px;
+    top: 0;
+    right: 0;
+    left: 0;
 }
 
 .navbar {
     min-height: 22px;
     height: 41px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     background: #4CAF50;
-    border-bottom: 0px;
+    border-bottom: 0;
 }
 
 .navbar.active {
-    box-shadow: 0px -5px 5px #0000001f inset;
+    box-shadow: 0 -5px 5px #0000001f inset;
 }
 
 .navbar-brand {
@@ -163,7 +163,7 @@ tr.break-word td {
 }
 
 .navbar-inverse .navbar-brand:hover {
-    text-shadow: #00170178 0px 0px 16px;
+    text-shadow: #00170178 0 0 16px;
 }
 
 .navbar-nav > li > a {
@@ -176,13 +176,13 @@ tr.break-word td {
     color: #adadad;
     position: absolute;
     font-size: 12px;
-    padding: 0px 17px 0px 17px;
+    padding: 0 17px 0 17px;
     left: 50%;
     margin-left: -25px;
-    bottom: 0px;
+    bottom: 0;
     border: #5ebf61 1px solid;
-    border-bottom: 0px;
-    border-top: 0px;
+    border-bottom: 0;
+    border-top: 0;
     background: none;
     line-height: 41px;
     color: white;
@@ -234,11 +234,11 @@ ul.autocomplete-list {
     z-index: 9999;
     top: 31px;
     min-width: 172px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     list-style: none;
     border: 1px solid #cccccc;
-    border-bottom: 0px;
+    border-bottom: 0;
     /* display: none; */
     max-height: 400px;
     overflow: auto;
@@ -267,13 +267,13 @@ h4 a.sm {
     background: #ffffff;
     border: 1px solid #eaeaea;
     border-width: 0 1px 0 0;
-    padding: 0px;
-    border-radius: 0px;
+    padding: 0;
+    border-radius: 0;
     position: fixed;
     top: 41px;
-    left: 0px;
-    bottom: 0px;
-    margin: 0px;
+    left: 0;
+    bottom: 0;
+    margin: 0;
     width: 200px;
 }
 
@@ -303,29 +303,29 @@ h4 a.sm {
 .sidebar-fixed {
     position: fixed;
     top: 30px;
-    bottom: 0px;
+    bottom: 0;
     background: #eaeaea;
     border-right: 1px solid #e9e9e9;
-    box-shadow: inset -6px 0px 10px -6px rgba(0, 0, 0, 0.13);
+    box-shadow: inset -6px 0 10px -6px rgba(0, 0, 0, 0.13);
     border-right: 1px solid #dedede;
     z-index: 3100;
 }
 
 .sidebar button.default {
     background: #ffffff;
-    border: 0px;
+    border: 0;
     border-bottom: 1px solid #e6e6e6;
     color: black;
     display: block;
-    margin: 0px;
+    margin: 0;
     padding: 16px 9px;
     width: 199px;
     text-align: left;
-    outline: 0px;
+    outline: 0;
 }
 
 .sidebar h5 {
-    padding: 0px 12px;
+    padding: 0 12px;
 }
 
 .sidebar .extenty-wrap {
@@ -346,16 +346,16 @@ h4 a.sm {
 
 .search-container {
     overflow: visible;
-    /* box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.26); */
-    box-shadow: 0px 5px 6px -2px rgba(0, 0, 0, 0.26);
+    /* box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.26); */
+    box-shadow: 0 5px 6px -2px rgba(0, 0, 0, 0.26);
     z-index: 3000;
     background: #ffffff;
     padding: 7px 15px 8px 30px;
     border-bottom: 1px solid #cacaca;
     position: fixed;
     top: 41px;
-    right: 0px;
-    left: 0px;
+    right: 0;
+    left: 0;
     transition: transform 0.2s ease-in-out;
     transform: scaleY(1);
     transform-origin: top;
@@ -384,7 +384,7 @@ h4 a.sm {
 }
 
 .coord-input label {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .coord-input input {
@@ -418,7 +418,7 @@ h4 a.sm {
     display: inline-block;
     position: absolute;
     left: 32px;
-    top: 0px;
+    top: 0;
 }
 
 .btn.left-icon:active .vr,
@@ -429,8 +429,8 @@ h4 a.sm {
 
 .btn.btn-blank {
     padding: 6px 0;
-    border: 0px;
-    outline: 0px;
+    border: 0;
+    outline: 0;
     background: none;
 }
 
@@ -441,8 +441,8 @@ h4 a.sm {
 
 .btn.btn-blank:focus, .btn.btn-blank:active {
     background: none;
-    border: 0px;
-    outline: 0px;
+    border: 0;
+    outline: 0;
     box-shadow: none;
 }
 
@@ -512,7 +512,7 @@ body .extenty-box {
 
 .map {
     border: 2px solid #a2a2a2;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .map.cross-hair:hover {
@@ -544,9 +544,9 @@ body .extenty-box {
 
 body .ol-mouse-position {
     top: unset;
-    right: 0px;
+    right: 0;
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     background: #3c6ea88c;
     color: #fff;
     padding: 2px 8px;
@@ -561,7 +561,7 @@ body .ol-mouse-position {
     text-align: center;
     background: #ffffff;
     font-size: 12px;
-    border-bottom: 0px;
+    border-bottom: 0;
     cursor: pointer;
 }
 
@@ -580,8 +580,8 @@ body .ol-mouse-position {
 }
 
 .records-progress {
-    border-radius: 0px;
-    margin: 0px;
+    border-radius: 0;
+    margin: 0;
     display: block;
     /*margin-left: -24px;*/
     /*margin-right: -24px;*/
@@ -653,9 +653,9 @@ article.record:hover {
     position: absolute;
     top: 5px;
     right: 5px;
-    padding: 1px 3px 0px 4px;
+    padding: 1px 3px 0 4px;
     background: #ffffffa8;
-    box-shadow: #000 0px 0px 3px;
+    box-shadow: #000 0 0 3px;
 }
 
 .record-thumbnail:hover .edit-icon {
@@ -669,6 +669,7 @@ article.record:hover {
 
 .record .toolbar {
     margin-bottom: 9px;
+    margin-left: -12px;
 }
 
 .record .toolbar a {
@@ -693,18 +694,18 @@ article.record:hover {
     display: inline-block;
     background-image: url(../img/code-icon.png);
     background-size: 20px 20px;
-    background-position-y: 0px;
+    background-position-y: 0;
 }
 
 .remove-button-wrapper {
     position: absolute;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
+    right: 0;
+    top: 0;
+    bottom: 0;
     width: 18px;
     border: 1px solid #ececec;
-    border-top: 0px;
-    border-bottom: 0px;
+    border-top: 0;
+    border-bottom: 0;
 }
 
 .remove-button {
@@ -732,7 +733,7 @@ label.highlight {
     color: #337ab7;
     font-weight: 400;
     font-style: italic;
-    padding: 1px 0px;
+    padding: 1px 0;
 }
 
 .map-thumbnail {
@@ -760,9 +761,9 @@ a.left-toggle {
     padding: 17px 1px;
     top: 50%;
     margin-top: -25px;
-    left: 0px;
+    left: 0;
     border: #dcdcdc 1px solid;
-    border-left: 0px;
+    border-left: 0;
     background: #e4e4e4;
 }
 
@@ -771,12 +772,12 @@ a.bottom-toggle {
     color: #adadad;
     position: absolute;
     font-size: 11px;
-    padding: 0px 17px;
+    padding: 0 17px;
     left: 50%;
     margin-left: -25px;
-    bottom: 0px;
+    bottom: 0;
     border: #e2e2e2 1px solid;
-    border-bottom: 0px;
+    border-bottom: 0;
     background: none;
     line-height: 22px;
 }
@@ -788,8 +789,8 @@ a.bottom-toggle:hover {
 }
 
 .collapsed a.bottom-toggle {
-    top: 0px;
-    border-top: 0px;
+    top: 0;
+    border-top: 0;
     background: none;
     border-color: #eaeaea;
     line-height: 58px;
@@ -849,10 +850,10 @@ body .refine-clear {
 
 .xl-input-submit {
     position: absolute;
-    right: 0px;
-    top: 0px;
+    right: 0;
+    top: 0;
     background: none;
-    border: 0px;
+    border: 0;
     height: 40px;
     color: #9a9a9d;
     width: 35px;
@@ -865,7 +866,7 @@ body .refine-clear {
 
 input.xl {
     background: none;
-    border: 0px;
+    border: 0;
     border-bottom: 1px solid #9b9b9b;
     width: 100%;
     display: block;
@@ -875,7 +876,7 @@ input.xl {
 }
 
 input.xl:focus {
-    outline: 0px;
+    outline: 0;
     border-bottom: 3px solid #9b9b9b;
     margin-bottom: 34px;
     background: #efefef;
@@ -915,21 +916,21 @@ input.xl::-webkit-input-placeholder {
     position: fixed;
     top: 41px;
     left: 200px;
-    right: 0px;
+    right: 0;
     background: #f8f8f8;
     border-bottom: 1px solid #d8d8d8;
     font-size: 13px;
-    padding: 0px 27px;
+    padding: 0 27px;
 
 }
 
 #main-toolbar .pagination {
-    margin: 0px;
+    margin: 0;
 }
 
 .toolbar .glyphicon {
     font-size: 10px;
-    top: 0px;
+    top: 0;
     color: #9c9c9c;
 }
 
@@ -937,8 +938,8 @@ input.xl::-webkit-input-placeholder {
 }
 
 .toolbar-item label {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     font-weight: 400;
     color: #616161;
 }
@@ -964,7 +965,7 @@ input.xl::-webkit-input-placeholder {
 
 .toolbar .select-wrap select {
     border: none;
-    border-radius: 0px;
+    border-radius: 0;
     -webkit-appearance: none;
     -moz-appearance: none;
     -ms-appearance: none;
