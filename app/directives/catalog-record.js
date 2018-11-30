@@ -11,6 +11,8 @@ angular.module('nrlCatalog')
                 $scope.viewAll = false;
                 $scope.viewXml = false;
                 $scope.viewImage = false;
+                $scope.thumbnailLoaded = false;
+                $scope.record.xmlLoaded = false;
                 var smExtentThumb = new extenty(69,69);
                 $scope.boxStyle = smExtentThumb.getBoxStyle($scope.flipExtent($scope.record.extent));
     
@@ -58,12 +60,13 @@ angular.module('nrlCatalog')
     .directive('imageonload', function() {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
+            link: function(scope, element) {
                 element.bind('load', function() {
-                    alert('image is loaded');
+                    scope.$parent.thumbnailLoaded = true;
+                    scope.$apply();
                 });
                 element.bind('error', function(){
-                    alert('image could not be loaded');
+                    console.log('image could not be loaded');
                 });
             }
         };

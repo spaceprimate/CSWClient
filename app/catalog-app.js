@@ -509,12 +509,11 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.requestRecord = function(r){
         if (r.xml == undefined){ // only run once
-            r.xml = "working...";
+            r.xml = "";
             var url = cswUrl + "&REQUEST=GetRecordById&service=CSW&version=2.0.2&elementSetName=full&id=" + r.identifier;
             $http({
                 url: url,
                 method: "GET",
-                
                 headers: {
                     'Accept': 'application/xml',
                 }
@@ -522,6 +521,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             .then(function(response){
                 // Request successful!
                 r.xml = vkbeautify.xml(response.data.toString(), 4);
+                r.xmlLoaded = true;
             },
             function(response){
                 r.xml = "The CSW server returned an error."

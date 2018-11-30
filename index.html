@@ -106,7 +106,8 @@
         <!-- No records found message -->
         <div ng-if="!hasData && !hasError && !startScreen && !loadingData" class="ng-cloak content">
             <sidebar-template></sidebar-template>
-            <h4 class="no-margin">No records found for those parameters.</h4>
+            <h4>No records found for those parameters.</h4>
+            <p><a ng-click="refineSearchToggle()">Refine search terms</a></p>
         </div>
 
         <!-- Error Message -->
