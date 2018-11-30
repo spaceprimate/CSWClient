@@ -15,16 +15,21 @@ body .no-outline {
     margin-left: 218px;
     margin-right: 18px;
     margin-bottom: 18px;
-    padding: 24px 0;
+    padding: 0;
     background: white;
     border: 1px solid #eaeaea;
     border-radius: 2px;
 }
 
+#main .content{padding: 24px;}
+
+
+
 /* general */
 .pointer {
     cursor: pointer;
 }
+.no-margin{margin: 0;}
 
 .break-word,
 tr.break-word td {
@@ -524,7 +529,7 @@ body .ol-mouse-position {
 
 /* records */
 .records-header {
-    margin: -24px 0 0 0;
+    margin: 0;
     background: #ffffff;
     padding: 5px 22px;
     /*border-bottom: solid 1px #eaeaea;*/
@@ -540,8 +545,8 @@ body .ol-mouse-position {
     border-radius: 0px;
     margin: 0px;
     display: block;
-    margin-left: -24px;
-    margin-right: -24px;
+    /*margin-left: -24px;*/
+    /*margin-right: -24px;*/
     height: 8px;
 }
 
@@ -563,7 +568,7 @@ tr.record-table td {
 
 .record {
     /*margin-top: 15px;*/
-    padding: 24px 24px 0 24px;
+    padding: 18px 24px 0 24px;
     border-top: 1px solid #eeeeee;
     overflow: hidden;
     position: relative;
@@ -586,7 +591,7 @@ article.record:hover {
 
 .record .record-thumbnail {
     position: absolute;
-    top: 24px;
+    top: 18px;
     left: 24px;
 }
 
@@ -594,7 +599,7 @@ article.record:hover {
     float: left;
     padding-left: 18px;
     margin-left: 74px;
-    min-height: 88px;
+    min-height: 93px;
 }
 
 .record-info h3 {

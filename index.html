@@ -104,11 +104,9 @@
         </div>
 
         <!-- No records found message -->
-        <div ng-if="!hasData && !hasError && !startScreen && !loadingData" class="ng-cloak row">
+        <div ng-if="!hasData && !hasError && !startScreen && !loadingData" class="ng-cloak content">
             <sidebar-template></sidebar-template>
-            <div class="col-sm-10">
-                <h2>No records found for those parameters.</h2>
-            </div>
+            <h4 class="no-margin">No records found for those parameters.</h4>
         </div>
 
         <!-- Error Message -->
