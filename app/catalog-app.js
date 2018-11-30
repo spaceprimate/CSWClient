@@ -6,8 +6,8 @@
 // Site Module
 var nrlCatalog = angular.module('nrlCatalog', [ 'ngAnimate' ]);
 
-// init extenty- handles extent thumbnails
-var extentThumbnail = new extenty(100,100);
+// init Extenty- handles extent thumbnails
+var extentThumbnail = new Extenty(100,100);
 
 nrlCatalog.config(function($httpProvider) {
     //Enable cross domain calls
@@ -82,13 +82,13 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         else{
             $scope.hideSearch();
         }
-    }
+    };
 
     $scope.loadWelcome = function(){
         $scope.startScreen = true;
         $scope.hasError = false;
         $scope.hasData = false;
-    }
+    };
 
     $scope.welcomeScreenInput = "";
 
@@ -96,12 +96,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         $scope.search.clearAll();
         $scope.addFilter('AnyText', $scope.welcomeScreenInput);
         $scope.submitSearch();
-    }
+    };
     
     /**
      * Sets $scope.curSearch value and calls method to retrieve the first set of pages
-     * 
-     * @param {string}  either"basicSearch" or "advancedSearch". if param is ommited, "basicSearch" is used
      */
     $scope.submitSearch = function(){
         $scope.showSearch = false;
@@ -123,7 +121,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.viewAllRecords = function(){
         $scope.search.filters[0].term = "";
         $scope.submitSearch();
-    }
+    };
 
     /**
      * Converts coordinates from corner formatted strings "20, 30" to extent array
@@ -132,20 +130,22 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @return{[]} getExtentFromCorners
      */
     function getExtentFromCorners(lowerCorner, upperCorner){
-        if (lowerCorner == undefined || upperCorner == undefined){
+        if (lowerCorner === undefined || upperCorner === undefined){
             return [null, null, null, null];
         }
-        lc = lowerCorner.split(" ");
-        uc = upperCorner.split(" ");
+        var lc = lowerCorner.split(" ");
+        var uc = upperCorner.split(" ");
         return lc.concat(uc);
     }
+
+
 
     /**
      * Get possible values for meta-data fields, Dublin core formatted
      * makes an ajax POST GetDomain request to CSW server
-     * @param {string} - name of property
-     * @param {method} - optional method to further process values (remove dupes or extraneous data)
-     *                      needed to handle idiosycrasies bewteen CSWs and metadata format and volume
+     * @param property - name of property
+     * @param filter - optional method to further process values (remove dupes or extraneous data)
+     *                      needed to handle idiosyncrasies between CSWs and metadata format and volume
      */
     function requestDomain(property, filter){
         var query =   '<csw:GetDomain xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" version="2.0.2" service="CSW">' +
@@ -156,7 +156,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             method: "POST",
             data: query,
             headers: {
-                'Accept': 'application/xml',
+                'Accept': 'application/xml'
             }
         })
         .then(function(response){
@@ -192,14 +192,17 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         });
     }
 
+
+
     /**
      * Adds a new type to the $scope.domain, and populates it with all possible values in the catalog
      * called once a AJAX GetDomain request has completed.
-     * @param {string} - type id
-     * @param {[]} - array of 
-     * @param {method} - optional method to further process values (remove dupes or extraneous data)
+     *
+     * @param type      {string} - type id
+     * @param values    {[]} - array of values
+     * @param filter    {method} - optional method to further process values (remove dupes or extraneous data)
      */
-    updateDomain = function(type, values, filter){
+    var updateDomain = function(type, values, filter){
         $scope.domain[type] = {};
         $scope.domain[type].values = [];
         values.forEach(function(v){
@@ -216,17 +219,18 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         if (filter){
             filter();
         }
-    }
+    };
 
     /**
      * Checks to see if domain contains a given property
-     * @param - property-type to search
-     * @param - property to search for
+     * @param type - property-type to search
+     * @param property - property to search for
+     * @returns {boolean}
      */
-    domainHasProperty = function(type, property){
+    var domainHasProperty = function(type, property){
         var found = false;
         for(var i = 0; i < $scope.domain[type].values.length; i++) {
-            if ($scope.domain[type].values[i].id == type) {
+            if ($scope.domain[type].values[i].id === type) {
                 found = true;
                 break;
             }
@@ -240,25 +244,25 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     $scope.getDomainValues = function(type){
         var values = [];
-        if($scope.domain[type] != undefined){
+        if($scope.domain[type] !== undefined){
             $scope.domain[type].values.forEach(function(v){
                 values.push(v.id);
             });
         }
         return values;
-    }
+    };
 
     /**
      * resets all properties 'active' state to false
      * currently implemented for only 'subject' and 'type' types
      */
     function resetDomain(){
-        if($scope.domain.subject != undefined){
+        if($scope.domain.subject !== undefined){
             $scope.domain.subject.values.forEach(function(e){
                 e.active = false;
             });
         }
-        if($scope.domain.type != undefined){
+        if($scope.domain.type !== undefined){
             $scope.domain.type.values.forEach(function(e){
                 e.active = false;
             });
@@ -272,16 +276,16 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     function refreshDomain(){
         resetDomain();
         $scope.search.filters.forEach(function(e){
-            if (e.type.id == "subject" && $scope.domain.subject != undefined){
+            if (e.type.id === "subject" && $scope.domain.subject !== undefined){
                 $scope.domain.subject.values.forEach(function(ee){
-                    if(e.term == ee.id){
+                    if(e.term === ee.id){
                         ee.active = true;
                     }
                 });
             }
-            else if (e.type.id == "type" && $scope.domain.type != undefined){
+            else if (e.type.id === "type" && $scope.domain.type !== undefined){
                 $scope.domain.type.values.forEach(function(ee){
-                    if(e.term == ee.id){
+                    if(e.term === ee.id){
                         ee.active = true;
                     }
                 });
@@ -294,7 +298,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * as user enters a term into a input field
      */
     $scope.autoComplete = function(f){
-        if(f.term == ""){
+        if(f.term === ""){
             f.autoTerms = null;
         }
         else{
@@ -308,7 +312,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             });
             f.autoTerms=output;
         }
-    }
+    };
 
     /**
      * When user selects an auto-complete suggestion, this enters it into the 
@@ -317,7 +321,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.fillAutoComplete = function(f, term){
         f.term = term;
         f.autoTerms = null;
-    }
+    };
 
 
     /**
@@ -326,7 +330,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      * @param {string}
      * @param {string} - optional
      */
-    addFilter = function(id, term){
+    var addFilter = function(id, term){
         var filter = {
             id: id,
             term: term

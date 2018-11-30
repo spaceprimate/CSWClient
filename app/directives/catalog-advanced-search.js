@@ -39,7 +39,7 @@ angular.module('nrlCatalog')
                         //set current filter of the extent-selection-map
                         advSearchMap.currentFilter = filter;
 
-                        //assign extenty css style to this filter instance
+                        //assign Extenty css style to this filter instance
                         filter.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
                         filter.isFirstTime = true; // is this the first time the bounding box has been assigned to this filter?
                         $scope.clearExtent(filter);

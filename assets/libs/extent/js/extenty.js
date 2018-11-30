@@ -1,4 +1,4 @@
-function extenty(w, h){
+function Extenty(w, h){
 
     var baseWidth = 100; // in pixels
     var baseHeight = 100;
@@ -9,7 +9,7 @@ function extenty(w, h){
     }
     
     /**
-     * Cycle through all the elements with the "extenty-box" class. 
+     * Cycle through all the elements with the "Extenty-box" class.
      * Get the coordinates in the dat-coords attribute
      * update styles for each box
      */

@@ -13,7 +13,7 @@ angular.module('nrlCatalog')
                 $scope.viewImage = false;
                 $scope.thumbnailLoaded = false;
                 $scope.record.xmlLoaded = false;
-                var smExtentThumb = new extenty(69,69);
+                var smExtentThumb = new Extenty(69,69);
                 $scope.boxStyle = smExtentThumb.getBoxStyle($scope.flipExtent($scope.record.extent));
     
                 $scope.toggleViewAll = function(){
