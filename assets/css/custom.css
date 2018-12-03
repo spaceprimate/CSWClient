@@ -348,7 +348,7 @@ h4 a.sm {
 .sidebar-keywords{
     position: fixed;
     width: 199px;
-    top: 283px;
+    top: 311px;
     bottom: 0px;
     left: 0px;
     overflow:auto;
@@ -356,6 +356,19 @@ h4 a.sm {
     padding-bottom: 24px;
 }
 .sidebar-keywords span.link{padding-left: 11px;}
+
+.sidebar-keywords span.count{
+    /*float: right;*/
+    font-size: 10px;
+    /*padding: 3px 2px;*/
+    /* background: #e2e2e2; */
+    color: #5195b7;
+    border-radius: 2px;
+    margin-right: 3px;
+    vertical-align: middle;
+    padding-left: 5px;
+
+}
 
 .search-container {
     overflow: visible;

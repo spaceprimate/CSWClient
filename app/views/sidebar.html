@@ -12,28 +12,34 @@
     </ul>
     <hr>
 
+
+
+    <h5>
+        <span ng-hide="showAllKeywords">Top keywords</span>
+        <span ng-show="showAllKeywords">Keywords</span>
+        <span class="refine-clear link" ng-click="clearFilterType('subject'); submitSearch();" ng-show="hasFilterType('subject')" alt="Clear keywords" title="Clear keywords">
+            Clear
+        </span>
+    </h5>
+
     <div class="sidebar-keywords">
-
-        <h5>
-            <span ng-hide="showAllKeywords">Top keywords</span>
-            <span ng-show="showAllKeywords">Keywords</span>
-            <span class="refine-clear link" ng-click="clearFilterType('subject'); submitSearch();" ng-show="hasFilterType('subject')" alt="Clear keywords" title="Clear keywords">
-                Clear
-            </span>
-        </h5>
-
-
 
         <ul class="list-unstyled sidebar-menu" ng-if="!showAllKeywords">
             <li ng-repeat="k in domain.subject.values | orderBy : 'count': true | limitTo:16"
-            ng-click="refineSearch('subject', k.id, true)" class="pointer" ng-class="{ 'active' : k.active }">{{k.id}}</li>
+            ng-click="refineSearch('subject', k.id, true)" class="pointer" ng-class="{ 'active' : k.active }">
+                {{k.id}}
+                <span class="count">{{k.count}}</span>
+            </li>
         </ul>
 
 
 
         <ul class="list-unstyled sidebar-menu" ng-if="showAllKeywords">
             <li ng-repeat="k in domain.subject.values | orderBy : 'count': true"
-                ng-click="refineSearch('subject', k.id, true)" class="pointer" ng-class="{ 'active' : k.active }">{{k.id}}</li>
+            ng-click="refineSearch('subject', k.id, true)" class="pointer" ng-class="{ 'active' : k.active }">
+                {{k.id}}
+                <span class="count">{{k.count}}</span>
+            </li>
         </ul>
 
         <p>
