@@ -344,6 +344,19 @@ h4 a.sm {
     margin-right: 8px;
 }
 
+
+.sidebar-keywords{
+    position: fixed;
+    width: 199px;
+    top: 283px;
+    bottom: 0px;
+    left: 0px;
+    overflow:auto;
+    padding-top: 7px;
+    padding-bottom: 24px;
+}
+.sidebar-keywords span.link{padding-left: 11px;}
+
 .search-container {
     overflow: visible;
     /* box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.26); */
