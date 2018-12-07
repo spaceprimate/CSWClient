@@ -28,7 +28,7 @@
             <li ng-repeat="k in domain.subject.values | orderBy : 'count': true | limitTo:16"
             ng-click="refineSearch('subject', k.id, true)" class="pointer" ng-class="{ 'active' : k.active }">
                 {{k.id}}
-                <span class="count">{{k.count}}</span>
+                <!--<span class="count">{{k.count}}</span>-->
             </li>
         </ul>
 
@@ -38,7 +38,7 @@
             <li ng-repeat="k in domain.subject.values | orderBy : 'count': true"
             ng-click="refineSearch('subject', k.id, true)" class="pointer" ng-class="{ 'active' : k.active }">
                 {{k.id}}
-                <span class="count">{{k.count}}</span>
+                <!--<span class="count">{{k.count}}</span>-->
             </li>
         </ul>
 

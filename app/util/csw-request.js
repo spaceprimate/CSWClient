@@ -16,10 +16,12 @@ csw.components = {};
  */
 csw.filter = function(filter){
     this.type = this.types[0];
+    this.extentyStyle = [];
     this.constraint = this.constraints[0];
     this.term = "";
     this.extent = [-180, -90, 180, 90];
     this.extentConstraint = this.extentConstraints[0];
+    this.multiExtent = false; // if extent crosses the antimeridian
     if(filter){
         this.type = this.types.find(function(t){return filter.id == t.id});
         this.term = filter.term;
@@ -223,7 +225,7 @@ csw.search.prototype.createRequest = function(pages){
     var request =   '<csw:GetRecords xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:ogc="http://www.opengis.net/ogc" service="CSW" version="2.0.2" resultType="results" startPosition="' + recordNumber + '" maxRecords="' + pages.recordsPerPage.value + '" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:gml="http://www.opengis.net/gml">' +
                         '<csw:Query typeNames="csw:Record">' +
                         '<csw:ElementSetName>full</csw:ElementSetName>';
-        if (this.filters.length < 2){
+        if (this.filters.length < 2 && !this.filters[0].multiExtent){
             request +=  '<csw:Constraint version="1.1.0">' +
                             '<ogc:Filter>'; 
                                 for (var i = 0; i < this.filters.length; i++) {
@@ -271,19 +273,42 @@ csw.getFilterXml = function(filter){
     else{ return csw.getBboxXml(filter); }
 };
 
+
+
 /**
  * builds xml string for bbox filters
- * @param {csw.filter} 
- * @return XML string
+ * Checks if a extent crosses the antimeridian (lat 180 or -180) and creates two bbox filters if necessary
+ * @param filter        - csw.filter
+ * @returns {string}
  */
 csw.getBboxXml = function(filter){
-    var xml = '<ogc:'+filter.extentConstraint.id+'>'+
+    var extents = [];
+    var xml = '';
+    if (filter.multiExtent){
+        extents = getOutOfBoundsExtents(filter.extent);
+    }
+    else {
+        extents[0] = filter.extent;
+    }
+
+    xml =   '<ogc:'+filter.extentConstraint.id+'>'+
+                '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>'+
+                '<gml:Envelope>'+
+                    '<gml:lowerCorner>' + extents[0][1] + ' ' + extents[0][0] + '</gml:lowerCorner>'+
+                    '<gml:upperCorner>' + extents[0][3] + ' ' + extents[0][2] + '</gml:upperCorner>'+
+                '</gml:Envelope>'+
+            '</ogc:'+filter.extentConstraint.id+'>';
+
+    if(filter.multiExtent){
+        xml +=  '<ogc:'+filter.extentConstraint.id+'>'+
                     '<ogc:PropertyName>ows:BoundingBox</ogc:PropertyName>'+
                     '<gml:Envelope>'+
-                        '<gml:lowerCorner>' + filter.extent[1] + ' ' + filter.extent[0] + '</gml:lowerCorner>'+
-                        '<gml:upperCorner>' + filter.extent[3] + ' ' + filter.extent[2] + '</gml:upperCorner>'+
+                        '<gml:lowerCorner>' + extents[1][1] + ' ' + extents[1][0] + '</gml:lowerCorner>'+
+                        '<gml:upperCorner>' + extents[1][3] + ' ' + extents[1][2] + '</gml:upperCorner>'+
                     '</gml:Envelope>'+
                 '</ogc:'+filter.extentConstraint.id+'>';
+    }
+
     return xml;
 }
 

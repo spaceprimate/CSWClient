@@ -12,7 +12,7 @@ angular.module('nrlCatalog')
                     return [-180, -90, 180, 90];
                 }
 
-                $scope.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
+                // $scope.extentyStyle[0] = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
 
                 $scope.mapClass = "cross-hair";
                 
@@ -40,7 +40,7 @@ angular.module('nrlCatalog')
                         advSearchMap.currentFilter = filter;
 
                         //assign Extenty css style to this filter instance
-                        filter.extentyStyle = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
+                        filter.extentyStyle[0] = extentThumbnail.getBoxStyle( $scope.getDefaultExtent() );
                         filter.isFirstTime = true; // is this the first time the bounding box has been assigned to this filter?
                         $scope.clearExtent(filter);
                         $scope.loadExtentSelector(filter);
@@ -95,7 +95,7 @@ angular.module('nrlCatalog')
                             center: [0, 0],
                             projection: 'EPSG:4326',
                             zoom: 2,
-                            minZoom: 2
+                            minZoom: 1
                         })
                     });
 
@@ -149,9 +149,23 @@ angular.module('nrlCatalog')
                  * updates extent when user manually changes coordinate input in view
                  */
                 $scope.updateExtent = function(filter){
-                    //this needs to get extent from a specific contraint
                     advSearchExtent.setExtent(filter.extent);
-                    filter.extentyStyle = extentThumbnail.getBoxStyle(filter.extent);
+                    if(!isOutOfBounds(filter.extent)){
+                        filter.multiExtent = false;
+
+                        filter.extentyStyle[0] = extentThumbnail.getBoxStyle(filter.extent);
+                        if (filter.extentyStyle.length > 1){filter.extentyStyle.pop();}
+                    }
+                    else {
+                        filter.multiExtent = true;
+                        // advSearchExtent.setExtent(filter.extent);
+                        // filter.extentyStyle[0] = extentThumbnail.getBoxStyle(filter.extent);
+                        var multiExtents = getOutOfBoundsExtents(filter.extent);
+                        filter.extentyStyle[0] = extentThumbnail.getBoxStyle(multiExtents[0]);
+                        filter.extentyStyle[1] = extentThumbnail.getBoxStyle(multiExtents[1]);
+                    }
+
+
                 };
 
                 /**
@@ -160,32 +174,59 @@ angular.module('nrlCatalog')
                 $scope.updateExtentFields = function(){
                     if (advSearchExtent.getExtent() != null){
                         advSearchMap.currentFilter.extent = advSearchExtent.getExtent(); // set current extent filter extent to extent outline in OL extent object
-                        if ( isOutOfBounds( advSearchExtent.getExtent() )){
-                            console.log("this is outta bounds!");
+                        advSearchMap.currentFilter.extent = trimExtent(advSearchMap.currentFilter.extent);
+                        if ( isOutOfBounds( advSearchMap.currentFilter.extent )){
+                            console.log("out of bounds");
+
+                            /*
+                            -   split into 2 arrays
+                            -   take take largest longitude as left bound, 180 as right bound
+                            -   take -180 as left bound, smallest long as right
+                            -   (you'll need to apply this to the query as well)
+
+                                - CASE 1: [0] < -180
+                                - CASE 2: [2] > 180
+                                - CASE 3: THEY'RE BOTH OUT, WAT - possible tho
+
+
+                                TODO: set 'multibound' flag
+                                    - move the map over slightly to accommodate the selection
+                                    - we should probably add text to the edit and pan icons
+
+
+                             */
+
+                            //set flag
+                            advSearchMap.currentFilter.multiExtent = true;
+                            var multiExtents = getOutOfBoundsExtents(advSearchMap.currentFilter.extent);
+
+                            advSearchMap.currentFilter.extentyStyle[0] = extentThumbnail.getBoxStyle(multiExtents[0]);
+                            advSearchMap.currentFilter.extentyStyle[1] = extentThumbnail.getBoxStyle(multiExtents[1]);
+
+
                         }
                         else{
-                            console.log("aint even outta bounds a bit!11");
+
+                            if (advSearchMap.currentFilter.extentyStyle.length > 1){advSearchMap.currentFilter.extentyStyle.pop();}
+                            console.log("in bounds");
+                            //unset flag
+                            advSearchMap.currentFilter.multiExtent = false;
+
+                            advSearchMap.currentFilter.extentyStyle[0] = extentThumbnail.getBoxStyle(advSearchMap.currentFilter.extent);
                         }
                     }
                     else{
                         advSearchMap.currentFilter.extent = [-180.0, -90.0, 180.0, 90.0];
+
                     }
                     
-                    advSearchMap.currentFilter.extentyStyle = extentThumbnail.getBoxStyle(advSearchMap.currentFilter.extent);
-                    $scope.hideExtentSelector();
-                }
 
-                function isOutOfBounds(extent){
-                    if(
-                        extent[0] > 180 || extent[0] < -180 ||
-                        extent[1] > 90 || extent[1] < -90 ||
-                        extent[2] > 180 || extent[2] < -180 ||
-                        extent[3] > 90 || extent[3] < -90
-                    ){
-                        return true;
-                    }
-                    return false;
-                }
+                    $scope.hideExtentSelector();
+                };
+
+                // many functions moved from here to util.js
+
+
 
 
                 $scope.loadExtentSelector = function(filter){
@@ -217,7 +258,7 @@ angular.module('nrlCatalog')
                 $scope.clearExtent = function(filter){
                     advSearchExtent.setExtent(null); // open layers extent (clears it)
                     filter.extent = $scope.getDefaultExtent();
-                    filter.extentyStyle = extentThumbnail.getBoxStyle(filter.extent);
+                    filter.extentyStyle[0] = extentThumbnail.getBoxStyle(filter.extent);
                 };
 
                 /**

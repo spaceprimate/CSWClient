@@ -78,7 +78,12 @@
                                 ng-change="updateExtent(f)" id="max-lat"></div>
 
                         <div class="extenty record-thumbnail pointer" ng-click="loadExtentSelector(f)">
-                            <div class="extenty-box" ng-style="f.extentyStyle"></div>
+                            <!--<div class="extenty-box" ng-style="f.extentyStyle[0]"></div>-->
+                            <!--<div class="extenty-box" ng-style="f.extentyStyle[1]"></div>-->
+
+                            <div class="extenty-box" ng-repeat="style in f.extentyStyle" ng-style="style"></div>
+
+
                             <div class="edit-icon"><span class="glyphicon glyphicon-pencil"></span></div>
                         </div>
                         
