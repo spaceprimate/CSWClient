@@ -31,7 +31,45 @@
 
 <div ng-if="viewImage" class="record-preview">
     <img src="assets/img/loading-grey-grey.gif" ng-hide="thumbnailLoaded" class="loading-icon"/>
-    <img ng-src="{{record.thumbnail}}"  imageonload />
+    <img ng-src="{{record.thumbnail}}"  imageonload class="thumb" ng-style="{'background-color':thumbBg}"/>
+    <div class="color-select">
+        <div class="color-button" ng-click="toggleColorSelect()">
+            <span class="glyphicon glyphicon-tint"></span>
+        </div>
+        <!--
+            cyan
+            magenta
+            yellow
+            red
+            green
+            blue
+            black
+            white
+            grey
+            sea blue
+            forest green
+                            black
+            grey            white
+            green           deep blue
+            light green     ocean blue
+            light yellow    very light grey blue
+            light brown     brick
+            brown           deep red
+
+        -->
+        <div class="colors" ng-show="showColorSelect">
+            <div class="c1">
+                <div class="color" ng-repeat="c in colors1" ng-style="{'background-color':c}" ng-click="setThumbBg(c)"
+                    ng-mouseover="setHoverBg(c)" ng-mouseleave="setHoverOut()"></div>
+
+            </div>
+            <div class="c2">
+                <div class="color" ng-repeat="c in colors2" ng-style="{'background-color':c}" ng-click="setThumbBg(c)"
+                     ng-mouseover="setHoverBg(c)" ng-mouseleave="setHoverOut()"></div>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 <div ng-if="viewXml">

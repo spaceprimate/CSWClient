@@ -14,6 +14,26 @@ angular.module('nrlCatalog')
                 $scope.thumbnailLoaded = false;
                 $scope.record.xmlLoaded = false;
                 var smExtentThumb = new Extenty(69,69);
+                $scope.colors1 = [
+                    "#f9f9f9",
+                    "#009688",
+                    "#7fd882",
+                    "#fff8bf",
+                    "#d0bc83",
+                    "#795548"
+                ];
+                $scope.colors2 = [
+                    "#000000",
+                    "#9e9e9e",
+                    "#0164b3",
+                    "#74cef7",
+                    "#dbfbff",
+                    "#ffbba6",
+                    "#f44336",
+                ];
+                $scope.thumbBg = "#f9f9f9";
+                $scope.thumbBgBackup = "#f9f9f9";
+                $scope.showColorSelect = false;
                 $scope.boxStyle = smExtentThumb.getBoxStyle($scope.flipExtent($scope.record.extent));
     
                 $scope.toggleViewAll = function(){
@@ -24,7 +44,7 @@ angular.module('nrlCatalog')
                     else{
                         $scope.viewAll = false;
                     }
-                }
+                };
     
                 $scope.toggleViewXml = function(){
                     if (!$scope.viewXml){
@@ -34,7 +54,7 @@ angular.module('nrlCatalog')
                     else{
                         $scope.viewXml = false;
                     }
-                }
+                };
     
                 $scope.toggleViewImage = function(){
                     if (!$scope.viewImage){
@@ -44,12 +64,31 @@ angular.module('nrlCatalog')
                     else{
                         $scope.viewImage = false;
                     }
-                }
+                };
     
                 var hideAllViews = function(){
                     $scope.viewXml = false;
                     $scope.viewAll = false;
                     $scope.viewImage = false;
+                };
+
+                $scope.setThumbBg = function(c){
+                    $scope.thumbBg = c;
+                    $scope.thumbBgBackup = c;
+                    $scope.showColorSelect = false;
+                    console.log("select: " + $scope.showColorSelect);
+                    console.log("color: " + c);
+                };
+                $scope.setHoverBg = function(c){
+                    $scope.thumbBgBackup = $scope.thumbBg;
+                    $scope.thumbBg = c;
+                };
+                $scope.setHoverOut = function (){
+                    $scope.thumbBg = $scope.thumbBgBackup;
+                };
+
+                $scope.toggleColorSelect = function(){
+                    $scope.showColorSelect = !$scope.showColorSelect;
                 };
     
             }
