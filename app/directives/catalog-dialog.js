@@ -13,7 +13,7 @@ angular.module('nrlCatalog')
                 $scope.dialog = {
                     title: "error",
                     msg: "An error has occurred."
-                }
+                };
                 $scope.openDialog = function(title, msg){
                     $scope.dialog.title = title;
                     $scope.dialog.msg = msg;

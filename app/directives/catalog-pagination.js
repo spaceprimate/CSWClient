@@ -4,14 +4,12 @@ angular.module('nrlCatalog')
             restrict: 'E',
             templateUrl:   'app/views/pagination.html',
             controller: function($scope){
-                console.log("working so far");
-
                 $scope.recordsPerPageOptions = [
                     {value: 10, label: '10 per page'},
                     {value: 25, label: '25 per page'},
                     {value: 50, label: '50 per page'},
                     {value: 100, label: '100 per page'}
-                ]
+                ];
 
                 $scope.pages = {
                     curPage: 1,
@@ -20,9 +18,8 @@ angular.module('nrlCatalog')
                     recordsPerPage: $scope.recordsPerPageOptions[0],
                     totalPages: null,
                     pageLimits: []
-                }
+                };
 
-                
 
                 /**
                  * based on settings in pages object, this calculates how many pages are required
@@ -77,14 +74,12 @@ angular.module('nrlCatalog')
                  */
                 $scope.getPageNumbers = function(){
                     var arr = [];
-                    for (i = $scope.pages.pageLimits[0] + 1; i <= $scope.pages.pageLimits[1] && i <= $scope.pages.totalPages; i++){
+                    for (var i = $scope.pages.pageLimits[0] + 1; i <= $scope.pages.pageLimits[1] && i <= $scope.pages.totalPages; i++){
                         arr.push(i);
                     }
                     return arr;
                 };
 
-
-                
 
                 /**
                  * gets all the page numbers
@@ -95,7 +90,7 @@ angular.module('nrlCatalog')
                         arr.push(i);
                     }
                     return arr;
-                }
+                };
 
                 /**
                  * increments $scope.pages.curPage
@@ -128,7 +123,7 @@ angular.module('nrlCatalog')
                         lastRecord = p.totalRecords;
                     }
                     return [firstRecord, lastRecord];
-                }
+                };
 
                 // separate model maintained for GoTo dropdown
                 $scope.goToPageModel = 1;

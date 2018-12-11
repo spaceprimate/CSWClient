@@ -76,8 +76,6 @@ angular.module('nrlCatalog')
                     $scope.thumbBg = c;
                     $scope.thumbBgBackup = c;
                     $scope.showColorSelect = false;
-                    console.log("select: " + $scope.showColorSelect);
-                    console.log("color: " + c);
                 };
                 $scope.setHoverBg = function(c){
                     $scope.thumbBgBackup = $scope.thumbBg;
