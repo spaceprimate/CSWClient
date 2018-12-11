@@ -596,7 +596,8 @@ body .extenty-box {
 }
 
 .dialog .panel-body{
-    min-height: 168px;
+    height: 168px;
+    overflow: auto;
 }
 
 .panel, .panel-heading{

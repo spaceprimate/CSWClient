@@ -24,6 +24,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     // var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
     // var cswUrl = "https://www.sciencebase.gov/catalog/item/4f554236e4b018de15819c85/csw?service=CSW&version=2.0.2";
     var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    
 
     //if true, app knows to rebuild $scope.pages object, called during http request
     $scope.newRequest = true;
@@ -49,8 +50,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.hasData = false; 
 
     // If records request returns an error
-    $scope.hasError = false;
-    $scope.errorMessage = '';
+    // $scope.hasError = false;
+    // $scope.errorMessage = '';
 
     $scope.search = new csw.search(); // main search object
 
@@ -86,7 +87,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     $scope.loadWelcome = function(){
         $scope.startScreen = true;
-        $scope.hasError = false;
+        // $scope.hasError = false;
         $scope.hasData = false;
     };
 
@@ -149,7 +150,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     function requestDomain(property, filter){
         var query =   '<csw:GetDomain xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" version="2.0.2" service="CSW">' +
-                                '<csw:PropertyName>dc:' + property + '</csw:PropertyName>' +                            
+                                '<csw:PropertyName>dc:' + property + '</csw:PropertyName>' +
                             '</csw:GetDomain>';
         $http({
             url: cswUrl,
@@ -168,8 +169,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
             
             if(jsonData.ExceptionReport){ // If server returns an exception
-                $scope.hasError = true;
-                $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
+                // $scope.hasError = true;
+                // $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
+                $scope.openDialog("Keyword request exception", jsonData.ExceptionReport.Exception.ExceptionText.toString());
                 console.log("Error: ");
                 console.log(jsonData.ExceptionReport);
             }
@@ -185,8 +187,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         function(response){ // error
             $scope.hasData = false;
             $scope.loadingData = false;
-            $scope.hasError = true;
-            $scope.errorMessage = "The CSW server returned an error."
+            // $scope.hasError = true;
+            // $scope.errorMessage = "The CSW server returned an error."
+
+            $scope.openDialog(response.status, response.statusText);
             console.log("Request Error, response follows: ");
             console.log(response);
         });
@@ -446,7 +450,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
      */
     // check here: http://stackoverflow.com/questions/21455045/angularjs-http-cors-and-http-authentication
     $scope.requestRecords = function(recordRequest){
-        $scope.hasError = false;
+        // $scope.hasError = false;
         $scope.startScreen = false;
         $scope.hasData = false;
         $scope.loadingData = true;
@@ -473,8 +477,9 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             //If server returns an exception
             if(jsonData.ExceptionReport){
                 $scope.loadingData = false;
-                $scope.hasError = true;
-                $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
+                // $scope.hasError = true;
+                // $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
+                $scope.openDialog("CSW server error", jsonData.ExceptionReport.Exception.ExceptionText.toString());
                 console.log("Error: ");
                 console.log(jsonData.ExceptionReport);
             }
@@ -496,9 +501,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         function(response){
             $scope.hasData = false;
             $scope.loadingData = false;
-            $scope.hasError = true;
-            $scope.errorMessage = "The CSW server returned an error."
+            // $scope.hasError = true;
+            // $scope.errorMessage = "The CSW server returned an error."
             //error
+            $scope.openDialog("Error: " + response.status, response.statusText);
             console.log("Request Error, response follows: ");
             console.log(response);
         });
