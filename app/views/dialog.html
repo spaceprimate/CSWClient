@@ -1,0 +1,11 @@
+<div class="dialog" ng-show="showDialog">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            {{dialog.title}}
+            <button class="close-button" ng-click="closeDialog()"><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+        <div class="panel-body">
+            <p>{{dialog.msg}}</p>
+        </div>
+    </div>
+</div>

@@ -581,6 +581,44 @@ body .extenty-box {
     background: deeppink;
 }
 
+.dialog{
+    width: 400px;
+    position: absolute;
+    left: 50%;
+    margin-left: -200px;
+    height: 200px;
+    top: 50%;
+    margin-top: -100px;
+}
+.dialog .panel{
+    box-shadow: #989898 0px 2px 11px 2px;
+    border: 0px;
+}
+
+.dialog .panel-body{
+    min-height: 168px;
+}
+
+.panel, .panel-heading{
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+.panel-heading{
+    padding: 5px 15px;
+    position: relative;
+}
+.panel-heading .close-button{
+    position: absolute;
+    top: 0;
+    right: 0px;
+    bottom: 0;
+    background: none;
+    border: 0px;
+    width: 31px;
+}
+
+.panel-danger>.panel-heading{background: none;}
 
 .map {
     border: 2px solid #a2a2a2;
