@@ -10,10 +10,7 @@ body .no-outline {
 }
 
 #main {
-    margin-top: 81px;
-    margin-left: 218px;
-    margin-right: 18px;
-    margin-bottom: 18px;
+    margin: 81px 18px 18px 218px;
     padding: 0;
     background: white;
     border: 1px solid #eaeaea;
@@ -114,11 +111,8 @@ tr.break-word td {
 }
 
 #loading-indicator {
-    /* width: 450px; */
-    /* margin: auto; */
     font-weight: 300;
     font-size: 18px;
-    /* margin-top: 120px; */
     position: fixed;
     top: 42px;
     left: 0;
@@ -173,7 +167,6 @@ tr.break-word td {
 
 .navbar a.search-toggle {
     display: block;
-    color: #adadad;
     position: absolute;
     font-size: 12px;
     padding: 0 17px 0 17px;
@@ -265,8 +258,7 @@ h4 a.sm {
 
 .sidebar {
     background: #ffffff;
-    border: 1px solid #eaeaea;
-    border-width: 0 1px 0 0;
+    border-right: 1px solid #eaeaea;
     padding: 0;
     border-radius: 0;
     position: fixed;
@@ -349,8 +341,8 @@ h4 a.sm {
     position: fixed;
     width: 199px;
     top: 311px;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
     overflow:auto;
     padding-top: 7px;
     padding-bottom: 24px;
@@ -515,13 +507,10 @@ body .extenty-box {
 
 .record-preview {
     margin: 9px 0 24px 0;
-    background: #f9f9f9;
+    background: #f9f9f9 no-repeat center;
     min-height: 200px;
     min-width: 200px;
-    /*background-image: url("../img/loading-grey-grey.gif");*/
     border: 3px solid #e0e0e0;
-    background-repeat: no-repeat;
-    background-position: center;
     display: inline-block;
     position: relative;
 }
@@ -548,7 +537,6 @@ body .extenty-box {
 .color-select .color-button{
     width: 23px;
     height: 22px;
-    /*border-left: 1px solid #cecece;*/
     text-align: center;
     padding-top: 1px;
 }
@@ -568,17 +556,21 @@ body .extenty-box {
 
 .color-select .colors{
     position: absolute;
-    top: 0px;
+    top: 0;
     left: 0;
     /*border-left: solid 1px #cecece;*/
 }
-.color-select .colors .c1{position: absolute; top: 22px; left: 0px; width: 23px;}
-.color-select .colors .c2{position: absolute; top: 0px; left: 22px; width: 23px;}
+.color-select .colors .c1{position: absolute; top: 22px; left: 0; width: 23px;}
+.color-select .colors .c2{position: absolute; top: 0; left: 22px; width: 23px;}
 .color-select .colors .color{
     width: 22px;
     height: 22px;
     cursor: pointer;
     background: deeppink;
+}
+.color-select .colors .color:hover{
+    border: rgba(255, 255, 255, 0.25) solid 1px;
+    opacity: .9;
 }
 
 .dialog{
@@ -591,8 +583,8 @@ body .extenty-box {
     margin-top: -100px;
 }
 .dialog .panel{
-    box-shadow: #989898 0px 2px 11px 2px;
-    border: 0px;
+    box-shadow: #989898 0 2px 11px 2px;
+    border: 0;
 }
 
 .dialog .panel-body{
@@ -601,9 +593,9 @@ body .extenty-box {
 }
 
 .panel, .panel-heading{
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
 }
 .panel-heading{
     padding: 5px 15px;
@@ -612,10 +604,10 @@ body .extenty-box {
 .panel-heading .close-button{
     position: absolute;
     top: 0;
-    right: 0px;
+    right: 0;
     bottom: 0;
     background: none;
-    border: 0px;
+    border: 0;
     width: 31px;
 }
 
@@ -681,7 +673,6 @@ body .ol-mouse-position {
     margin: 0;
     background: #ffffff;
     padding: 5px 22px;
-    /*border-bottom: solid 1px #eaeaea;*/
     min-height: 28px;
     color: #656565;
 }
@@ -993,8 +984,6 @@ input.xl:focus {
     background: #efefef;
 }
 
-/* input.xl::placeholder, input.xl:-ms-input-placeholder, input.xl::-ms-input-placeholder,  */
-
 input.xl::-ms-input-placeholder {
     font-style: italic;
     color: rgb(168, 168, 168);
@@ -1009,10 +998,6 @@ input.xl::-webkit-input-placeholder {
     font-style: italic;
     color: rgb(168, 168, 168);
 }
-
-/* ::-webkit-input-placeholder {
-    color: orange;
-  } */
 
 [ng\:cloak],
 [ng-cloak],

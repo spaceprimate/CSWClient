@@ -16,22 +16,26 @@ function getSafe(fn) {
 }
 
 /**
- *
+ * Checks if extent has out-of-bounds coordinate
  * @param extent
  * @returns {boolean}
  */
 function isOutOfBounds(extent){
-    if(
+    return (
         extent[0] > 180 || extent[0] < -180 ||
         extent[1] > 90 || extent[1] < -90 ||
         extent[2] > 180 || extent[2] < -180 ||
         extent[3] > 90 || extent[3] < -90
-    ){
-        return true;
-    }
-    return false;
+    );
 }
 
+/**
+ * If latitude exceeds |90| or both longitudinal coordinates exceed |180|, trim them
+ * Allow one and only one longitudinal coordinate to exceed |180| in case
+ * selection crosses antimeridian
+ * @param e
+ * @returns {*}
+ */
 function trimExtent(e){
     // trim latitudes to 90, -90
     if(e[1] < -90){e[1] = -90;}
@@ -42,10 +46,7 @@ function trimExtent(e){
 
 //make case for both being out of bounds
 function getOutOfBoundsExtents(e){
-    var extents = [];
-
-
-
+    var e1, e2;
     if (e[0] < -180){
         e1 = [ (e[0] + 360), e[1], 180, e[3] ];
         e2 = [ -180, e[1], e[2], e[3] ];

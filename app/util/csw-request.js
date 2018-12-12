@@ -23,10 +23,10 @@ csw.filter = function(filter){
     this.extentConstraint = this.extentConstraints[0];
     this.multiExtent = false; // if extent crosses the antimeridian
     if(filter){
-        this.type = this.types.find(function(t){return filter.id == t.id});
+        this.type = this.types.find(function(t){return filter.id === t.id});
         this.term = filter.term;
         if(filter.constraint){
-            this.constraint = this.constraints.find(function(c){return filter.constraint == c.id});
+            this.constraint = this.constraints.find(function(c){return filter.constraint === c.id});
         }
     }
 };
@@ -78,7 +78,7 @@ csw.search = function(){
     this.setHasExtent = function(){
         var extentTest = false;
         for (var i = 0; i < this.filters.length; i++) {
-            if (this.filters[i].type.id == "extent"){
+            if (this.filters[i].type.id === "extent"){
                 extentTest = true;
             }
         }
@@ -88,7 +88,7 @@ csw.search = function(){
     //returns index of extent filter
     this.findExtentIndex = function(){
         for (var i = 0; i < this.filters.length; i++) {
-            if (this.filters[i].type.id == "extent"){
+            if (this.filters[i].type.id === "extent"){
                 return i;
             }
         }
@@ -99,7 +99,6 @@ csw.search = function(){
     this.setExtent = function(extent){
         var index = this.findExtentIndex();
         if (index != null){
-            //this.filters[this.findExtentIndex()].extent = extent;
             this.filters[index].extent = extent;
         }
     };
@@ -109,13 +108,14 @@ csw.search = function(){
         return this.filters[this.findExtentIndex()].extent;
     };
 
-    // this.setType = function(filter, type){
-        
-    // }
 
-    //pushes new filter object into filters array
+    /**
+     * forwards to appropriate addFilter function
+     * if parameter is empty, and new filter needs to be instantiated
+     *
+     * @param f - already instantiated filter to add to filters array
+     */
     this.addFilter = function(f){
-        
         if(f){
             this.filters.push( new csw.filter(f) );
         }
@@ -124,31 +124,11 @@ csw.search = function(){
         }
     };
 
-    // //pushes new filter object into filters array
-    // this.addFilterByType = function(type){
-    //     // var newType = csw.filter.prototype.types.find(function(t){return filter.id == type});
-    //     var filter = new csw.filter();
 
-    //     filter.type = filter.types.find(function(t){return t.id == type});
-
-
-    //     // this.type = this.types.find(function(t){return filter.id == t.id});
-
-    //     this.filters.push( filter );
-        
-
-
-    //     // options are: title, AnyText, abstract, subject, extent, type
-    //     // {id: "title", label: "Title", prefix: "dc:"},
-    //     // {id: "AnyText", label: "Any", prefix: "csw:"},
-    //     // {id: "abstract", label: "Abstract", prefix: "dct:"},
-    //     // {id: "subject", label: "Keyword", prefix: "dc:"},
-    //     // {id: "extent", label: "Bounding Box"},
-    //     // {id: "type", label: "type", prefix: "dc:"}
-        
-    // };
-
-    //removes filter at index
+    /**
+     * removes filter at index
+     * @param index
+     */
     this.removeFilter = function(index){
         this.filters.splice(index, 1);
         this.setHasExtent();
@@ -158,29 +138,31 @@ csw.search = function(){
     this.removeFilterType = function(type){
         var index = this.filters.length - 1;
         while (index >= 0) {
-            if (this.filters[index].type.id == type) {
+            if (this.filters[index].type.id === type) {
                 this.removeFilter(index);
             }
             index--;
         }
     };
+
 
     //removes filters of a given type and term
     this.removeFilterTypeId = function(type, term){
         var index = this.filters.length - 1;
         while (index >= 0) {
-            if (this.filters[index].type.id == type && this.filters[index].term == term) {
+            if (this.filters[index].type.id === type && this.filters[index].term === term) {
                 this.removeFilter(index);
             }
             index--;
         }
     };
 
+
     //removes filters of a given type
     this.hasFilterType = function(type){
         var hasFilter = false;
         this.filters.forEach(function(f){
-            if (f.type.id == type){                
+            if (f.type.id === type){
                 hasFilter = true;
             }
         });
@@ -201,17 +183,17 @@ csw.search = function(){
         this.filters = [];
         this.filters[0] = new csw.filter();
         this.setHasExtent();
-    }
+    };
 
     //completely clears search (zero filters)
     this.clearAll = function(){
         this.filters = [];
         this.setHasExtent();
-    }
+    };
 
     //initialize with 1 filter
     this.filters[0] = new csw.filter();
-}
+};
 
 /**
  * Creates XML string used in CSW POST requests * Useful when underlying map service has labels.
@@ -242,8 +224,8 @@ csw.search.prototype.createRequest = function(pages){
                                         '<ogc:PropertyName>dc:type</ogc:PropertyName>' +
                                         '<ogc:Literal>deleteThis</ogc:Literal>' +
                                     '</ogc:PropertyIsNotEqualTo>';
-                for (var i = 0; i < this.filters.length; i++) {
-                    request += csw.getFilterXml(this.filters[i]);
+                for (var index = 0; index < this.filters.length; index++) {
+                    request += csw.getFilterXml(this.filters[index]);
                 }
             request +=          '</ogc:And>' + 
                             '</ogc:Filter>' +
@@ -260,19 +242,18 @@ csw.search.prototype.createRequest = function(pages){
                     '</csw:GetRecords>';
     console.log(request);
     return request;
-}
+};
+
 
 /**
  * Determines which type of filter it's processing and returns result of appropriate method
- * @param {csw.filter} 
- * @return XML string
+ * @param filter    - csw filter
+ * @returns {*}     - xml string
  */
 csw.getFilterXml = function(filter){
-    if (filter.type.id != "extent"){ return csw.getTermXml(filter);}
-    //else if (filter.type.id == "abstract"){ return csw.getAbstractXml(filter);}
+    if (filter.type.id !== "extent"){ return csw.getTermXml(filter);}
     else{ return csw.getBboxXml(filter); }
 };
-
 
 
 /**
@@ -283,7 +264,7 @@ csw.getFilterXml = function(filter){
  */
 csw.getBboxXml = function(filter){
     var extents = [];
-    var xml = '';
+    var xml;
     if (filter.multiExtent){
         extents = getOutOfBoundsExtents(filter.extent);
     }
@@ -310,35 +291,36 @@ csw.getBboxXml = function(filter){
     }
 
     return xml;
-}
+};
+
 
 /**
  * Builds xml string for a given filter
- * @param {csw.filter} 
- * @return XML string
+ * @param filter        - csw filter
+ * @returns {string}    - xml string
  */
 csw.getTermXml = function(filter){
     var constraint, termPrefix, termSuffix, attributes;
     // if 'subject', it's a keyword search and we'll set it's constraint manually to keep the filter object simple
-    if (filter.constraint.id == "PropertyIsLike" || (filter.type.id != 'title' && filter.type.id != 'abstract') ){
+    if (filter.constraint.id === "PropertyIsLike" || (filter.type.id !== 'title' && filter.type.id !== 'abstract') ){
         constraint = "PropertyIsLike";
         termPrefix = "%";
         termSuffix = "%";
         attributes = ' matchCase="false" wildCard="%" singleChar="_" escapeChar="\"';
     }
-    else if (filter.constraint.id == "beginsWith"){
+    else if (filter.constraint.id === "beginsWith"){
         constraint = "PropertyIsLike";
         termPrefix = "";
         termSuffix = "%";
         attributes = ' matchCase="false" wildCard="%" singleChar="_" escapeChar="\"';
     }
-    else if (filter.constraint.id == "PropertyIsEqualTo"){
+    else if (filter.constraint.id === "PropertyIsEqualTo"){
         constraint = "PropertyIsEqualTo";
         termPrefix = "";
         termSuffix = "";
         attributes = '';
     }
-    else if (filter.constraint.id == "PropertyIsNotEqualTo"){
+    else if (filter.constraint.id === "PropertyIsNotEqualTo"){
         constraint = "PropertyIsNotEqualTo";
         termPrefix = "";
         termSuffix = "";
