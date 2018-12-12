@@ -63,8 +63,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
 
     $scope.hideSearch = function(){
         $scope.showSearch = false;
-
     };
+
+    $scope.keywordsLoaded = false;
+    $scope.keywordsLoadError = false;
 
     /**
      * Toggles the advanced search view
@@ -163,6 +165,10 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                 console.log(jsonData.ExceptionReport);
             }
             else  { // success!
+                // TODO - keywords are specific to nrl use and this is a generic function. Create a callback to handle this behavior
+                $scope.keywordsLoaded = true;
+                $scope.keywordsLoadError = false;
+
                 if(filter){
                     updateDomain(property, jsonData.GetDomainResponse.DomainValues.ListOfValues.Value, filter);
                 }
@@ -457,8 +463,6 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             //If server returns an exception
             if(jsonData.ExceptionReport){
                 $scope.loadingData = false;
-                // $scope.hasError = true;
-                // $scope.errorMessage = "The CSW server returned an error: " + jsonData.ExceptionReport.Exception.ExceptionText.toString();
                 $scope.openDialog("CSW server error", jsonData.ExceptionReport.Exception.ExceptionText.toString());
                 console.log("Error: ");
                 console.log(jsonData.ExceptionReport);

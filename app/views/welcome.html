@@ -20,7 +20,10 @@
         <div class="col-md-7">
             <p><b>Subjects:</b><p>
             <div class="tagcloud">
-                <div class="tag-wrap" ng-repeat="k in domain.subject.values" ng-click="search.clearAll(); refineSearch('subject', k.id);">
+                <div ng-hide="keywordsLoaded || keywordsLoadError" style="padding: 18px">
+                    <img src="assets/img/loading-grey-grey.gif" ng-hide="thumbnailLoaded" class="loading-icon"/>
+                </div>
+                <div class="tag-wrap" ng-repeat="k in domain.subject.values" ng-click="search.clearAll(); refineSearch('subject', k.id);" ng-show="keywordsLoaded">
                     <span class="badge tag">{{k.id}}</span>
                 </div>
             </div>
