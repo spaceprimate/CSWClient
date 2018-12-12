@@ -1,5 +1,57 @@
 /* main elements */
 
+/* icon test ================================================================================================================================================================================================
+========================================================================================================================================================================
+================================================================================================================================================================================================
+================================================================================================================================================================================================
+======================================================================================================================== */
+
+.icon{
+    display: block; 
+    background: url('../img/icons.png') no-repeat; 
+    overflow: hidden; 
+    text-indent: -9999px; 
+    text-align: left;
+    width: 16px;
+    height: 16px;
+    background-size: 51px 82.5px;
+    float: left;
+    margin-right: 7px;
+    margin-top: 2px;
+    
+}
+
+/* .iconadd, .iconarrow-down, .iconarrow-left, .iconarrow-right, .iconarrow-up, 
+.iconcancel, .iconcode, .iconcontent, .iconedit, .iconpan, 
+.iconphoto, .iconpin, .iconrepeat, .iconsearch
+{ display: inline-block; background: url('../img/icons.png') no-repeat; overflow: hidden; text-indent: -9999px; text-align: left; } */
+ 
+.iconadd { background-position: -1px -0px; width: 32px; height: 32px; }
+.iconarrow-down { background-position: -34px -0px; width: 32px; height: 32px; }
+.iconarrow-left { background-position: -67px -0px; width: 32px; height: 32px; }
+.iconarrow-right { background-position: -1px -33px; width: 32px; height: 32px; }
+.iconarrow-up { background-position: -34px -33px; width: 32px; height: 32px; }
+.iconcancel { background-position: -67px -33px; width: 32px; height: 32px; }
+.iconcode { background-position: -1px -66px; width: 32px; height: 32px; }
+.iconcontent { background-position: -34px -66px; width: 32px; height: 32px; }
+.iconedit { background-position: -67px -66px; width: 32px; height: 32px; }
+.iconpan { background-position: -1px -99px; width: 32px; height: 32px; }
+.iconphoto { background-position: -34px -99px; width: 32px; height: 32px; }
+
+
+
+
+/* fixed */
+.iconrepeat { background-position: -.5px -66px; margin-top: 4px;}
+.iconpin { background-position: -33.5px -49.5px;}
+.iconsearch { background-position: -17px -66px;}
+
+/* icon test ================================================================================================================================================================================================
+========================================================================================================================================================================
+================================================================================================================================================================================================
+================================================================================================================================================================================================
+======================================================================================================================== */
+
 body {
     background: rgb(248, 248, 248);
 }
