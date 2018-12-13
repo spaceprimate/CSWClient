@@ -53,7 +53,8 @@
                     CSW Search
                 </div>
                 <a href="#" class="search-toggle" ng-click="searchBarToggle()" alt="Search CSW Records" title="Search CSW Records">
-                    <span class="glyphicon glyphicon-search"></span>
+                    <!--<span class="glyphicon glyphicon-search"></span>-->
+                    <div class="icon icon-search white"></div>
                     <img src="assets/img/search-indicator-arrow.png" class="bottom-arrow" />
                 </a>
             </div>
@@ -66,7 +67,8 @@
         <div class="container">
             <a href="#" ng-click="searchBarToggle(); $event.stopPropagation();" class="bottom-toggle" ng-show="showSearch"
                 alt="Minimize Search Menu" title="Minimize Search Menu">
-                <span class="glyphicon glyphicon-chevron-up"></span>
+                <div class="icon icon-arrow-up lt-grey"></div>
+                <!--<span class="glyphicon glyphicon-chevron-up"></span>-->
             </a>
             <advanced-search></advanced-search>
         </div>

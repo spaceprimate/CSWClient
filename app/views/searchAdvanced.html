@@ -84,7 +84,8 @@
                             <div class="extenty-box" ng-repeat="style in f.extentyStyle" ng-style="style"></div>
 
 
-                            <div class="edit-icon"><span class="glyphicon glyphicon-pencil"></span></div>
+                            <div class="edit-icon"><div class="icon icon-edit grey"></div></div>
+                            <!--<div class="edit-icon"><span class="glyphicon glyphicon-pencil"></span></div>-->
                         </div>
                         
                         <a href="#" class="" style="margin:36px 0 0 2px; display: inline-block;" ng-click="clearExtent(f)" ng-hide="search.extent.extent == getDefaultExtent()">clear</a>
@@ -94,7 +95,8 @@
                     <!--Button to remove filters-->
                     <div class="remove-button-wrapper pointer" ng-click="search.removeFilter($index)" ng-if="search.filters.length > 1">
                         <div class="remove-button">
-                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a href="#"><div class="icon icon-close lt-grey"></div></a>
+                            <!--<a href="#"><span class="glyphicon glyphicon-remove"></span></a>-->
                         </div>
                     </div>
                     
@@ -112,7 +114,8 @@
                             <span class="caret"></span>
                         </button> -->
                         <button type="button" class="btn btn-blank" ng-click="constraintSelect = !constraintSelect">
-                            <span class="glyphicon glyphicon-plus"></span>
+                            <div class="icon icon-add grey icon-left"></div>
+                            <!--<span class="glyphicon glyphicon-plus"></span>-->
                             <!-- <span class="vr"></span>  -->
                             Add Constraint 
                             <!-- <span class="caret"></span> -->

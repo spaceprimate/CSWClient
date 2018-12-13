@@ -1,5 +1,14 @@
 <div class="pull-right toolbar-item toolbar-buttons" style="margin-left: 18px;" ng-show="pages.totalPages > 1">
-    <a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1" class="toolbar-button"><span class="glyphicon glyphicon-chevron-left"></span>Previous</a><a href="#" ng-click="getNextPage()" ng-if="pages.curPage < pages.totalPages" class="toolbar-button">Next <span class="glyphicon glyphicon-chevron-right"></span></a>
+    <a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1" class="toolbar-button">
+        <div class="icon icon-arrow-left icon-left lt-grey"></div>
+        <!--<span class="glyphicon glyphicon-chevron-left"></span>-->
+        Previous
+    </a>
+    <a href="#" ng-click="getNextPage()" ng-if="pages.curPage < pages.totalPages" class="toolbar-button">
+        Next
+        <div class="icon icon-arrow-right icon-right lt-grey"></div>
+        <!--<span class="glyphicon glyphicon-chevron-right"></span>-->
+    </a>
 </div>
 
 <div class="pull-right toolbar-item" style="margin-left: 18px;" ng-show="pages.totalPages > 1">

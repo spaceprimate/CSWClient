@@ -11,18 +11,18 @@
 
     <div class="toolbar">
         <a ng-click="toggleViewAll()" class="no-underline details" ng-class="viewAll ? 'active' : 'incactive'">
-            <!-- <span class="glyphicon glyphicon-chevron-down" ng-hide="viewAll"></span>
-            <span class="glyphicon glyphicon-chevron-up" ng-show="viewAll"></span> -->
-            <span class="glyphicon glyphicon-list-alt"></span>
+            <div class="icon icon-content icon-left lt-grey"></div>
             Full record
-        </a> 
+        </a>
     
         <a class="no-underline details" ng-click="requestRecord(record); toggleViewXml();"  ng-class="viewXml ? 'active' : 'incactive'">
-            <span class="img-icon code-icon"></span> XML
+            <div class="icon icon-code icon-left lt-grey"></div>
+            XML
         </a>
 
         <a class="no-underline details" ng-click="toggleViewImage();"  ng-class="viewImage ? 'active' : 'incactive'" ng-if="record.hasThumbnail">
-            <span class="glyphicon glyphicon-picture"></span> Preview
+            <div class="icon icon-photo icon-left lt-grey"></div>
+            Preview
         </a>
     </div>
 
@@ -34,29 +34,9 @@
     <img ng-src="{{record.thumbnail}}"  imageonload class="thumb" ng-style="{'background-color':thumbBg}"/>
     <div class="color-select">
         <div class="color-button" ng-click="toggleColorSelect()">
-            <span class="glyphicon glyphicon-tint"></span>
+            <div class="icon icon-paint lt-grey" style="margin-left: 2px;"></div>
         </div>
-        <!--
-            cyan
-            magenta
-            yellow
-            red
-            green
-            blue
-            black
-            white
-            grey
-            sea blue
-            forest green
-                            black
-            grey            white
-            green           deep blue
-            light green     ocean blue
-            light yellow    very light grey blue
-            light brown     brick
-            brown           deep red
 
-        -->
         <div class="colors" ng-show="showColorSelect">
             <div class="c1">
                 <div class="color" ng-repeat="c in colors1" ng-style="{'background-color':c}" ng-click="setThumbBg(c)"
