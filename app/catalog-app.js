@@ -580,7 +580,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
                 e.references.forEach(function(ref){
                     if (ref['_scheme'] === "WWW:LINK-1.0-http--image-thumbnail"){
                         item.hasThumbnail = true;
-                        item.thumbnail = ref.toString();
+                        item.thumbnail = decodeURIComponent(ref.toString());
                     }
                 })
             }
