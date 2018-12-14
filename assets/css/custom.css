@@ -1121,6 +1121,10 @@ select.form-control {
     padding-right: 23px;
 }
 
+select.form-control::-ms-expand {
+    display: none;
+}
+
 select.form-control:hover {
     background-color: #e6e6e6;
     border-color: #adadad;

@@ -12,6 +12,7 @@ angular.module('nrlCatalog')
                 $scope.viewXml = false;
                 $scope.viewImage = false;
                 $scope.thumbnailLoaded = false;
+                $scope.thumbnailFailed = false;
                 $scope.record.xmlLoaded = false;
                 var smExtentThumb = new Extenty(69,69);
                 $scope.colors1 = [
@@ -105,7 +106,9 @@ angular.module('nrlCatalog')
                 element.bind('error', function(e){
                     console.log('image could not be loaded, error: ');
                     console.log(e);
-                    $scope.openDialog("image load error", e);
+                    // scope.openDialog("image load error", e);
+                    scope.$parent.thumbnailFailed = true;
+                    scope.$apply();
                 });
             }
         };

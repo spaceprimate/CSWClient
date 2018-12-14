@@ -30,9 +30,10 @@
 <div class="clearfix"></div>
 
 <div ng-if="viewImage" class="record-preview">
-    <img src="assets/img/loading-grey-grey.gif" ng-hide="thumbnailLoaded" class="loading-icon"/>
-    <img ng-src="{{record.thumbnail}}"  imageonload class="thumb" ng-style="{'background-color':thumbBg}"/>
-    <div class="color-select">
+    <img src="assets/img/loading-grey-grey.gif" ng-hide="thumbnailLoaded || thumbnailFailed" class="loading-icon"/>
+    <p style="padding-top: 80px; color: #666; width: 200px; text-align: center;" ng-show="thumbnailFailed">image not found</p>
+    <img ng-src="{{record.thumbnail}}"  imageonload class="thumb" ng-style="{'background-color':thumbBg}" ng-hide="thumbnailFailed"/>
+    <div class="color-select" ng-hide="thumbnailFailed">
         <div class="color-button" ng-click="toggleColorSelect()">
             <div class="icon icon-paint lt-grey" style="margin-left: 2px;"></div>
         </div>
