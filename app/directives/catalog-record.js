@@ -106,7 +106,6 @@ angular.module('nrlCatalog')
                 element.bind('error', function(e){
                     console.log('image could not be loaded, error: ');
                     console.log(e);
-                    // scope.openDialog("image load error", e);
                     scope.$parent.thumbnailFailed = true;
                     scope.$apply();
                 });
