@@ -575,12 +575,18 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             if ( getSafe( function(){ return e.references.toString()  }) !== undefined ){ item.info.push(["References", e.references.toString()]);}
 
             // try to retrieve thumbnail
-            // TODO prob a cleaner way to do this
+            // TODO prob a cleaner way to do this, getting pycsw to update ENCServer to enc/wms. etc would also be a good idea
             if ( getSafe( function(){ return e.references.toString()  }) !== undefined && Array.isArray(e.references)  ){
                 e.references.forEach(function(ref){
                     if (ref['_scheme'] === "WWW:LINK-1.0-http--image-thumbnail"){
                         item.hasThumbnail = true;
                         item.thumbnail = decodeURIComponent(ref.toString());
+                        // item.thumbnail.replace("ENCServer/wms/ENC/feature/individual/ENC/feature/", "enc/wms/ENC/feature/");
+
+                        if (item.thumbnail.indexOf("ENCServer") >= 0){
+                            item.thumbnail = item.thumbnail.replace("ENCServer/wms/ENC/feature/individual/ENC/feature/", "enc/wms/ENC/feature/");
+                            console.log("old ENC Server path detected");
+                        }
                     }
                 })
             }
