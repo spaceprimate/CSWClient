@@ -1,5 +1,4 @@
-<section ng-show="showSearch" id="advanced-search">
-    
+<section ng-show="showSearch">
 
     <div class="advanced-search-content">
 
@@ -17,28 +16,15 @@
             <div id="adv-search-map" class="map" style="height: 480px;" ng-class="mapClass"></div>
         </div>
 
-
-        <div ng-hide="extentSelectVisibility" style="width: 680px;" class="advanced-search-content-filters">
+        <form id="advanced-search" name="advanced-search" novalidate>
+            <div ng-hide="extentSelectVisibility" class="advanced-search-content-filters">
         <!-- <div style="width: 100%; padding-right: 531px;" > -->
-            <form id="advanced-search" name="advanced-search" novalidate>
+
                 <h4>CSW Search Constraints</h4>
                 <div ng-repeat="f in search.filters" class="form-inline advanced-filter" ng-class="{first:$first}">
 
-                    <select ng-model="f.type" ng-options="o.label for o in f.types" ng-change="extentStatus(f)" class="form-control">
-                    </select>
-
-                    <!-- Filter Type Select ============================================================================================ -->
-                    <!-- if no extent filter exists yet -->
-                    <!-- <select ng-model="f.type" ng-options="o.label for o in f.types" ng-change="extentStatus(f)" 
-                        ng-if="!search.hasExtent || f.type.label == 'Bounding Box'">
-                    </select> -->
-
-                    <!--if extent filter exists, filter extent option out -->
-                    <!-- <select ng-model="f.type" ng-options="o.label for o in f.types | filter:{label :'!Bounding Box'}" ng-change="search.setHasExtent()"
-                        ng-if="search.hasExtent && f.type.label != 'Bounding Box'">
-                    </select> -->
-
-                    <!-- Filter Constraint Options (by type)  ============================================================================================ -->
+                    <!-- filter constraint options by type -->
+                    <select ng-model="f.type" ng-options="o.label for o in f.types" ng-change="extentStatus(f)" class="form-control"></select>
 
                     <!--Title and Abstract constraint-->
                     <div ng-if="f.type.id == 'title' || f.type.id == 'abstract'" class="form-group">
@@ -61,12 +47,9 @@
                     </div>
 
 
-                    
-
                     <!--Extent constraints-->
                     <select ng-if="f.type.id == 'extent'" ng-model="f.extentConstraint" ng-options="o.label for o in f.extentConstraints" class="form-control"></select>
                     <div ng-if="f.type.id == 'extent'" class="extent-wrapper">
-                        <!-- <label class="small highlight" ng-if="f.type.id == 'extent'">Hold "Shift" to select extent on map, or enter values below</label> -->
                         <div class="clear-left"></div>
                         <div class="coord-input"><label class="small">min Long</label><input type="number" ng-model="search.filters[$index].extent[0]"
                                 ng-change="updateExtent(f)" id="min-long"></div>
@@ -77,15 +60,10 @@
                         <div class="coord-input"><label class="small">max Lat</label><input type="number" ng-model="search.filters[$index].extent[3]"
                                 ng-change="updateExtent(f)" id="max-lat"></div>
 
+                        <div class="clear-left-mobile"></div>
                         <div class="extenty record-thumbnail pointer" ng-click="loadExtentSelector(f)">
-                            <!--<div class="extenty-box" ng-style="f.extentyStyle[0]"></div>-->
-                            <!--<div class="extenty-box" ng-style="f.extentyStyle[1]"></div>-->
-
                             <div class="extenty-box" ng-repeat="style in f.extentyStyle" ng-style="style"></div>
-
-
                             <div class="edit-icon"><div class="icon icon-edit grey"></div></div>
-                            <!--<div class="edit-icon"><span class="glyphicon glyphicon-pencil"></span></div>-->
                         </div>
                         
                         <a href="#" class="" style="margin:36px 0 0 2px; display: inline-block;" ng-click="clearExtent(f)" ng-hide="search.extent.extent == getDefaultExtent()">clear</a>
@@ -96,29 +74,18 @@
                     <div class="remove-button-wrapper pointer" ng-click="search.removeFilter($index)" ng-if="search.filters.length > 1">
                         <div class="remove-button">
                             <a href="#"><div class="icon icon-close lt-grey"></div></a>
-                            <!--<a href="#"><span class="glyphicon glyphicon-remove"></span></a>-->
                         </div>
                     </div>
                     
                 </div>
                 <!-- Button to add filters -->
                 <div class="form-inline advanced-filter">
-                    <!-- <a href="#" ng-click="search.addFilter()"><span class="glyphicon glyphicon-plus dark"></span> Add constraint</a> -->
-                    <!-- <hr> -->
+
                     <div class="btn-group" ng-class="constraintSelect ? 'open' : 'closed' ">
-                            <!-- <div ng-class=" $variableToEvaluate ? 'class-if-true' : 'class-if-false' "> -->
-                        <!-- <button type="button" class="btn btn-default dropdown-toggle left-icon" ng-click="constraintSelect = !constraintSelect">
-                            <span class="glyphicon glyphicon-plus"></span>
-                            <span class="vr"></span> 
-                            Add Constraint 
-                            <span class="caret"></span>
-                        </button> -->
+
                         <button type="button" class="btn btn-blank" ng-click="constraintSelect = !constraintSelect">
                             <div class="icon icon-add grey icon-left"></div>
-                            <!--<span class="glyphicon glyphicon-plus"></span>-->
-                            <!-- <span class="vr"></span>  -->
-                            Add Constraint 
-                            <!-- <span class="caret"></span> -->
+                            Add Constraint
                         </button>
                         <ul class="dropdown-menu">
                             
@@ -133,12 +100,14 @@
                     </div>
                 </div>
 
-                <div style="margin-top:12px;">
-                    <button class="btn btn-primary" ng-click="submitSearch()">Search</button>
-                    <a href="#" class="sm black" style="padding: 4px 0 0 12px;" ng-click="search.clear()">Reset</a>
-                </div>
-            </form>
-        </div>
+
+
+            </div>
+            <div class="advanced-search-buttons"  ng-hide="extentSelectVisibility">
+                <button class="btn btn-primary" ng-click="submitSearch()">Search</button>
+                <a href="#" class="sm black" style="padding: 4px 0 0 12px;" ng-click="search.clear()">Reset</a>
+            </div>
+        </form>
         <div class="clearfix"></div>
     </div>
 </section>

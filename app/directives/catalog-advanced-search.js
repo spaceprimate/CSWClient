@@ -5,6 +5,7 @@ angular.module('nrlCatalog')
     .directive('advancedSearch', function() {
         return{
             restrict: 'E',
+            replace: true,
             templateUrl:   'app/views/searchAdvanced.html',
             controller: function($scope){
 
