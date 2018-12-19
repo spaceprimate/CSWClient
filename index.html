@@ -82,7 +82,14 @@
     <sidebar-template ng-hide="startScreen"></sidebar-template>
 
     <!-- ==== MAIN CONTENT ==== -->
-    <div id="main" ng-hide="startScreen">
+    <!--<div id="main" ng-hide="startScreen"  ng-class=" hideSidebar ? 'hide-sidebar' : 'show-sidebar', showPageOptions ? 'hide-page-options' : 'show-page-options' ">-->
+    <div id="main" ng-hide="startScreen"  ng-class="{ 'show-sidebar' : showSidebar,'show-page-options' : showPageOptions}">
+
+        <!--toggle sidebar in mobile-->
+        <a href="#" ng-click="showSidebar = !showSidebar" class="sidebar-toggle">
+            <span class="icon icon-arrow-right"></span>
+            <span class="icon icon-arrow-left"></span>
+        </a>
 
 
         <!--Main Data-->
@@ -118,9 +125,9 @@
                 <!--<div class="alert alert-danger ng-cloak">{{errorMessage}}</div>-->
             <!--</div>-->
 
-        <div id="main-toolbar" class="toolbar" ng-hide="startScreen" ng-cloak>
+        <div id="main-toolbar" class="toolbar" ng-hide="startScreen" ng-cloak ng-class="{'show-page-options' : showPageOptions}">
             <div class="toolbar-item pull-left">
-                <label>Sort by: </label>
+                <label class="hide-mobile">Sort by: </label>
                 <div class="select-wrap">
                     <select ng-options="item as item.label for item in search.sortOptions" ng-model="search.sortOption"
                         ng-change="getFirstPage()"></select>

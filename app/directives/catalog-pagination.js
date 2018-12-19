@@ -20,6 +20,9 @@ angular.module('nrlCatalog')
                     pageLimits: []
                 };
 
+                // for mobile view only
+                $scope.showPageOptions = false;
+
 
                 /**
                  * based on settings in pages object, this calculates how many pages are required

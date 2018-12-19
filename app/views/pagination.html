@@ -1,32 +1,41 @@
-<div class="pull-right toolbar-item toolbar-buttons" style="margin-left: 18px;" ng-show="pages.totalPages > 1">
-    <a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1" class="toolbar-button">
+<div class="pull-right toolbar-item" style="margin-left: -1px;">
+    <a href="#" class="toolbar-button ellipsis-icon" ng-click="showPageOptions = !showPageOptions">
+        <img src="assets/img/ellipsis-icon.png"  />
+    </a>
+</div>
+<div class="pull-right toolbar-item toolbar-buttons"  ng-show="pages.totalPages > 1">
+    <a href="#" ng-click="getPrevPage()" ng-if="pages.curPage > 1" class="toolbar-button prev">
         <div class="icon icon-arrow-left icon-left lt-grey"></div>
         <!--<span class="glyphicon glyphicon-chevron-left"></span>-->
-        Previous
+        <span class="hide-mobile">Previous</span>
     </a>
-    <a href="#" ng-click="getNextPage()" ng-if="pages.curPage < pages.totalPages" class="toolbar-button">
-        Next
+    <a href="#" ng-click="getNextPage()" ng-if="pages.curPage < pages.totalPages" class="toolbar-button next">
+        <span class="hide-mobile">Next</span>
         <div class="icon icon-arrow-right icon-right lt-grey"></div>
         <!--<span class="glyphicon glyphicon-chevron-right"></span>-->
     </a>
+
 </div>
 
-<div class="pull-right toolbar-item" style="margin-left: 18px;" ng-show="pages.totalPages > 1">
+<div class="pull-right toolbar-item show-mobile">
+
+
+</div>
+
+<div class="pull-right toolbar-item page-count" ng-show="pages.totalPages > 1">
     <label>Page <b>{{pages.curPage}}</b> of <b>{{pages.totalPages}}</b></label>
 </div>
 
-<div class="pull-right toolbar-item" ng-show="pages.totalPages > 1">
+<div class="pull-right toolbar-item go-to-page" ng-show="pages.totalPages > 1">
     <label>Go to page: </label>
     <div class="select-wrap">
         <select ng-options="p for p in getAllPageNumbers()" ng-model="goToPageModel" ng-change="goToPage(goToPageModel)"></select>
     </div>
 </div>
 
-<div class="pull-right toolbar-item">
-    
+<div class="pull-right toolbar-item show-records">
         <label>Show records: </label>
         <div class="select-wrap">
             <select ng-model="pages.recordsPerPage" class="" ng-change="updatePages()" ng-options="item.value for item in recordsPerPageOptions"></select>
         </div>
-
 </div>

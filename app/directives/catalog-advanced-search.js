@@ -1,6 +1,3 @@
-//delete this and all references before going live pls
-var root = {};
-
 angular.module('nrlCatalog')
     .directive('advancedSearch', function() {
         return{
@@ -92,9 +89,6 @@ angular.module('nrlCatalog')
                     });
 
                     advSearchMap.addInteraction(advSearchExtent);
-
-                    root.extent = advSearchExtent;
-                    root.map = advSearchMap;
 
                     $scope.$watch('showSearch', function(newValue, oldValue) {
                         if (newValue !== oldValue) {

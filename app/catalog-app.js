@@ -68,6 +68,8 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.keywordsLoaded = false;
     $scope.keywordsLoadError = false;
 
+
+
     /**
      * Toggles the advanced search view
      * Does nothing if it's already showing or, if it's displaying basic search mode. 
@@ -649,6 +651,9 @@ nrlCatalog.directive('sidebarTemplate', function() {
     return{
         restrict: 'E',
         templateUrl:   'app/views/sidebar.html',
-        replace: true
+        replace: true,
+        controller: function($scope){
+            $scope.showSidebar = false;
+        }
     }
 });
