@@ -1229,14 +1229,15 @@ select.form-control:hover {
 
     #main .sidebar-toggle{
         display: block;
-        position: absolute;
+        position: fixed;
         width: 19px;
         padding: 40px 2px;
         background: white;
         border: 1px solid #eaeaea;
-        top: -1px;
-        left: -19px;
+        top: 64px;
+        left: 0px;
     }
+    #main.show-page-options .sidebar-toggle{top: 86px;}
 
     #main.show-page-options{margin-top: 86px;}
     #main .sidebar-toggle .icon-arrow-right{display: inline-block;}
@@ -1245,8 +1246,8 @@ select.form-control:hover {
     #main.show-sidebar .sidebar-toggle .icon-arrow-left{display: inline-block;}
 
     #main.show-sidebar .sidebar-toggle{
-        top: -2px;
-        left: 180px;
+        top: 63px;
+        left: 199px;
         z-index: 9999;
         box-shadow: #0000005e 3px 2px 4px 0px;
     }
@@ -1254,6 +1255,16 @@ select.form-control:hover {
 
     /*toolbar*/
     #main-toolbar{left: 0; padding: 0 18px;}
+    #main-toolbar.show-page-options{height: 46px;}
+    #main-toolbar .toolbar-border{display: none;}
+    #main-toolbar.show-page-options .toolbar-border{display: block; height: 1px;
+        background: lightgrey;
+        position: absolute;
+        top: 23px;
+        left: 0px;
+        right: 0;
+        z-index: 9999;
+    }
 
     .toolbar-item{height: 23px; overflow: hidden;}
 
@@ -1286,7 +1297,7 @@ select.form-control:hover {
     }
     .toolbar-item.pull-right{margin-left: 0;}
 
-    .toolbar-button.ellipsis-icon img{ height: 18px; width: auto; opacity: 0.7;}
+    .toolbar-button.ellipsis-icon img{ height: 18px; width: auto; opacity: 0.6;}
 }
 
 @media (max-width: 767px){
