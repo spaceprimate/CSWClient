@@ -228,6 +228,11 @@ tr.break-word td {
     margin-top: 12px;
 }
 
+.advanced-search-content .clear-extent{
+    margin: 36px 0 0 2px;
+    display: inline-block;
+}
+
 .autocomplete-item {
     position: relative;
 }
@@ -1228,10 +1233,14 @@ select.form-control:hover {
     }
 
     .extent-wrapper .record-thumbnail{
-        position: relative;
-        top: auto;
-        right: auto;
-        margin-top: 12px;
+
+        top: -92px;
+        right: 32px;
+
+    }
+    .coord-input{margin-top: 22px;}
+    .advanced-search-content .clear-extent{
+        margin: 13px 0 3px 2px;
     }
 }
 
