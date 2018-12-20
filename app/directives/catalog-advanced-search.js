@@ -10,6 +10,8 @@ angular.module('nrlCatalog')
                     return [-180, -90, 180, 90];
                 };
 
+                $scope.mapHeight = 480;
+
                 $scope.mapClass = "cross-hair";
                 
                 // Open Street Maps layer
@@ -169,11 +171,22 @@ angular.module('nrlCatalog')
                     else{
                         filter.isFirstTime = false;
                     }
-                    
+                    // adjust map height for shorter screens
+                    if ($(window).height() < 595 ){
+                        setMapHeight($(window).height() - 115);
+                    }
+                    else{
+                        setMapHeight(480);
+                    }
                     $scope.extentSelectVisibility = true;
+
                     setTimeout(function(){advSearchMap.updateSize();}, 100);
 
                 };
+
+                function setMapHeight(height){
+                    $scope.mapHeight = height;
+                }
 
                 $scope.hideExtentSelector = function(){
                     $scope.extentSelectVisibility = false;

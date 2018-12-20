@@ -4,7 +4,11 @@
 
         <!-- MAP -->
         <div ng-show="extentSelectVisibility">
-            <p style="padding-top:7px;" class="pull-right"><label class="small highlight">Click and drag to select extent on map, or Cancel and enter values manually</label></p>
+            <button class="map-help-button no-format" ng-click="showMapHelp = !showMapHelp" ng-hide="showMapHelp">?</button>
+            <div class="map-help" ng-show="showMapHelp">
+                <label>Click and drag to select extent on map, or Cancel and enter values manually</label>
+                <button class="no-format map-help-close" ng-click="showMapHelp = !showMapHelp">x</button>
+            </div>
                 
             <div class="" style="min-height: 43px;">    
                 <button class="btn btn-primary" ng-click="updateExtentFields()">Apply</button>
@@ -13,7 +17,7 @@
             
             
             <div class="clearboth"></div>
-            <div id="adv-search-map" class="map" style="height: 480px;" ng-class="mapClass"></div>
+            <div id="adv-search-map" class="map" ng-style="{ 'height' : mapHeight }" ng-class="mapClass"></div>
         </div>
 
         <form id="advanced-search" name="advanced-search" novalidate>
