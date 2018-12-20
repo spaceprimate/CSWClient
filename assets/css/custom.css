@@ -801,6 +801,7 @@ article.record:hover {
     padding-left: 18px;
     margin-left: 74px;
     min-height: 93px;
+    word-break: break-all;
 }
 
 .record-info h3 {
@@ -852,6 +853,8 @@ article.record:hover {
     background: #ececec;
     color: #656565;
 }
+
+.record .full-record{overflow: auto;}
 
 .glyphicon.dark {
     color: #636363;

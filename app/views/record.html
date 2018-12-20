@@ -11,17 +11,17 @@
 
     <div class="toolbar">
         <a ng-click="toggleViewAll()" class="no-underline details" ng-class="viewAll ? 'active' : 'incactive'">
-            <div class="icon icon-content icon-left lt-grey"></div>
+            <span class="icon icon-content icon-left lt-grey"></span>
             Full record
         </a>
     
         <a class="no-underline details" ng-click="requestRecord(record); toggleViewXml();"  ng-class="viewXml ? 'active' : 'incactive'">
-            <div class="icon icon-code icon-left lt-grey"></div>
+            <span class="icon icon-code icon-left lt-grey"></span>
             XML
         </a>
 
         <a class="no-underline details" ng-click="toggleViewImage();"  ng-class="viewImage ? 'active' : 'incactive'" ng-if="record.hasThumbnail">
-            <div class="icon icon-photo icon-left lt-grey"></div>
+            <span class="icon icon-photo icon-left lt-grey"></span>
             Preview
         </a>
     </div>
@@ -57,7 +57,7 @@
     <pre lang="xml"><img src="assets/img/loading-grey-grey.gif" ng-hide="record.xmlLoaded" class="loading-icon"/>{{record.xml}}</pre>
 </div>
 
-<div ng-if="viewAll">
+<div ng-if="viewAll" class="full-record">
     <table class="table table-striped table-auto">
         <tr ng-if="record.title != null">
             <td>Title</td>
