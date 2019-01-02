@@ -232,7 +232,7 @@ body button.no-format{
 }
 
 .advanced-search-content-filters, .advanced-search-buttons {
-    width: 680px;
+    /*width: 680px;*/
     margin: auto;
 }
 .advanced-search-buttons{
