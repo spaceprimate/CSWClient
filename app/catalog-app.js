@@ -362,6 +362,14 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
         }
     };
 
+    /**
+     * toggles the showSidebar boolean variable true/false
+     */
+    $scope.toggleSidebar = function(){
+        $scope.showSidebar = !$scope.showSidebar;
+    };
+
+
 
     $scope.toggleExtentFilter = function(){
         $scope.displaySearch();
