@@ -3,8 +3,11 @@
 </div>
 
 <div class="record-info">
-    <h3>{{record.title}}</h3>
-    <p>{{record.abstract}}</p>
+    <div class="record-info-main">
+        <h3>{{record.title}}</h3>
+        <p>{{record.abstract}}</p>
+    </div>
+
     <div class="record-tags">
         <div class="tag-wrap" ng-repeat="tag in record.keywords track by $index"><span class="small badge tag">{{tag}}</span></div>
     </div>

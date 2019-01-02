@@ -1383,6 +1383,35 @@ select.form-control:hover {
     }
 }
 
+@media (max-width: 500px){
+
+    .record{
+        padding: 12px 12px 0 12px;
+    }
+    .record .tag-wrap > .badge.tag {
+        padding: 5px 7px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 90px;
+    }
+
+
+    .record-info-main{
+        padding-right: 72px;
+        min-height: 65px;
+    }
+    .record-info{
+        float:none;
+        margin-left: 0;
+        padding-left: 0;
+    }
+    .record .record-thumbnail{
+        left: auto;
+        top: 4px;
+        right: 4px;
+    }
+}
+
 /* icons */
 .icon{
     display: block;
