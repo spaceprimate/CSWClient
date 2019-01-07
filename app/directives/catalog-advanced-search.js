@@ -49,8 +49,7 @@ angular.module('nrlCatalog')
                     // create Openlayers buttons to control panning and extent selection
                     // edit button
                     var mapEditButton = document.createElement('button');
-                    // mapEditButton.innerHTML = "<span class='glyphicon glyphicon-pencil'></span>";
-                    mapEditButton.innerHTML = "<div class='icon icon-edit white' style='margin-bottom: 1px; margin-left: 3px;'></div>";
+                    mapEditButton.innerHTML = "<div class='icon icon-edit icon-white' style='margin-bottom: 1px; margin-left: 3px;'></div>";
                     mapEditButton.addEventListener('click', function(){$scope.enableMapEdit(); $scope.$apply();}, false);
                     var mapEditButtonContainer = document.createElement('div');
                     mapEditButtonContainer.className = 'map-edit-button ol-unselectable ol-control';
@@ -59,8 +58,7 @@ angular.module('nrlCatalog')
 
                     // pan button
                     var mapPanButton = document.createElement('button');
-                    mapPanButton.innerHTML = "<div class='icon icon-pan white' style='margin-bottom: 1px; margin-left: 3px;'></div>";
-                    // mapPanButton.innerHTML = "<img src='assets/img/pan-icon.png' style='width: 15px; height: auto;' />";
+                    mapPanButton.innerHTML = "<div class='icon icon-pan icon-white' style='margin-bottom: 1px; margin-left: 3px;'></div>";
                     mapPanButton.addEventListener('click', function(){$scope.enableMapPan(); $scope.$apply();}, false);
                     var mapPanButtonContainer = document.createElement('div');
                     mapPanButtonContainer.className = 'map-pan-button ol-unselectable ol-control';

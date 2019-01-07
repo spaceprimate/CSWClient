@@ -67,7 +67,7 @@
                         <div class="clear-left-mobile"></div>
                         <div class="extenty record-thumbnail pointer" ng-click="loadExtentSelector(f)">
                             <div class="extenty-box" ng-repeat="style in f.extentyStyle" ng-style="style"></div>
-                            <div class="edit-icon"><div class="icon icon-edit grey"></div></div>
+                            <div class="edit-icon"><div class="icon icon-edit icon-grey"></div></div>
                         </div>
                         
                         <a href="#" class="clear-extent" ng-click="clearExtent(f)" ng-hide="search.extent.extent == getDefaultExtent()">clear</a>
@@ -77,7 +77,7 @@
                     <!--Button to remove filters-->
                     <div class="remove-button-wrapper pointer" ng-click="search.removeFilter($index)" ng-if="search.filters.length > 1">
                         <div class="remove-button">
-                            <a href="#"><div class="icon icon-close lt-grey"></div></a>
+                            <a href="#"><div class="icon icon-cancel icon-sm icon-lt-grey"></div></a>
                         </div>
                     </div>
                     
@@ -88,7 +88,7 @@
                     <div class="btn-group" ng-class="constraintSelect ? 'open' : 'closed' ">
 
                         <button type="button" class="btn btn-blank" ng-click="constraintSelect = !constraintSelect">
-                            <div class="icon icon-add grey icon-left"></div>
+                            <div class="icon icon-add icon-grey icon-left"></div>
                             Add Constraint
                         </button>
                         <ul class="dropdown-menu">

@@ -1,0 +1,135 @@
+.icon{
+   display: inline-block;
+   background: url('icons.png') no-repeat;
+   overflow: hidden;
+   text-indent: -9999px;
+   text-align: left;
+   width: 16px;
+   height: 16px;
+   background-size: 90px 342px;
+   margin-top: 2px;
+}
+.icon.icon-left{
+   float: left;
+   margin-right: 7px;
+}
+.icon.icon-right{
+   float: right;
+   margin-right: 7px;
+}
+.icon.icon-sm{
+    background-size: 45px 171px;
+    width: 8px; height: 8px;
+}
+.icon.icon-md{
+    background-size: 120px 456px;
+    width: 24px; height: 24px;
+}
+.icon.icon-lg{
+    background-size: 180px 684px;
+    width: 36px; height: 36px;
+}
+.icon-add{background-position: -2px -2px;}
+.icon-add.icon-sm{background-position: -2px -0px;}
+.icon-add.icon-md{background-position: -2px -2px;}
+.icon-add.icon-lg{background-position: -2px -2px;}
+.icon-arrow-down{background-position: -2px -20px;}
+.icon-arrow-down.icon-sm{background-position: -2px -9px;}
+.icon-arrow-down.icon-md{background-position: -2px -26px;}
+.icon-arrow-down.icon-lg{background-position: -2px -38px;}
+.icon-arrow-left{background-position: -2px -38px;}
+.icon-arrow-left.icon-sm{background-position: -2px -18px;}
+.icon-arrow-left.icon-md{background-position: -2px -50px;}
+.icon-arrow-left.icon-lg{background-position: -2px -74px;}
+.icon-arrow-right{background-position: -2px -56px;}
+.icon-arrow-right.icon-sm{background-position: -2px -27px;}
+.icon-arrow-right.icon-md{background-position: -2px -74px;}
+.icon-arrow-right.icon-lg{background-position: -2px -110px;}
+.icon-arrow-up{background-position: -2px -74px;}
+.icon-arrow-up.icon-sm{background-position: -2px -36px;}
+.icon-arrow-up.icon-md{background-position: -2px -98px;}
+.icon-arrow-up.icon-lg{background-position: -2px -146px;}
+.icon-cancel{background-position: -2px -92px;}
+.icon-cancel.icon-sm{background-position: -2px -45px;}
+.icon-cancel.icon-md{background-position: -2px -122px;}
+.icon-cancel.icon-lg{background-position: -2px -182px;}
+.icon-code{background-position: -2px -110px;}
+.icon-code.icon-sm{background-position: -2px -54px;}
+.icon-code.icon-md{background-position: -2px -146px;}
+.icon-code.icon-lg{background-position: -2px -218px;}
+.icon-content{background-position: -2px -128px;}
+.icon-content.icon-sm{background-position: -2px -63px;}
+.icon-content.icon-md{background-position: -2px -170px;}
+.icon-content.icon-lg{background-position: -2px -254px;}
+.icon-edit{background-position: -2px -146px;}
+.icon-edit.icon-sm{background-position: -2px -72px;}
+.icon-edit.icon-md{background-position: -2px -194px;}
+.icon-edit.icon-lg{background-position: -2px -290px;}
+.icon-fill{background-position: -2px -164px;}
+.icon-fill.icon-sm{background-position: -2px -81px;}
+.icon-fill.icon-md{background-position: -2px -218px;}
+.icon-fill.icon-lg{background-position: -2px -326px;}
+.icon-games-alt-3{background-position: -2px -182px;}
+.icon-games-alt-3.icon-sm{background-position: -2px -90px;}
+.icon-games-alt-3.icon-md{background-position: -2px -242px;}
+.icon-games-alt-3.icon-lg{background-position: -2px -362px;}
+.icon-games-alt-4{background-position: -2px -200px;}
+.icon-games-alt-4.icon-sm{background-position: -2px -99px;}
+.icon-games-alt-4.icon-md{background-position: -2px -266px;}
+.icon-games-alt-4.icon-lg{background-position: -2px -398px;}
+.icon-layers_0{background-position: -2px -218px;}
+.icon-layers_0.icon-sm{background-position: -2px -108px;}
+.icon-layers_0.icon-md{background-position: -2px -290px;}
+.icon-layers_0.icon-lg{background-position: -2px -434px;}
+.icon-pan{background-position: -2px -236px;}
+.icon-pan.icon-sm{background-position: -2px -117px;}
+.icon-pan.icon-md{background-position: -2px -314px;}
+.icon-pan.icon-lg{background-position: -2px -470px;}
+.icon-photo{background-position: -2px -254px;}
+.icon-photo.icon-sm{background-position: -2px -126px;}
+.icon-photo.icon-md{background-position: -2px -338px;}
+.icon-photo.icon-lg{background-position: -2px -506px;}
+.icon-pin{background-position: -2px -272px;}
+.icon-pin.icon-sm{background-position: -2px -135px;}
+.icon-pin.icon-md{background-position: -2px -362px;}
+.icon-pin.icon-lg{background-position: -2px -542px;}
+.icon-repeat{background-position: -2px -290px;}
+.icon-repeat.icon-sm{background-position: -2px -144px;}
+.icon-repeat.icon-md{background-position: -2px -386px;}
+.icon-repeat.icon-lg{background-position: -2px -578px;}
+.icon-search{background-position: -2px -308px;}
+.icon-search.icon-sm{background-position: -2px -153px;}
+.icon-search.icon-md{background-position: -2px -410px;}
+.icon-search.icon-lg{background-position: -2px -614px;}
+.icon-user{background-position: -2px -326px;}
+.icon-user.icon-sm{background-position: -2px -162px;}
+.icon-user.icon-md{background-position: -2px -434px;}
+.icon-user.icon-lg{background-position: -2px -650px;}
+.icon-black{background-position-x: -2px;}
+.icon-black.icon-sm{background-position-x: -0px;}
+.icon-black.icon-md{background-position-x: -2px;}
+.icon-black.icon-lg{background-position-x: -2px;}
+.icon-grey{background-position-x: -20px;}
+.icon-grey.icon-sm{background-position-x: -9px;}
+.icon-grey.icon-md{background-position-x: -26px;}
+.icon-grey.icon-lg{background-position-x: -38px;}
+.icon-lt-grey{background-position-x: -38px;}
+.icon-lt-grey.icon-sm{background-position-x: -18px;}
+.icon-lt-grey.icon-md{background-position-x: -50px;}
+.icon-lt-grey.icon-lg{background-position-x: -74px;}
+.icon-white{background-position-x: -56px;}
+.icon-white.icon-sm{background-position-x: -27px;}
+.icon-white.icon-md{background-position-x: -74px;}
+.icon-white.icon-lg{background-position-x: -110px;}
+.icon-blue{background-position-x: -74px;}
+.icon-blue.icon-sm{background-position-x: -36px;}
+.icon-blue.icon-md{background-position-x: -98px;}
+.icon-blue.icon-lg{background-position-x: -146px;}
+.icon-hover:hover{background-position-x: -74px;}
+.icon-hover.icon-sm:hover{background-position-x: -36px;}
+.icon-hover.icon-md:hover{background-position-x: -98px;}
+.icon-hover.icon-lg:hover{background-position-x: -146px;}
+.icon-blue.icon-hover:hover{background-position-x: -2px;}
+.icon-blue.icon-sm.icon-hover:hover{background-position-x: 0px;}
+.icon-blue.icon-md.icon-hover:hover{background-position-x: -2px;}
+.icon-blue.icon-lg.icon-hover:hover{background-position-x: -2px;}
