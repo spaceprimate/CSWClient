@@ -21,9 +21,7 @@ nrlCatalog.config(function($httpProvider) {
 nrlCatalog.controller('mainController', ['$scope', '$http', '$window', function($scope, $http, $window) {
 
     //CSW Endpoint
-    // var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
-    // var cswUrl = "https://www.sciencebase.gov/catalog/item/4f554236e4b018de15819c85/csw?service=CSW&version=2.0.2";
-    var cswUrl = "https://nrlgeoint.cs.uno.edu/pycsw?service=CSW&version=2.0.2";
+    var cswUrl = "https://geoint.nrlssc.navy.mil/pycsw?service=CSW&version=2.0.2";
 
     //if true, app knows to rebuild $scope.pages object, called during http request
     $scope.newRequest = true;
