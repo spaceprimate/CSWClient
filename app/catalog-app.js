@@ -18,7 +18,7 @@ nrlCatalog.config(function($httpProvider) {
  * main controller
  * injects $scope and $http ( for post requests )
  */
-nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $http) {
+nrlCatalog.controller('mainController', ['$scope', '$http', '$window', function($scope, $http, $window) {
 
     //CSW Endpoint
     // var cswUrl = "https://data.noaa.gov/csw?service=CSW&version=2.0.2";
@@ -69,6 +69,26 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
     $scope.keywordsLoadError = false;
 
 
+    // set dynamically accessible width and height values for the browser window
+    $scope.width = $window.innerWidth;
+    $scope.height = $window.innerHeight;
+
+    angular.element($window).bind('resize', function(){
+        $scope.width = $window.innerWidth;
+        $scope.height = $window.innerHeight;
+        $scope.setAdvancedSearchStyle();
+        $scope.$digest();
+    });
+
+    $scope.advancedSearchContentStyle = {'max-height' : ($scope.height - 58)};
+
+    /**
+     * Prevents the search dropdown from overflowing the browser window
+     * Only required for desktop view, mobile is handled with pure css
+     */
+    $scope.setAdvancedSearchStyle = function(){
+        $scope.advancedSearchContentStyle = {'max-height' : ($scope.height - 58)};
+    };
 
     /**
      * Toggles the advanced search view
@@ -361,6 +381,7 @@ nrlCatalog.controller('mainController', ['$scope', '$http', function($scope, $ht
             $scope.submitSearch(); 
         }
     };
+
 
     /**
      * toggles the showSidebar boolean variable true/false

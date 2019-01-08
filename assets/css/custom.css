@@ -232,6 +232,7 @@ body button.no-format{
 .advanced-search-content {
     padding-bottom: 14px;
     position: relative;
+    overflow: auto;
 }
 
 .advanced-search-content-filters, .advanced-search-buttons {
@@ -1188,6 +1189,14 @@ select.form-control:hover {
     border-color: #adadad;
 }
 
+#add-constraint-menu{
+    top: -75px;
+}
+/*.dropdown-menu.bottom{*/
+    /*top: auto;*/
+    /*bottom: 0;*/
+/*}*/
+
 .toolbar .select-wrap select::-ms-expand {
     display: none;
 
@@ -1368,7 +1377,9 @@ select.form-control:hover {
         bottom: 22px;
         overflow: auto;
         top: 6px;
+        max-height: inherit !important;
     }
+    /*.overflow .advanced-search-content{}*/
     .advanced-search-buttons{margin-bottom: 56px;}
     .search-container .form-control{
         width: auto;

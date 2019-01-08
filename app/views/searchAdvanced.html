@@ -1,6 +1,6 @@
 <section ng-show="showSearch">
 
-    <div class="advanced-search-content">
+    <div class="advanced-search-content" ng-style="advancedSearchContentStyle" id="advanced-search-content">
 
         <!-- MAP -->
         <div ng-show="extentSelectVisibility">
@@ -87,11 +87,11 @@
 
                     <div class="btn-group" ng-class="constraintSelect ? 'open' : 'closed' ">
 
-                        <button type="button" class="btn btn-blank" ng-click="constraintSelect = !constraintSelect">
+                        <button type="button" class="btn btn-blank" ng-click="constraintSelect = !constraintSelect" id="add-constraint-button">
                             <div class="icon icon-add icon-grey icon-left"></div>
                             Add Constraint
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" id="add-constraint-menu">
                             
                             <li ng-click="addFilter('title',''); constraintSelect = false;"><a class="pointer">Title</a></li>
                             <li ng-click="addFilter('AnyText',''); constraintSelect = false;"><a class="pointer">Any</a></li>
